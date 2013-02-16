@@ -1,4 +1,7 @@
-import plugin.PluginTemp;
+package plugin;
+
+
+
 
 
 public class HelloWorldPlugin implements PluginTemp

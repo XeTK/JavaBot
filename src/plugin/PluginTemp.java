@@ -1,4 +1,9 @@
-public interface Plugin
+package plugin;
+
+
+
+
+public interface PluginTemp
 {
 	public void onCreate(String in_str);
 	public void onTime(String in_str);

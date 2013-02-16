@@ -1,9 +1,10 @@
+package program;
 
 public class Details
 {
 	private String nickName = "JaBot", host = "JaBot", server = "127.0.0.1", name = "Java Bot";
 	private int port = 6667;
-	private String[] channels = {"#42"};
+	private String[] channels = {"#69"}, admins = {"XeTK"}, startup = {"PRIVMSG zippy identify helloworld"};
 	public String getNickName()
 	{
 		return nickName;
@@ -51,6 +52,22 @@ public class Details
 	public void setChannels(String[] channels)
 	{
 		this.channels = channels;
+	}
+	public String[] getAdmins()
+	{
+		return admins;
+	}
+	public void setAdmins(String[] admins)
+	{
+		this.admins = admins;
+	}
+	public String[] getStartup()
+	{
+		return startup;
+	}
+	public void setStartup(String[] startup)
+	{
+		this.startup = startup;
 	}
 	
 	

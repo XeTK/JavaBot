@@ -1,3 +1,6 @@
+package program;
+
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -7,22 +10,21 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Hashtable;
+
+import plugin.PluginClassLoader;
+import plugin.PluginTemp;
 
 import com.google.gson.Gson;
 
-import run.IRC;
-import run.PluginClassLoader;
 
-
-public class start
+public class Start
 {
-	private static ArrayList<Plugin> pluginsglob = new ArrayList<Plugin>();
+	private static ArrayList<PluginTemp> pluginsglob = new ArrayList<PluginTemp>();
 	private static Details details = new Details();
 	public static void main(String[] args) throws UnknownHostException, IOException
 	{
-		//saveGSON("details.json");
 		loadGSON("details.json");
+		//saveGSON("details.json");
 		loadPlugins();
 		connect();
 		mainLoop();
@@ -93,8 +95,8 @@ public class start
 	//http://www.javaranch.com/journal/200607/Plugins.html
 	public static void loadPlugins() throws MalformedURLException
 	{
-		pluginsglob = new ArrayList<Plugin>();
-		File dir = new File(System.getProperty("user.dir") + File.separator + "plugins");
+		pluginsglob = new ArrayList<PluginTemp>();
+		File dir = new File(System.getProperty("user.dir") + File.separator + "plugin");
 		System.out.println(dir.toString());
 		ClassLoader cl = new PluginClassLoader(dir);
 		if (dir.exists() && dir.isDirectory()) 
@@ -113,13 +115,13 @@ public class start
 					Class[] intf = c.getInterfaces();
 					for (int j=0; j<intf.length; j++) 
 					{
-						if (intf[j].getName().equals("Plugin")) 
-						{
+						//if (intf[j].getName().equals("plugin/Plugin")) 
+						//{
 							// the following line assumes that PluginFunction has a no-argument constructor
-							Plugin pf = (Plugin) c.newInstance();
+							PluginTemp pf = (PluginTemp) c.newInstance();
 							pluginsglob.add(pf);
 							continue;
-						}
+						//}
 					}
 				} 
 				catch (Exception ex) 
@@ -128,6 +130,10 @@ public class start
 				}
 			}
 		}
-
 	}
+	public static Details getDetails()
+	{
+		return details;
+	}
+	
 }

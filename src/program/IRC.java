@@ -1,5 +1,4 @@
-package run;
-
+package program;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -24,7 +23,7 @@ public class IRC
 			try
 			{
 				outToServer.writeBytes(in_str + '\n');
-				System.out.println("->" +in_str);
+				System.out.println("<-" +in_str);
 			} 
 			catch (IOException e)
 			{
@@ -37,7 +36,7 @@ public class IRC
 		try
 		{
 			String out = inFromServer.readLine();
-			System.out.println("<-" + out);
+			System.out.println("->" + out);
 			return out;
 		} 
 		catch (IOException e)
