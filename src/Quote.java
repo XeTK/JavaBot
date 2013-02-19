@@ -54,7 +54,7 @@ public class Quote implements PluginTemp
 				else
 					IRC.sendServer("PRIVMSG " + channel + " " + t[1] + ": Rep = " + Database.getUserRep(t[1]) + "!");
  			}
-			else if (message.matches("^.msgsent")||message.matches("^.msgsent [A-Za-z0-9#]+$"))
+			else if (message.matches("^.msgsent [A-Za-z0-9#]+$"))
 			{
 				String[] t = message.split(" ");
 				if (t.length <= 0||t[1] == null)
