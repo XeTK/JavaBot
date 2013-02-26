@@ -2,7 +2,7 @@ package program;
 
 public class Details
 {
-	private String nickName = "JaBot", host = "JaBot", server = "127.0.0.1", name = "Java Bot";
+	private String nickName = "JaBot", host = "JaBot", server = "127.0.0.1", name = "Java Bot", dbServer = "127.0.0.1", dbPort = "3306", dbTable = "jabot", dbUser = "root", dbpasswd = "password";
 	private int port = 6667;
 	private String[] channels = {"#69"}, admins = {"XeTK"}, startup = {"PRIVMSG zippy identify helloworld"};
 	public String getNickName()
@@ -68,6 +68,46 @@ public class Details
 	public void setStartup(String[] startup)
 	{
 		this.startup = startup;
+	}
+	public String getDbServer()
+	{
+		return dbServer;
+	}
+	public void setDbServer(String dbServer)
+	{
+		this.dbServer = dbServer;
+	}
+	public String getDbPort()
+	{
+		return dbPort;
+	}
+	public void setDbPort(String dbPort)
+	{
+		this.dbPort = dbPort;
+	}
+	public String getDbTable()
+	{
+		return dbTable;
+	}
+	public void setDbTable(String dbTable)
+	{
+		this.dbTable = dbTable;
+	}
+	public String getDbUser()
+	{
+		return dbUser;
+	}
+	public void setDbUser(String dbUser)
+	{
+		this.dbUser = dbUser;
+	}
+	public String getDbpasswd()
+	{
+		return dbpasswd;
+	}
+	public void setDbpasswd(String dbpasswd)
+	{
+		this.dbpasswd = dbpasswd;
 	}
 	
 	

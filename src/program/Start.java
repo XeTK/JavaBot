@@ -96,7 +96,7 @@ public class Start
 	public static void loadPlugins() throws MalformedURLException
 	{
 		pluginsglob = new ArrayList<PluginTemp>();
-		File dir = new File(System.getProperty("user.dir") + File.separator + "plugin");
+		File dir = new File(System.getProperty("user.dir"));
 		System.out.println(dir.toString());
 		ClassLoader cl = new PluginClassLoader(dir);
 		if (dir.exists() && dir.isDirectory()) 

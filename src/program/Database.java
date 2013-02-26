@@ -16,7 +16,7 @@ public class Database
 	private static void connect() throws ClassNotFoundException, SQLException
 	{
 		Class.forName("com.mysql.jdbc.Driver");
-		handle = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/JaBot","root","");
+		handle = DriverManager.getConnection("jdbc:mysql://" + Start.getDetails().getDbServer() + ":" + Start.getDetails().getDbPort() + "/" + Start.getDetails().getDbTable(),Start.getDetails().getDbUser(),Start.getDetails().getDbpasswd());
 	}
 	private static void disconnect() throws SQLException
 	{
@@ -99,7 +99,7 @@ public class Database
 		ResultSet exist = (handle.createStatement().executeQuery("SELECT * FROM remind WHERE Recipient =\"" + username + "\""));
 		ArrayList<String> temp = new ArrayList<String>();
 		while(exist.next())
-			temp.add(exist.getString("Recipient") + ": " +exist.getString("Message"));
+			temp.add(exist.getString("Recipient") + ": " + exist.getString("Sender") + " Said " +exist.getString("Message"));
 		disconnect();
 		return temp.toArray(new String[temp.size()]);
 	}
