@@ -46,15 +46,15 @@ public class Quote implements PluginTemp
 				Database.updateRep(message.substring(0, message.length()-2), -1);
 				IRC.sendServer("PRIVMSG " + channel + " " + message.substring(0, message.length()-2) + ": Rep = " + Database.getUserRep(message.substring(0, message.length()-2)) + "!");
 			}
-			else if (message.matches("^.rep")||message.matches("^.rep [A-Za-z0-9#]+$"))
+			else if (message.matches("\\.rep [A-Za-z0-9#]+$"))
 			{
 				String[] t = message.split(" ");
-				if (t.length <= 0||t[1] == null)
+				if (t[1] == null)
 					IRC.sendServer("PRIVMSG " + channel + " " + user + ": Rep = " + Database.getUserRep(user) + "!");
 				else
 					IRC.sendServer("PRIVMSG " + channel + " " + t[1] + ": Rep = " + Database.getUserRep(t[1]) + "!");
  			}
-			else if (message.matches("^.msgsent [A-Za-z0-9#]+$"))
+			else if (message.matches("\\.msgsent [A-Za-z0-9#]+$"))
 			{
 				String[] t = message.split(" ");
 				if (t.length <= 0||t[1] == null)
@@ -62,7 +62,7 @@ public class Quote implements PluginTemp
 				else
 					IRC.sendServer("PRIVMSG " + channel + " " + t[1] + ": Messages Sent = " + Database.getMessagesSent(t[1]) + "!");
  			}
-			else if (message.matches("^.lastonline [A-Za-z0-9#]+$"))
+			else if (message.matches("\\.lastonline [A-Za-z0-9#]+$"))
 			{
 				String[] t = message.split(" ");
 				if (t.length > 0||t[1] != null)
