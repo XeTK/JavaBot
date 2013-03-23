@@ -106,7 +106,7 @@ public class Admin implements PluginTemp
 		String data[] = in_str.split(":"),
 				user = data[1].split("!")[0],
 				channel = data[2];
-		IRC.sendServer("MODE " + channel + " +o " +user);
+		IRC.sendServer("MODE " + channel + " +v " +user);
 	}
 
 	@Override
