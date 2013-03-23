@@ -37,33 +37,37 @@ public class Database
 		}
 		else
 		{
-			handle.createStatement().executeUpdate("INSERT INTO User(NickName, Rep, SentMsg, LastOnline) VALUES(\"" + username + "\", \"0\", \"0\", NOW())");
+			handle.createStatement().executeUpdate("INSERT INTO User(NickName, Rep, SentMsg, LastOnline) VALUES(\"" + username + "\", \"1\", \"0\", NOW())");
 		}
 		System.out.println("Updated Database");
 		disconnect();
 	}
-	public static void updateRep(String username,int rep) throws ClassNotFoundException, SQLException
+	public static void updateRep(String item,int rep) throws ClassNotFoundException, SQLException
 	{	
 		connect();
-		ResultSet exist = (handle.createStatement().executeQuery("SELECT COUNT(*) FROM User WHERE NickName =\"" + username + "\""));
+		ResultSet exist = (handle.createStatement().executeQuery("SELECT COUNT(*) FROM Rep WHERE item =\"" + item + "\""));
 		int temp = 0;
 		while(exist.next())
 			temp = exist.getInt(1);
 		if (temp != 0)
 		{
-			String sql = "UPDATE User SET Rep = Rep + " + rep + " WHERE NickName = \"" + username + "\"";
+			String sql = "UPDATE Rep SET rep = rep + " + rep + " WHERE item = \"" + item + "\"";
 			//System.out.println(sql);
 			handle.createStatement().executeUpdate(sql);
+		}
+		else
+		{
+			handle.createStatement().executeUpdate("INSERT INTO Rep(rep,item) VALUES(\"" + rep + "\", \"" + item + "\")");
 		}
 		disconnect();
 	}
 	public static int getUserRep(String username) throws ClassNotFoundException, SQLException
 	{
 		connect();
-		ResultSet exist = (handle.createStatement().executeQuery("SELECT * FROM User WHERE NickName =\"" + username + "\" LIMIT 1"));
+		ResultSet exist = (handle.createStatement().executeQuery("SELECT * FROM Rep WHERE item =\"" + username + "\" LIMIT 1"));
 		int temp = 0;
 		while(exist.next())
-			temp = exist.getInt("Rep");
+			temp = exist.getInt("rep");
 		disconnect();
 		return temp;
 	}
