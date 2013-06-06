@@ -1,5 +1,11 @@
 package program;
 
+/**
+ * This holds all the data needed to carry out the connection to the IRC server, and any other information that is needed
+ * @author Tom Rosier(XeTK)
+ *
+ */
+
 public class Details
 {
 	private static Details details;
@@ -7,16 +13,29 @@ public class Details
 	private int port = 6667;
 	private String[] channels = {"#69"}, admins = {"XeTK"}, startup = {"PRIVMSG zippy identify helloworld"};
 	
+	/**
+	 * Get our instance of the details class back for us to use.
+	 * @return we get the origernal instance of the class back
+	 */
 	public static Details getIntance()
 	{
 		if (details == null)
 			details = new Details();
 		return details;
 	}
+	
+	/**
+	 * If we get a instance back from JSON we want to set this instance of the class to this origernal instance
+	 * @param instance take in the instance we want to set the class to.
+	 */
 	public static void setInstance(Details instance)
 	{
 		details = instance;
 	}
+	
+	/**
+	 * Getters & setters
+	 */
 	public String getNickName()
 	{
 		return nickName;

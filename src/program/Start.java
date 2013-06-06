@@ -22,13 +22,13 @@ public class Start
 	private static Start startInstance;
 	
 	private ArrayList<PluginTemp> pluginsglob = new ArrayList<PluginTemp>();
-	private Details details;
 	
 	public static void main(String[] args) throws UnknownHostException, IOException, IRCException
 	{
+		loadGSON("details.json");
+		
 		Start init = getInstance();
-		init.loadGSON("details.json");
-		//saveGSON("details.json");
+		
 		init.loadPlugins();
 		init.connect();
 		init.mainLoop();
@@ -45,9 +45,12 @@ public class Start
 	private void connect() throws UnknownHostException, IOException, IRCException
 	{
 		IRC irc = IRC.getInstance();
+		Details details = Details.getIntance();
+		
 		irc.connectServer(details.getServer(), details.getPort());
 		irc.sendServer("User " + details.getNickName() + " " + details.getName() + " " + details.getHost() + " :" + details.getName());
 		irc.sendServer("NICK " + details.getNickName());
+		
 		for (int i = 0;i < details.getChannels().length;i++)
 			irc.sendServer("JOIN " + details.getChannels()[i]);
 	}
@@ -87,35 +90,44 @@ public class Start
 		}
 		irc.closeConnection();
 	}
-	private void loadGSON(String in_Path) throws IOException
+	
+	private static void loadGSON(String in_Path) throws IOException
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(in_Path));
+		
 		String tempWord = "", json = "";
+		
 		while ((tempWord = reader.readLine()) != null)
 			json += tempWord + "\n";
+		
 		reader.close();
-		details.setInstance(new Gson().fromJson(json, Details.class));
-		details = Details.getIntance();
+		
+		Details.setInstance(new Gson().fromJson(json, Details.class));
 	}
-	private void saveGSON(String in_Path) throws IOException
+	
+	private static void saveGSON(String in_Path) throws IOException
 	{
-			File filePath = new File(in_Path);
-			if (!filePath.exists())
-				filePath.createNewFile();
-			else
-				filePath.delete();
-			BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
-			writer.write(new Gson().toJson(details));
-			writer.close();
+		File filePath = new File(in_Path);
+		
+		if (!filePath.exists())
+			filePath.createNewFile();
+		else
+			filePath.delete();
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
+		writer.write(new Gson().toJson(Details.getIntance()));
+		writer.close();
 	}
 	
 	//http://www.javaranch.com/journal/200607/Plugins.html
-	public void loadPlugins() throws MalformedURLException
+	private void loadPlugins() throws MalformedURLException
 	{
 		pluginsglob = new ArrayList<PluginTemp>();
 		File dir = new File(System.getProperty("user.dir"));
-		System.out.println(dir.toString());
 		ClassLoader cl = new PluginClassLoader(dir);
+		
+		System.out.println("\u001B[33m" + dir.toString());
+		
 		if (dir.exists() && dir.isDirectory()) 
 		{
 			// we'll only load classes directly in this directory -
@@ -126,19 +138,16 @@ public class Start
 				try 
 				{
 					// only consider files ending in ".class"
-					if (! files[i].endsWith(".class"))
+					if (!files[i].endsWith(".class"))
 						continue;
 					Class c = cl.loadClass(files[i].substring(0, files[i].indexOf(".")));
 					Class[] intf = c.getInterfaces();
 					for (int j=0; j<intf.length; j++) 
 					{
-						//if (intf[j].getName().equals("plugin/Plugin")) 
-						//{
-							// the following line assumes that PluginFunction has a no-argument constructor
-							PluginTemp pf = (PluginTemp) c.newInstance();
-							pluginsglob.add(pf);
-							continue;
-						//}
+						// the following line assumes that PluginFunction has a no-argument constructor
+						PluginTemp pf = (PluginTemp) c.newInstance();
+						pluginsglob.add(pf);
+						continue;
 					}
 				} 
 				catch (Exception ex) 

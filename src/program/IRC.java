@@ -75,7 +75,7 @@ public class IRC
 	{
 			checkConnection();
 			outToServer.writeBytes(in_str + '\n');
-			System.out.println("<-" +in_str);
+			System.out.println("\u001B[34m<- " +in_str);
 	}
 	
 	/**
@@ -88,7 +88,7 @@ public class IRC
 	{
 			checkConnection();
 			String out = inFromServer.readLine();
-			System.out.println("->" + out);
+			System.out.println("\u001B[31m-> " + out);
 			return out;
 	}
 	

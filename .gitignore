@@ -2,7 +2,8 @@
 .project
 .settings/
 bin/*
+plugin/*
 *.class
-
+src/org/*
 *.json
 
