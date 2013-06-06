@@ -91,11 +91,7 @@ public class Admin implements PluginTemp
 	}
 
 	@Override
-	public void onQuit(String in_str) throws IRCException, IOException
-	{
-		// TODO Auto-generated method stub
-
-	}
+	public void onQuit(String in_str) throws IRCException, IOException {}
 
 
 }

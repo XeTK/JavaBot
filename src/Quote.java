@@ -14,18 +14,10 @@ public class Quote implements PluginTemp
 {
 
 	@Override
-	public void onCreate(String in_str)
-	{
-		// TODO Auto-generated method stub
-		
-	}
+	public void onCreate(String in_str) {}
 
 	@Override
-	public void onTime(String in_str)
-	{
-		// TODO Auto-generated method stub
-		
-	}
+	public void onTime(String in_str) {}
 
 	@Override
 	public void onMessage(String in_str) throws IRCException, IOException
@@ -57,17 +49,13 @@ public class Quote implements PluginTemp
 				else if (message.matches("\\.rep [A-Za-z0-9#]+$"))
 				{
 					String[] t = message.split(" ");
-					if (t[1] == null)
-						irc.sendServer("PRIVMSG " + channel + " " + user + ": Rep = " + db.getUserRep(user) + "!");
-					else
+					if (t.length > 0||t[1] != null)
 						irc.sendServer("PRIVMSG " + channel + " " + t[1] + ": Rep = " + db.getUserRep(t[1]) + "!");
 	 			}
 				else if (message.matches("\\.msgsent [A-Za-z0-9#]+$"))
 				{
 					String[] t = message.split(" ");
-					if (t.length <= 0||t[1] == null)
-						irc.sendServer("PRIVMSG " + channel + " " + user + ": Messages Sent = " + db.getMessagesSent(user) + "!");
-					else
+					if (t.length > 0||t[1] != null)
 						irc.sendServer("PRIVMSG " + channel + " " + t[1] + ": Messages Sent = " + db.getMessagesSent(t[1]) + "!");
 	 			}
 				else if (message.matches("\\.lastonline [A-Za-z0-9#]+$"))
@@ -85,6 +73,10 @@ public class Quote implements PluginTemp
 					db.addReminder(user, tt[1], t[1]);
 					irc.sendServer("PRIVMSG " + channel + " " + user + ": I will remind them next time they are round master!");
 				}
+				else if(message.matches("^\\.help") || message.matches("^\\."))
+				{
+					irc.sendServer("PRIVMSG " + channel + " QUOTE: .remind *username* - leave a message for another member : .lastonline *username* - check when a member was last active : .msgsent *username* - check how many messages a user has sent globaly within the channel : .rep *Item* - view the reputation of a item : *item*--/++ - increment or decrement the rep of a desired item");
+				}
 				else
 				{
 					String[] reminders = db.getReminders(user);
@@ -98,6 +90,7 @@ public class Quote implements PluginTemp
 					}
 					db.updateUser(user);
 				}
+				
 			} 
 			catch (SQLException e)
 			{
@@ -120,11 +113,6 @@ public class Quote implements PluginTemp
 	}
 
 	@Override
-	public void onQuit(String in_str)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
+	public void onQuit(String in_str) {}
 
 }
