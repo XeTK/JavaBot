@@ -1,9 +1,11 @@
+import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 
 import plugin.PluginTemp;
 import program.Database;
 import program.IRC;
+import program.IRCException;
 
 
 public class Quote implements PluginTemp
@@ -24,7 +26,7 @@ public class Quote implements PluginTemp
 	}
 
 	@Override
-	public void onMessage(String in_str)
+	public void onMessage(String in_str) throws IRCException, IOException
 	{
 		String temp[] = in_str.split(":"),
 				message, host, user, channel;
@@ -36,37 +38,38 @@ public class Quote implements PluginTemp
 		channel = temp[2];
 		try
 		{
+			IRC irc = IRC.getInstance();
 			if (message.matches("^[A-Za-z0-9]+([\\+]){2,2}"))
 			{
 				Database.updateRep(message.substring(0, message.length()-2), +1);
-				IRC.sendServer("PRIVMSG " + channel + " " + message.substring(0, message.length()-2) + ": Rep = " + Database.getUserRep(message.substring(0, message.length()-2)) + "!");
+				irc.sendServer("PRIVMSG " + channel + " " + message.substring(0, message.length()-2) + ": Rep = " + Database.getUserRep(message.substring(0, message.length()-2)) + "!");
 			}
 			else if (message.matches("^[A-Za-z0-9]+([\\-]){2,2}"))
 			{
 				Database.updateRep(message.substring(0, message.length()-2), -1);
-				IRC.sendServer("PRIVMSG " + channel + " " + message.substring(0, message.length()-2) + ": Rep = " + Database.getUserRep(message.substring(0, message.length()-2)) + "!");
+				irc.sendServer("PRIVMSG " + channel + " " + message.substring(0, message.length()-2) + ": Rep = " + Database.getUserRep(message.substring(0, message.length()-2)) + "!");
 			}
 			else if (message.matches("\\.rep [A-Za-z0-9#]+$"))
 			{
 				String[] t = message.split(" ");
 				if (t[1] == null)
-					IRC.sendServer("PRIVMSG " + channel + " " + user + ": Rep = " + Database.getUserRep(user) + "!");
+					irc.sendServer("PRIVMSG " + channel + " " + user + ": Rep = " + Database.getUserRep(user) + "!");
 				else
-					IRC.sendServer("PRIVMSG " + channel + " " + t[1] + ": Rep = " + Database.getUserRep(t[1]) + "!");
+					irc.sendServer("PRIVMSG " + channel + " " + t[1] + ": Rep = " + Database.getUserRep(t[1]) + "!");
  			}
 			else if (message.matches("\\.msgsent [A-Za-z0-9#]+$"))
 			{
 				String[] t = message.split(" ");
 				if (t.length <= 0||t[1] == null)
-					IRC.sendServer("PRIVMSG " + channel + " " + user + ": Messages Sent = " + Database.getMessagesSent(user) + "!");
+					irc.sendServer("PRIVMSG " + channel + " " + user + ": Messages Sent = " + Database.getMessagesSent(user) + "!");
 				else
-					IRC.sendServer("PRIVMSG " + channel + " " + t[1] + ": Messages Sent = " + Database.getMessagesSent(t[1]) + "!");
+					irc.sendServer("PRIVMSG " + channel + " " + t[1] + ": Messages Sent = " + Database.getMessagesSent(t[1]) + "!");
  			}
 			else if (message.matches("\\.lastonline [A-Za-z0-9#]+$"))
 			{
 				String[] t = message.split(" ");
 				if (t.length > 0||t[1] != null)
-					IRC.sendServer("PRIVMSG " + channel + " " + t[1] + ": Last Online = " + Database.getLastOnline(t[1]) + "!");
+					irc.sendServer("PRIVMSG " + channel + " " + t[1] + ": Last Online = " + Database.getLastOnline(t[1]) + "!");
  			}
 			else if (message.matches("\\.remind .* \".*\"")||message.matches("\\.remind .* '.*'"))
 			{
@@ -75,7 +78,7 @@ public class Quote implements PluginTemp
 					t = message.split("\"");
 				String[] tt = t[0].split(" ");
 				Database.addReminder(user, tt[1], t[1]);
-				IRC.sendServer("PRIVMSG " + channel + " " + user + ": I will remind them next time they are round master!");
+				irc.sendServer("PRIVMSG " + channel + " " + user + ": I will remind them next time they are round master!");
 			}
 			else
 			{
@@ -84,7 +87,7 @@ public class Quote implements PluginTemp
 				{
 					for (int i = 0; i < reminders.length;i++)
 					{
-						IRC.sendServer("PRIVMSG " + channel + " " + reminders[i]);
+						irc.sendServer("PRIVMSG " + channel + " " + reminders[i]);
 						Database.delReminder(user);
 					}
 				}

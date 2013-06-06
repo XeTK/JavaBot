@@ -16,7 +16,8 @@ public class Database
 	private static void connect() throws ClassNotFoundException, SQLException
 	{
 		Class.forName("com.mysql.jdbc.Driver");
-		handle = DriverManager.getConnection("jdbc:mysql://" + Start.getDetails().getDbServer() + ":" + Start.getDetails().getDbPort() + "/" + Start.getDetails().getDbTable(),Start.getDetails().getDbUser(),Start.getDetails().getDbpasswd());
+		Details details = Details.getIntance();
+		handle = DriverManager.getConnection("jdbc:mysql://" + details.getDbServer() + ":" + details.getDbPort() + "/" + details.getDbTable(),details.getDbUser(), details.getDbpasswd());
 	}
 	private static void disconnect() throws SQLException
 	{

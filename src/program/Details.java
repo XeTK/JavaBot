@@ -2,9 +2,21 @@ package program;
 
 public class Details
 {
+	private static Details details;
 	private String nickName = "JaBot", host = "JaBot", server = "127.0.0.1", name = "Java Bot", dbServer = "127.0.0.1", dbPort = "3306", dbTable = "jabot", dbUser = "root", dbpasswd = "password";
 	private int port = 6667;
 	private String[] channels = {"#69"}, admins = {"XeTK"}, startup = {"PRIVMSG zippy identify helloworld"};
+	
+	public static Details getIntance()
+	{
+		if (details == null)
+			details = new Details();
+		return details;
+	}
+	public static void setInstance(Details instance)
+	{
+		details = instance;
+	}
 	public String getNickName()
 	{
 		return nickName;

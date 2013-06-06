@@ -19,26 +19,42 @@ import com.google.gson.Gson;
 
 public class Start
 {
-	private static ArrayList<PluginTemp> pluginsglob = new ArrayList<PluginTemp>();
-	private static Details details = new Details();
-	public static void main(String[] args) throws UnknownHostException, IOException
+	private static Start startInstance;
+	
+	private ArrayList<PluginTemp> pluginsglob = new ArrayList<PluginTemp>();
+	private Details details;
+	
+	public static void main(String[] args) throws UnknownHostException, IOException, IRCException
 	{
-		loadGSON("details.json");
+		Start init = getInstance();
+		init.loadGSON("details.json");
 		//saveGSON("details.json");
-		loadPlugins();
-		connect();
-		mainLoop();
+		init.loadPlugins();
+		init.connect();
+		init.mainLoop();
 	}
-	private static void connect() throws UnknownHostException, IOException
+	
+	public static Start getInstance()
 	{
-		IRC.connectServer(details.getServer(), details.getPort());
-		IRC.sendServer("User " + details.getNickName() + " " + details.getName() + " " + details.getHost() + " :" + details.getName());
-		IRC.sendServer("NICK " + details.getNickName());
+		if (startInstance == null)
+			startInstance = new Start();
+		
+		return startInstance;
+	}
+	
+	private void connect() throws UnknownHostException, IOException, IRCException
+	{
+		IRC irc = IRC.getInstance();
+		irc.connectServer(details.getServer(), details.getPort());
+		irc.sendServer("User " + details.getNickName() + " " + details.getName() + " " + details.getHost() + " :" + details.getName());
+		irc.sendServer("NICK " + details.getNickName());
 		for (int i = 0;i < details.getChannels().length;i++)
-			IRC.sendServer("JOIN " + details.getChannels()[i]);
+			irc.sendServer("JOIN " + details.getChannels()[i]);
 	}
-	private static void mainLoop() throws IOException
+	private void mainLoop() throws IOException, IRCException
 	{
+		IRC irc = IRC.getInstance();
+		
 		//On Create
 		for (int i = 0;i < pluginsglob.size();i++)
 			pluginsglob.get(i).onCreate("");
@@ -47,7 +63,7 @@ public class Start
 		{
 			//:XeTK!xetk@cpc4-swin16-2-0-cust422.3-1.cable.virginmedia.com PRIVMSG #xetk :asdf
 			
-			String output = IRC.getFromServer();
+			String output = irc.getFromServer();
 			
 			if (output == null)
 				break;
@@ -66,21 +82,22 @@ public class Start
 					pluginsglob.get(i).onQuit(output);
 			//Respond to pings
 			if (output.split(" ")[0].equals("PING"))
-				IRC.sendServer("PONG " + output.split(" ")[1]);
+				irc.sendServer("PONG " + output.split(" ")[1]);
 
 		}
-		IRC.closeConnection();
+		irc.closeConnection();
 	}
-	private static void loadGSON(String in_Path) throws IOException
+	private void loadGSON(String in_Path) throws IOException
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(in_Path));
 		String tempWord = "", json = "";
 		while ((tempWord = reader.readLine()) != null)
 			json += tempWord + "\n";
 		reader.close();
-		details = new Gson().fromJson(json, Details.class);
+		details.setInstance(new Gson().fromJson(json, Details.class));
+		details = Details.getIntance();
 	}
-	private static void saveGSON(String in_Path) throws IOException
+	private void saveGSON(String in_Path) throws IOException
 	{
 			File filePath = new File(in_Path);
 			if (!filePath.exists())
@@ -93,7 +110,7 @@ public class Start
 	}
 	
 	//http://www.javaranch.com/journal/200607/Plugins.html
-	public static void loadPlugins() throws MalformedURLException
+	public void loadPlugins() throws MalformedURLException
 	{
 		pluginsglob = new ArrayList<PluginTemp>();
 		File dir = new File(System.getProperty("user.dir"));
@@ -130,10 +147,6 @@ public class Start
 				}
 			}
 		}
-	}
-	public static Details getDetails()
-	{
-		return details;
 	}
 	
 }
