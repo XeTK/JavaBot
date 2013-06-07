@@ -161,8 +161,12 @@ public class Quote implements PluginTemp
 							".lastonline *username* - check when a member was last active : " +
 							".msgsent *username* - check how many messages a user has sent globaly within the channel : " +
 							".rep *Item* - view the reputation of a item : " +
-							"*Item*--/++ - increment or decrement the rep of a desired item / " +
-							"*Item* +/- *Ammount - increment or decrement the rep of a set item by a set amount :"
+							"*Item*--/++ - increment or decrement the rep of a desired item / : " +
+							"*Item* +/- *Ammount - increment or decrement the rep of a set item by a set amount : " +
+							".quotes *item* - returns all the quotes tied to this item : " +
+							".quote *item* - returns a random quote for that item : " +
+							".quoteadd *item* *message* - will add a new quote to the appropriate item : " +
+							".quotedel *message* - will remove the message from the libary of quotes : "
 							);
 				}
 				else

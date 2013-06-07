@@ -31,6 +31,11 @@ public class Sed implements PluginTemp
 	    {
 		    String user = m.group(1), host = m.group(2), channel = m.group(3), message = m.group(4);
 		    
+		    if(message.matches("^\\.help") || message.matches("^\\."))
+				irc.sendServer("PRIVMSG " + channel + " SED: " +
+								"*Username*: s/*Source*/*Replacement*/ - e.g XeTK: s/.*/hello/ is used to replace the previous statement with hello :"
+								);
+		    
 			if (messages.size() > 10)
 				messages.remove(0);
 
