@@ -15,12 +15,12 @@ public class Database
 	//Singleton for this class is stored here
 	private static Database db;
 	
-	//keep are connection handler easy to get to, we will need to interact with it alot...
+	//keep are connection handler easy to get to, we will need to interact with it a lot...
 	private Connection handle;
 	
 	/**
 	 * This returns an instance of this Database class for other objects to interact with
-	 * @return we return a refrence to this class else we create a new one for us to work with
+	 * @return we return a reference to this class else we create a new one for us to work with
 	 */
 	public static Database getInstance()
 	{
@@ -165,5 +165,26 @@ public class Database
 	public void delQuote(String message) throws ClassNotFoundException, SQLException
 	{
 		executeUpdate("DELETE FROM Quote WHERE Message =\"" + message + "\"");
+	}
+	
+	public void addReminderEvent(String time, String reminder) throws SQLException, ClassNotFoundException
+	{
+		executeUpdate("INSERT INTO Reminder(time,event) VALUES(\"" + time + "\", \"" + reminder + "\")");
+	}
+	
+	public String[] getReminderEvents(String time) throws SQLException, ClassNotFoundException 
+	{
+		connect();
+		ResultSet exist = (handle.createStatement().executeQuery("SELECT * FROM Reminder WHERE time =\"" + time + "\""));
+		ArrayList<String> temp = new ArrayList<String>();
+		while(exist.next())
+			temp.add("Reminder: " + exist.getString("event"));
+		disconnect();
+		return temp.toArray(new String[temp.size()]);
+	}
+	
+	public void delReminderEvent(String time) throws ClassNotFoundException, SQLException
+	{
+		executeUpdate("DELETE FROM Reminder WHERE time =\"" + time + "\"");
 	}
 }

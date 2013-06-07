@@ -69,10 +69,12 @@ public class Start
 		for (int i = 0;i < pluginsglob.size();i++)
 			pluginsglob.get(i).onCreate("");
 		
+		new TimeThread().start();
+		
 		while(true)
 		{			
 			String output = irc.getFromServer();
-			
+
 			if (output == null)
 				break;
 			
@@ -163,6 +165,11 @@ public class Start
 				}
 			}
 		}
+	}
+
+	public ArrayList<PluginTemp> getPluginsglob()
+	{
+		return pluginsglob;
 	}
 	
 }

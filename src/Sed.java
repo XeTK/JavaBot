@@ -23,9 +23,10 @@ public class Sed implements PluginTemp
 	{
 		IRC irc = IRC.getInstance();
 		
-		 Matcher m = 
+		Matcher m = 
 		    		Pattern.compile(":([\\w_\\-]+)!\\w+@([\\w\\d\\.-]+) PRIVMSG (#?\\w+) :(.*)$",
 		    				Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(in_str);
+		 
 	    if (m.find())
 	    {
 		    String user = m.group(1), host = m.group(2), channel = m.group(3), message = m.group(4);
@@ -44,7 +45,9 @@ public class Sed implements PluginTemp
 
 		    	for (int i = 0; i < messages.size();i++)
 		    		if (messages.get(i).getUser().equals(tuser))
-		    			irc.sendServer("PRIVMSG " + channel + " " + user + " thought " + tuser + " meant at " + new SimpleDateFormat("HH:mm:ss").format(messages.get(i).getDate()) + ": " + messages.get(i).getMessage().replaceAll(source, replacement));
+		    			if ((Pattern.compile(source,
+		    				Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(messages.get(i).getMessage())).find())
+		    				irc.sendServer("PRIVMSG " + channel + " " + user + " thought " + tuser + " meant at " + new SimpleDateFormat("HH:mm:ss").format(messages.get(i).getDate()) + ": " + messages.get(i).getMessage().replaceFirst(source, replacement));
 
 		    }
 		    else
