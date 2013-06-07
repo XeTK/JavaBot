@@ -15,7 +15,7 @@ public class Quote implements PluginTemp
 {
 
 	@Override
-	public void onCreate(String in_str) {}
+	public void onCreate(String in_str) {System.out.println("\u001B[37mQuote Plugin Loaded");}
 
 	@Override
 	public void onTime(String in_str) {}
@@ -46,34 +46,37 @@ public class Quote implements PluginTemp
 				    	String item = r.group(1),
 				    			type = r.group(2),
 				    			ammount = r.group(3);
-				    	int iAmmount = 0;
-				    	
-			    		if (type.equals("++"))
-			    		{
-			    			iAmmount = 1;
-			    		}
-			    		else if(type.equals("--"))
-			    		{
-			    			iAmmount = -1;
-			    		}
-			    		else
-			    		{
-			    			type = type.trim();
-			    			ammount = ammount.trim();
-			    			if (type.equals("+"))
-			    				iAmmount = Integer.valueOf(ammount);
-			    			else	
-			    				iAmmount = Integer.valueOf(type + ammount);
-			    		}
-			    		if (iAmmount > 100||iAmmount < -100)
-			    		{
-			    			irc.sendServer("PRIVMSG " + channel + " You cant do that its to much rep...");
-			    		}
-			    		else
-			    		{
-				    		db.updateRep(item, iAmmount);
-					    	irc.sendServer("PRIVMSG " + channel + " " + item + ": Rep = " + db.getUserRep(item) + "!");
-			    		}
+				    	if (!type.equals(""))
+				    	{
+					    	int iAmmount = 0;
+					    	
+				    		if (type.equals("++"))
+				    		{
+				    			iAmmount = 1;
+				    		}
+				    		else if(type.equals("--"))
+				    		{
+				    			iAmmount = -1;
+				    		}
+				    		else
+				    		{
+				    			type = type.trim();
+				    			ammount = ammount.trim();
+				    			if (type.equals("+"))
+				    				iAmmount = Integer.valueOf(ammount);
+				    			else	
+				    				iAmmount = Integer.valueOf(type + ammount);
+				    		}
+				    		if (iAmmount > 100||iAmmount < -100)
+				    		{
+				    			irc.sendServer("PRIVMSG " + channel + " You cant do that its to much rep...");
+				    		}
+				    		else
+				    		{
+					    		db.updateRep(item, iAmmount);
+						    	irc.sendServer("PRIVMSG " + channel + " " + item + ": Rep = " + db.getUserRep(item) + "!");
+				    		}
+				    	}
 				    }
 				}
 				else if (message.matches("\\.rep [A-Za-z0-9#]+$"))
@@ -137,7 +140,7 @@ public class Quote implements PluginTemp
 						String[] quotes = db.getQuotes(t[1]);
 						if (quotes.length > 0)
 						{
-							irc.sendServer("PRIVMSG " + channel + " " + quotes[new Random().nextInt(quotes.length - 1)]);
+							irc.sendServer("PRIVMSG " + channel + " " + quotes[new Random().nextInt(quotes.length)]);
 						}
 					}
 	 			}
@@ -177,16 +180,8 @@ public class Quote implements PluginTemp
 				}
 				
 			} 
-			catch (SQLException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} 
-			catch (ClassNotFoundException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}	
+			catch (SQLException e){e.printStackTrace();} 
+			catch (ClassNotFoundException e){e.printStackTrace();}	
 		}
 	}
 
@@ -207,29 +202,13 @@ public class Quote implements PluginTemp
 				String[] quotes = db.getQuotes(user);
 				if (quotes.length > 0)
 				{
-					irc.sendServer("PRIVMSG " + channel + " " + quotes[new Random().nextInt(quotes.length - 1)]);
+					irc.sendServer("PRIVMSG " + channel + " " + quotes[new Random().nextInt(quotes.length)]);
 				}
 			}
-			catch (SQLException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} 
-			catch (ClassNotFoundException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} 
-			catch (IRCException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} 
-			catch (IOException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			catch (SQLException e){e.printStackTrace();} 
+			catch (ClassNotFoundException e){e.printStackTrace();} 
+			catch (IRCException e){e.printStackTrace();} 
+			catch (IOException e){e.printStackTrace();}
 	    }
 	}
 

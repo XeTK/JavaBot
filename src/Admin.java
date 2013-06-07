@@ -14,7 +14,7 @@ public class Admin implements PluginTemp
 {
 
 	@Override
-	public void onCreate(String in_str) throws IRCException, IOException {}
+	public void onCreate(String in_str) throws IRCException, IOException {System.out.println("\u001B[37mAdmin Plugin Loaded");}
 	
 	@Override
 	public void onTime(String in_str) throws IRCException, IOException {}

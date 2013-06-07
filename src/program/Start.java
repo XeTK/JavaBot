@@ -60,6 +60,7 @@ public class Start
 		for (int i = 0;i < details.getChannels().length;i++)
 			irc.sendServer("JOIN " + details.getChannels()[i]);
 	}
+	
 	private void mainLoop() throws IOException, IRCException
 	{
 		IRC irc = IRC.getInstance();
@@ -69,9 +70,7 @@ public class Start
 			pluginsglob.get(i).onCreate("");
 		
 		while(true)
-		{
-			//:XeTK!xetk@cpc4-swin16-2-0-cust422.3-1.cable.virginmedia.com PRIVMSG #xetk :asdf
-			
+		{			
 			String output = irc.getFromServer();
 			
 			if (output == null)
@@ -143,9 +142,11 @@ public class Start
 			{
 				try 
 				{
+					
 					// only consider files ending in ".class"
 					if (!files[i].endsWith(".class"))
 						continue;
+					System.out.println("\u001B[33m" + files[i]);
 					Class c = cl.loadClass(files[i].substring(0, files[i].indexOf(".")));
 					Class[] intf = c.getInterfaces();
 					for (int j=0; j<intf.length; j++) 
