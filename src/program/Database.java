@@ -145,4 +145,25 @@ public class Database
 	{
 		executeUpdate("DELETE FROM remind WHERE Recipient =\"" + username + "\"");
 	}
+	
+	public void addQuote(String username, String quote) throws SQLException, ClassNotFoundException
+	{
+		executeUpdate("INSERT INTO Quote(User,Message) VALUES(\"" + username + "\", \"" + quote + "\")");
+	}
+	
+	public String[] getQuotes(String username) throws SQLException, ClassNotFoundException 
+	{
+		connect();
+		ResultSet exist = (handle.createStatement().executeQuery("SELECT * FROM Quote WHERE User =\"" + username + "\""));
+		ArrayList<String> temp = new ArrayList<String>();
+		while(exist.next())
+			temp.add(exist.getString("User") + ": " + exist.getString("Message"));
+		disconnect();
+		return temp.toArray(new String[temp.size()]);
+	}
+	
+	public void delQuote(String message) throws ClassNotFoundException, SQLException
+	{
+		executeUpdate("DELETE FROM Quote WHERE Message =\"" + message + "\"");
+	}
 }

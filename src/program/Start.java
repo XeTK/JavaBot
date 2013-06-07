@@ -25,7 +25,10 @@ public class Start
 	
 	public static void main(String[] args) throws UnknownHostException, IOException, IRCException
 	{
-		loadGSON("details.json");
+		if (new File("details.json").exists())
+			loadGSON("details.json");
+		else
+			saveGSON("details.json");
 		
 		Start init = getInstance();
 		
@@ -50,6 +53,9 @@ public class Start
 		irc.connectServer(details.getServer(), details.getPort());
 		irc.sendServer("User " + details.getNickName() + " " + details.getName() + " " + details.getHost() + " :" + details.getName());
 		irc.sendServer("NICK " + details.getNickName());
+		
+		for (int i = 0;i < details.getStartup().length;i++)
+			irc.sendServer(details.getStartup()[i]);
 		
 		for (int i = 0;i < details.getChannels().length;i++)
 			irc.sendServer("JOIN " + details.getChannels()[i]);

@@ -25,8 +25,6 @@ public class Admin implements PluginTemp
 		IRC irc = IRC.getInstance();
 		Details details = Details.getIntance();
 		
-		//:XeTK!xetk@cpc4-swin16-2-0-cust422.3-1.cable.virginmedia.com PRIVMSG #xetk :asdf
-		
 	    Matcher m = 
 	    		Pattern.compile(":([\\w_\\-]+)!\\w+@([\\w\\d\\.-]+) PRIVMSG (#?\\w+) :(.*)$",
 	    				Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(in_str);
@@ -56,7 +54,7 @@ public class Admin implements PluginTemp
 				{
 					if (user.equals(details.getAdmins()[i]))
 					{
-						irc.sendServer("QUIT Leaving Master");
+						irc.sendServer("QUIT Goodbye All!");
 						break;
 					}
 				}
@@ -84,10 +82,14 @@ public class Admin implements PluginTemp
 	public void onJoin(String in_str) throws IRCException, IOException
 	{
 		IRC irc = IRC.getInstance();
-		String data[] = in_str.split(":"),
-				user = data[1].split("!")[0],
-				channel = data[2];
-		irc.sendServer("MODE " + channel + " +v " +user);
+	    Matcher m = 
+	    		Pattern.compile(":([\\w_\\-]+)!\\w+@([\\w\\d\\.-]+) JOIN :(#?\\w+)",
+	    				Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(in_str);
+	    if (m.find())
+	    {
+	    	String user = m.group(1), host = m.group(2), channel = m.group(3);
+	    	irc.sendServer("MODE " + channel + " +v " +user);
+	    }
 	}
 
 	@Override
