@@ -13,6 +13,7 @@ Channel Stats
 Add String response
 Dice Roll
 TimeTable Support 
+Bug Reporting
 
 Others:
 Write web front end (Snow)
