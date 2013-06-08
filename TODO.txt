@@ -1,0 +1,20 @@
+JavaBot ToDo List
+
+Refactor:
+Refract plugin loading replace with different version
+sanitise strings everywhere
+Info
+Comment
+Write Readme.md / Fix Git
+
+Add:
+New user Detection / Host Change
+Add RSS reader title set
+Channel Stats
+Add String response
+Dice Roll
+TimeTable Support 
+
+Others:
+Write web front end (Snow)
+URL Scrapper (Goggles?)
