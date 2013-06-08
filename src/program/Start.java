@@ -23,7 +23,8 @@ public class Start
 	
 	private ArrayList<PluginTemp> pluginsglob = new ArrayList<PluginTemp>();
 	
-	public static void main(String[] args) throws UnknownHostException, IOException, IRCException
+	public static void main(String[] args) 
+			throws UnknownHostException, IOException, IRCException
 	{
 		if (new File("details.json").exists())
 			loadGSON("details.json");
@@ -51,8 +52,6 @@ public class Start
 		Details details = Details.getIntance();
 		
 		irc.connectServer(details.getServer(), details.getPort());
-		irc.sendServer("User " + details.getNickName() + " " + details.getName() + " " + details.getHost() + " :" + details.getName());
-		irc.sendServer("NICK " + details.getNickName());
 		
 		for (int i = 0;i < details.getStartup().length;i++)
 			irc.sendServer(details.getStartup()[i]);
@@ -139,30 +138,26 @@ public class Start
 		{
 			// we'll only load classes directly in this directory -
 			// no subdirectories, and no classes in packages are recognized
-			String[] files = dir.list();
-			for (int i=0; i<files.length; i++) 
+			String[] fi = dir.list();
+			for (int i=0; i<fi.length; i++) 
 			{
 				try 
 				{
 					
 					// only consider files ending in ".class"
-					if (!files[i].endsWith(".class"))
+					if (!fi[i].endsWith(".class"))
 						continue;
-					System.out.println("\u001B[33m" + files[i]);
-					Class c = cl.loadClass(files[i].substring(0, files[i].indexOf(".")));
+					System.out.println("\u001B[33m" + fi[i]);
+					Class c = cl.loadClass(fi[i].substring(0, fi[i].indexOf(".")));
 					Class[] intf = c.getInterfaces();
 					for (int j=0; j<intf.length; j++) 
 					{
-						// the following line assumes that PluginFunction has a no-argument constructor
 						PluginTemp pf = (PluginTemp) c.newInstance();
 						pluginsglob.add(pf);
 						continue;
 					}
 				} 
-				catch (Exception ex) 
-				{
-					System.err.println("File " + files[i] + " does not contain a valid PluginFunction class.");
-				}
+				catch (Exception ex) {}
 			}
 		}
 	}

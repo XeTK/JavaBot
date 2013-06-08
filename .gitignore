@@ -1,6 +1,7 @@
 .classpath
 .project
 .settings/
+doc/*
 bin/*
 plugin/*
 *.class
