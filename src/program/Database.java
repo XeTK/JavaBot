@@ -172,6 +172,12 @@ public class Database
 		executeUpdate(update);
 	}
 	
+	/**
+	 * This returns the reputation of a specific item given, it executes and 
+	 * returns the value that is stored within the DB.
+	 * @param user this is the name of the item we want to get the reputation for.
+	 * @return this is the value of the reputation of the passed in item
+	 */
 	public int getUserRep(String user) 
 			throws ClassNotFoundException, SQLException
 	{
@@ -179,6 +185,12 @@ public class Database
 				"WHERE item =\"" + user + "\" LIMIT 1","rep");
 	}
 	
+	/**
+	 * This returns the number of message sent by a specific user, it executes 
+	 * a query to return the value of the number of messages that the user has sent.
+	 * @param user this is the username we want to return the messages sent for.
+	 * @return's the value of the messages sent by the end user.
+	 */
 	public int getMessagesSent(String user) 
 			throws ClassNotFoundException, SQLException
 	{
@@ -193,6 +205,13 @@ public class Database
 				"WHERE NickName =\"" + user + "\" LIMIT 1","LastOnline");
 	}
 	
+	/**
+	 * This adds a reminder to the DB to be later picked up and used to reminder 
+	 * an user of something another user wants to remind them off.
+	 * @param sender this is the person that sent the reminder
+	 * @param recip this is the recipient of the message and who it is targeted at
+	 * @param message this is the actual message that is going to given to the user
+	 */
 	public void addReminder(String sender,String recip, String message) 
 			throws SQLException, ClassNotFoundException
 	{
@@ -200,6 +219,12 @@ public class Database
 				"VALUES(\"" + sender + "\", \"" + recip +"\", \""+ message +"\")");
 	}
 	
+	/**
+	 * This retrieves all the reminders for a given user, so they can be presented
+	 * to the end user, it uses a result set and query to get this information
+	 * @param username this the user that we want to retrieve the reminders for
+	 * @return's a list of reminders for the given user to be handled and printed
+	 */
 	public String[] getReminders(String username) 
 			throws ClassNotFoundException, SQLException
 	{
@@ -220,11 +245,16 @@ public class Database
 		return temp.toArray(new String[temp.size()]);
 	}
 	
+	/**
+	 * This removes any already viewed reminders that a view has viewed
+	 * @param user this is the user we want to remove the reminders for
+	 */
 	public void delReminder(String user) 
 			throws ClassNotFoundException, SQLException
 	{
 		executeUpdate("DELETE FROM remind WHERE Recipient =\"" + user + "\"");
 	}
+	
 	
 	public void addQuote(String user, String quote) 
 			throws SQLException, ClassNotFoundException

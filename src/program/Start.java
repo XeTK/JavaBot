@@ -1,6 +1,5 @@
 package program;
 
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -11,7 +10,7 @@ import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
-import plugin.PluginClassLoader;
+import plugin.PluginLoader;
 import plugin.PluginTemp;
 
 import com.google.gson.Gson;
@@ -23,8 +22,7 @@ public class Start
 	
 	private ArrayList<PluginTemp> pluginsglob = new ArrayList<PluginTemp>();
 	
-	public static void main(String[] args) 
-			throws UnknownHostException, IOException, IRCException
+	public static void main(String[] args) throws Exception
 	{
 		if (new File("details.json").exists())
 			loadGSON("details.json");
@@ -125,41 +123,25 @@ public class Start
 		writer.close();
 	}
 	
-	//http://www.javaranch.com/journal/200607/Plugins.html
-	private void loadPlugins() throws MalformedURLException
+	private void loadPlugins() throws Exception
 	{
 		pluginsglob = new ArrayList<PluginTemp>();
 		File dir = new File(System.getProperty("user.dir"));
-		ClassLoader cl = new PluginClassLoader(dir);
 		
-		System.out.println("\u001B[33m" + dir.toString());
+		System.out.println("\u001B[33mPlugins Dir: " + dir.toString());
+		System.out.print("Plugins Found : ");
 		
 		if (dir.exists() && dir.isDirectory()) 
 		{
-			// we'll only load classes directly in this directory -
-			// no subdirectories, and no classes in packages are recognized
 			String[] fi = dir.list();
 			for (int i=0; i<fi.length; i++) 
 			{
-				try 
-				{
-					
-					// only consider files ending in ".class"
-					if (!fi[i].endsWith(".class"))
-						continue;
-					System.out.println("\u001B[33m" + fi[i]);
-					Class c = cl.loadClass(fi[i].substring(0, fi[i].indexOf(".")));
-					Class[] intf = c.getInterfaces();
-					for (int j=0; j<intf.length; j++) 
-					{
-						PluginTemp pf = (PluginTemp) c.newInstance();
-						pluginsglob.add(pf);
-						continue;
-					}
-				} 
-				catch (Exception ex) {}
+				PluginTemp pf = (PluginTemp) new PluginLoader().loadClassOBJ(fi[i]);
+				if (pf != null)
+					pluginsglob.add(pf);
 			}
 		}
+		System.out.println();
 	}
 
 	public ArrayList<PluginTemp> getPluginsglob()

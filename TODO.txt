@@ -1,7 +1,6 @@
 JavaBot ToDo List
 
 Refactor:
-Refract plugin loading replace with different version
 sanitise strings everywhere
 Info
 Comment
