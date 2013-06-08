@@ -98,10 +98,23 @@ public class Reminder implements PluginTemp
 				else if(message.matches("^\\.help") || message.matches("^\\."))
 			    {
 					irc.sendServer("PRIVMSG " + channel + " REMINDER: " +
+									".remind *username* *Message* - leave a message for another member : " +
 									".reminder 00:00 *Message* - Leave reminder for the channel to view later today : " +
 									".reminder 01/01/1970 00:00 *Message* Leave a reminder for the future on a different date : "
 									);
 			    }
+				else
+				{
+					String[] reminders = db.getReminders(user);
+					if (reminders.length > 0)
+					{
+						for (int i = 0; i < reminders.length;i++)
+						{
+							irc.sendServer("PRIVMSG " + channel + " " + reminders[i]);
+							db.delReminder(user);
+						}
+					}
+				}
 		    }
 		} 
     	catch (ParseException e){} catch (SQLException e){} catch (ClassNotFoundException e){}
