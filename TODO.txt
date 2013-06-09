@@ -14,7 +14,8 @@ Add String response
 Dice Roll
 TimeTable Support 
 Bug Reporting
+Hot Adding of Bot Admins
 
 Others:
 Write web front end (Snow)
-URL Scrapper (Goggles?)
+URL Scraper (Goggles?)
