@@ -1,19 +1,11 @@
 package program;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import plugin.PluginLoader;
 import plugin.PluginTemp;
-
-import com.google.gson.Gson;
 
 
 public class Start
@@ -24,10 +16,11 @@ public class Start
 	
 	public static void main(String[] args) throws Exception
 	{
-		if (new File("details.json").exists())
-			loadGSON("details.json");
+		String cfgFile = "Details.json";
+		if (new File(cfgFile).exists())
+			Details.setInstance((Details)JSON.loadGSON(cfgFile,Details.class));
 		else
-			saveGSON("details.json");
+			JSON.saveGSON(cfgFile,Details.getIntance());
 		
 		Start init = getInstance();
 		
@@ -93,34 +86,6 @@ public class Start
 
 		}
 		irc.closeConnection();
-	}
-	
-	private static void loadGSON(String in_Path) throws IOException
-	{
-		BufferedReader reader = new BufferedReader(new FileReader(in_Path));
-		
-		String tempWord = "", json = "";
-		
-		while ((tempWord = reader.readLine()) != null)
-			json += tempWord + "\n";
-		
-		reader.close();
-		
-		Details.setInstance(new Gson().fromJson(json, Details.class));
-	}
-	
-	private static void saveGSON(String in_Path) throws IOException
-	{
-		File filePath = new File(in_Path);
-		
-		if (!filePath.exists())
-			filePath.createNewFile();
-		else
-			filePath.delete();
-		
-		BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
-		writer.write(new Gson().toJson(Details.getIntance()));
-		writer.close();
 	}
 	
 	private void loadPlugins() throws Exception

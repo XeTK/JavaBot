@@ -18,6 +18,7 @@ public class StatUser
 	{
 		return username;
 	}
+	
 	public int getMsgSent()
 	{
 		return msgSent;

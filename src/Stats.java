@@ -1,25 +1,65 @@
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import plugin.PluginTemp;
 import program.Database;
+import program.Details;
 import program.IRC;
 import program.IRCException;
+import program.JSON;
 
 
 public class Stats implements PluginTemp
 {
 
+	private StatDay today;
 	@Override
-	public void onCreate(String in_str) throws IRCException, IOException {}
+	public void onCreate(String in_str) throws IRCException, IOException {System.out.println("\u001B[37mStats Plugin Loaded");}
 
 	@Override
 	public void onTime(String in_str) throws IRCException, IOException
 	{
-		// TODO Auto-generated method stub
-
+		IRC irc = IRC.getInstance();
+		String ti = new SimpleDateFormat("HH:mm:ss").format(new Date());
+		
+		Matcher m = 
+				Pattern.compile("([0-2][0-9]):([0-5][0-9]):([0-5][0-9])",
+						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(ti);
+		if (m.find())
+		{
+			String hour = m.group(1), min = m.group(2), sec = m.group(3);
+			
+			String[] channels = Details.getIntance().getChannels();
+			if (min.equals("59")&&sec.equals("59"))
+				for (int i = 0; i < channels.length;i++)
+					irc.sendServer("PRIVMSG " + channels[i] + " Hourly Stats: Messages Sent : " + today.getHour().getMsgSent());
+			
+			if (hour.equals("00")&&min.equals("00")&&sec.equals("00"))
+			{
+				JSON.saveGSON("TestDay.json", today);
+				today = new StatDay();
+			}
+			
+			if (sec.equals("00"))
+			{
+				ti = new SimpleDateFormat("yyyyMMdd").format(new Date());
+				
+				String path = "logs/" + ti + ".json";
+				
+				File fi = new File(path);
+				
+				if (fi.exists())
+					fi.delete();
+				
+				if (sec.equals("00"))
+					JSON.saveGSON(path, today);
+			}
+		}
 	}
 
 	@Override
@@ -39,7 +79,12 @@ public class Stats implements PluginTemp
 			{
 				IRC irc = IRC.getInstance();
 				Database db = Database.getInstance();
-				db.updateUser(user);
+				
+				if (today == null)
+					today = new StatDay();
+				
+				today.incMsgSent(user);
+				
 				if (message.matches("\\.msgsent [A-Za-z0-9#]+$"))
 				{
 					String[] t = message.split(" ");
@@ -63,19 +108,24 @@ public class Stats implements PluginTemp
 			catch (SQLException e){e.printStackTrace();} 
 			catch (ClassNotFoundException e){e.printStackTrace();}	
 	    }
-
 	}
 
 	@Override
 	public void onJoin(String in_str) throws IRCException, IOException
 	{
+		if (today == null)
+			today = new StatDay();
 		
+		today.incJoins();
 	}
 	
 	@Override
 	public void onQuit(String in_str) throws IRCException, IOException
 	{
+		if (today == null)
+			today = new StatDay();
 		
+		today.incQuits();
 	}
 
 }

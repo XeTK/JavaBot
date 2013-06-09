@@ -1,3 +1,6 @@
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 public class StatDay
 {
@@ -5,25 +8,29 @@ public class StatDay
 	
 	public void incMsgSent(String user)
 	{
-		int i = 0;
-		hours[i].incMsgSent(user);
+		getHour().incMsgSent(user);
 	}
 	
 	public void incJoins()
 	{
-		int i = 0;
-		hours[i].incJoins();
+		getHour().incJoins();
 	}
 	
 	public void incQuits()
 	{
-		int i = 0;
-		hours[i].incQuits();
+		getHour().incQuits();
 	}
 	
 	public StatHour[] getHours()
 	{
 		return hours;
 	}
-	
+
+	public StatHour getHour()
+	{
+		int i = Integer.valueOf(new SimpleDateFormat("HH").format(new Date()));
+		if (hours[i] == null)
+			hours[i] = new StatHour();
+		return hours[i];
+	}
 }

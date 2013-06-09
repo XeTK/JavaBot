@@ -1,10 +1,10 @@
 JavaBot ToDo List
 
 Refactor:
-sanitise strings everywhere
 Info
 Comment
 Write Readme.md / Fix Git
+replace mysql with json
 
 Add:
 New user Detection / Host Change
@@ -14,6 +14,8 @@ Add String response
 Dice Roll
 TimeTable Support 
 Bug Reporting
+admin controls / hot config change
+reload plugins
 
 Others:
 Write web front end (Snow)
