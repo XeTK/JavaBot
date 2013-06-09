@@ -4,22 +4,16 @@ Refactor:
 Info
 Comment
 Write Readme.md / Fix Git
-replace mysql with json
+fix delete quote and not saving quotes
 
 Add:
-New user Detection / Host Change
 Add RSS reader title set
-Channel Stats
 Add String response
 Dice Roll
 TimeTable Support 
 Bug Reporting
-<<<<<<< HEAD
 admin controls / hot config change
 reload plugins
-=======
-Hot Adding of Bot Admins
->>>>>>> 5b2b265e64caa9f1ea0fb7cab3fe6c7feb3de1a9
 
 Others:
 Write web front end (Snow)

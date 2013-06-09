@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
+import addons.UserList;
+
 import plugin.PluginLoader;
 import plugin.PluginTemp;
 
@@ -12,11 +14,12 @@ public class Start
 {
 	private static Start startInstance;
 	
+	private static final String cfgFile = "Details.json";
+			
 	private ArrayList<PluginTemp> pluginsglob = new ArrayList<PluginTemp>();
 	
 	public static void main(String[] args) throws Exception
 	{
-		String cfgFile = "Details.json";
 		if (new File(cfgFile).exists())
 			Details.setInstance((Details)JSON.loadGSON(cfgFile,Details.class));
 		else

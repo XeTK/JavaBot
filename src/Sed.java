@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import addons.Message;
+
 import plugin.PluginTemp;
 import program.IRC;
 import program.IRCException;
@@ -29,7 +31,7 @@ public class Sed implements PluginTemp
 		 
 	    if (m.find())
 	    {
-		    String user = m.group(1), host = m.group(2), channel = m.group(3), message = m.group(4);
+		    String user = m.group(1).toLowerCase(), host = m.group(2), channel = m.group(3), message = m.group(4);
 		    
 		    if(message.matches("^\\.help") || message.matches("^\\."))
 				irc.sendServer("PRIVMSG " + channel + " SED: " +

@@ -30,7 +30,7 @@ public class Admin implements PluginTemp
 	    				Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(in_str);
 	    if (m.find())
 	    {
-	        String user = m.group(1), host = m.group(2), channel = m.group(3), message = m.group(4);
+	        String user = m.group(1).toLowerCase(), host = m.group(2), channel = m.group(3), message = m.group(4);
 	        
 	        if (message.charAt(message.length() - 1 ) == ' ')
 	        	message = message.substring(0, message.length() -1);

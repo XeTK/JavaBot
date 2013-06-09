@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -7,41 +8,46 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import addons.Reminders;
+import addons.RemindersList;
+import addons.RepList;
+import addons.User;
+import addons.UserList;
+
 import plugin.PluginTemp;
-import program.Database;
 import program.Details;
 import program.IRC;
 import program.IRCException;
+import program.JSON;
 
 
 public class Reminder implements PluginTemp
 {
-
+	private RemindersList rl = new RemindersList();
+	private static final String cfgFile = "Reminders.json";
+	
 	@Override
-	public void onCreate(String in_str) throws IRCException, IOException {System.out.println("\u001B[37mReminder Plugin Loaded");}
+	public void onCreate(String in_str) throws IRCException, IOException 
+	{
+		System.out.println("\u001B[37mReminder Plugin Loaded");
+		if (new File(cfgFile).exists())
+			rl = (RemindersList)JSON.loadGSON(cfgFile, RemindersList.class);
+		else
+			JSON.saveGSON(cfgFile, rl);
+	}
 
 	@Override
 	public void onTime(String in_str) throws IRCException, IOException
 	{	
-		try
-		{
-			IRC irc = IRC.getInstance();
-			Database db = Database.getInstance();
-			
-			String[] channels = Details.getIntance().getChannels();
-			
-			String sampleTime = new SimpleDateFormat("yyyy MM dd HH:mm").format(new Date());
-
-			String[] reminders = db.getReminderEvents(sampleTime);
-			
-			for (int i = 0; i < reminders.length; i++)
-				for (int j = 0; j < channels.length;j++)
-					irc.sendServer("PRIVMSG " + channels[j] + " " + reminders[i]);
-			
-			if (reminders.length > 0)
-				db.delReminderEvent(sampleTime);
-		} 
-		catch (SQLException e) {} catch (ClassNotFoundException e) {}
+		IRC irc = IRC.getInstance();
+		
+		String[] channels = Details.getIntance().getChannels();
+		
+		Reminders[] reminders = rl.getReminders(new Date());
+		
+		for (int i = 0; i < reminders.length; i++)
+			for (int j = 0; j < channels.length;j++)
+				irc.sendServer("PRIVMSG " + channels[j] + " " + reminders[i].getReminder());
 	}
 
 	@Override
@@ -49,8 +55,8 @@ public class Reminder implements PluginTemp
 	{
 		try
 		{
-			Database db = Database.getInstance();
 			IRC irc = IRC.getInstance();
+			UserList ul = UserList.getInstance();
 			
 			Matcher m = 
 			    		Pattern.compile(":([\\w_\\-]+)!\\w+@([\\w\\d\\.-]+) PRIVMSG (#?\\w+) :(.*)$",
@@ -58,16 +64,16 @@ public class Reminder implements PluginTemp
 			 
 		    if (m.find())
 		    {
-			    String user = m.group(1), host = m.group(2), channel = m.group(3), message = m.group(4);
+			    String user = m.group(1).toLowerCase(), host = m.group(2), channel = m.group(3), message = m.group(4);
 			    
 				if (message.matches("(\\.remind)\\s([a-zA-Z0-9]*)\\s([a-zA-Z\\w\\d\\s]*)"))
 				{
-				    Matcher r = Pattern.compile("(\\.remind)\\s([a-zA-Z0-9]*)\\s([a-zA-Z\\w\\d\\s]*)",
+				    Matcher r = Pattern.compile("\\.remind\\s([a-zA-Z0-9]*)\\s([a-zA-Z\\w\\d\\s]*)",
 				    				Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
 				    if (r.find())
 				    {
-				    	db.addReminder(user,r.group(2),r.group(3));
-						irc.sendServer("PRIVMSG " + channel + " " + user + ": I will remind " + r.group(2) + " next time they are here.");
+				    	ul.addReminder(r.group(1),  r.group(1) + ": " + user + " Said to you earlier " + r.group(2));
+						irc.sendServer("PRIVMSG " + channel + " " + user + ": I will remind " + r.group(1) + " next time they are here.");
 				    }
 				}
 				else if(message.matches("^\\.reminder ([\\d//:]*) ([\\d:]*).*"))
@@ -87,11 +93,11 @@ public class Reminder implements PluginTemp
 				    	}
 				    	else
 				    	{
-				    		date = new SimpleDateFormat("yyyy/MM/dd").format(new Date()) + " " + m.group(1);
+				    		date = new SimpleDateFormat("dd/MM/yyyy").format(new Date()) + " " + m.group(1);
 				    		reminder = m.group(2);
 				    	}
 				    	eventtime = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ENGLISH).parse(date);
-			    		db.addReminderEvent(new SimpleDateFormat("yyyy MM dd HH:mm").format(eventtime), reminder);
+			    		rl.addReminder(reminder, eventtime);
 			    		irc.sendServer("PRIVMSG " + channel + " " + user + ": Reminder Added.");
 				    }
 				}
@@ -105,19 +111,30 @@ public class Reminder implements PluginTemp
 			    }
 				else
 				{
-					String[] reminders = db.getReminders(user);
-					if (reminders.length > 0)
+					User userOBJ = ul.getUser(user);
+					if (userOBJ != null)
 					{
-						for (int i = 0; i < reminders.length;i++)
+						if (userOBJ.isDirty())
 						{
-							irc.sendServer("PRIVMSG " + channel + " " + reminders[i]);
-							db.delReminder(user);
+							String[] reminders = userOBJ.getReminders();
+							if (reminders.length > 0)
+							{
+								for (int i = 0; i < reminders.length;i++)
+								{
+									irc.sendServer("PRIVMSG " + channel + " " + reminders[i]);
+								}
+							}
+							else
+							{
+								irc.sendServer("PRIVMSG " + channel + " " + user + ": Your host has changed...");
+							}
 						}
 					}
 				}
+				JSON.saveGSON(cfgFile, rl);
 		    }
 		} 
-    	catch (ParseException e){} catch (SQLException e){} catch (ClassNotFoundException e){}
+    	catch (ParseException e){}
 
 	}
 
