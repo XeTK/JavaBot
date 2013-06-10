@@ -66,9 +66,9 @@ public class Reminder implements PluginTemp
 		    {
 			    String user = m.group(1).toLowerCase(), host = m.group(2), channel = m.group(3), message = m.group(4);
 			    
-				if (message.matches("(\\.remind)\\s([a-zA-Z0-9]*)\\s([a-zA-Z\\w\\d\\s]*)"))
+				if (message.matches("(\\.reminder)\\s([a-zA-Z0-9]*)\\s([a-zA-Z\\w\\d\\s]*)"))
 				{
-				    Matcher r = Pattern.compile("\\.remind\\s([a-zA-Z0-9]*)\\s([a-zA-Z\\w\\d\\s]*)",
+				    Matcher r = Pattern.compile("\\.reminder\\s([a-zA-Z0-9]*)\\s([a-zA-Z\\w\\d\\s]*)",
 				    				Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
 				    if (r.find())
 				    {
@@ -84,18 +84,12 @@ public class Reminder implements PluginTemp
 				    if (m.find())
 				    {
 				    	
-				    	String date = m.group(1), reminder = m.group(2);
+				    	String date = m.group(1), reminder = m.group(3);
 				    	Date eventtime;
 				    	if (date.matches("([0-3][0-9]/[0-1][0-9]/20[1-9][0-9])"))
-				    	{
-				    		date += " " + m.group(2);
-				    		reminder = m.group(3);	
-				    	}
+				    		date += " " + m.group(2);	
 				    	else
-				    	{
 				    		date = new SimpleDateFormat("dd/MM/yyyy").format(new Date()) + " " + m.group(1);
-				    		reminder = m.group(2);
-				    	}
 				    	eventtime = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ENGLISH).parse(date);
 			    		rl.addReminder(reminder, eventtime);
 			    		irc.sendServer("PRIVMSG " + channel + " " + user + ": Reminder Added.");
@@ -104,7 +98,7 @@ public class Reminder implements PluginTemp
 				else if(message.matches("^\\.help") || message.matches("^\\."))
 			    {
 					irc.sendServer("PRIVMSG " + channel + " REMINDER: " +
-									".remind *username* *Message* - leave a message for another member : " +
+									".reminder *username* *Message* - leave a message for another member : " +
 									".reminder 00:00 *Message* - Leave reminder for the channel to view later today : " +
 									".reminder 01/01/1970 00:00 *Message* Leave a reminder for the future on a different date : "
 									);

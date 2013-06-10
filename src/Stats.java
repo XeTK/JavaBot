@@ -38,7 +38,8 @@ public class Stats implements PluginTemp
 			String[] channels = Details.getIntance().getChannels();
 			if (min.equals("59")&&sec.equals("59"))
 				for (int i = 0; i < channels.length;i++)
-					irc.sendServer("PRIVMSG " + channels[i] + " Hourly Stats: Messages Sent : " + today.getHour().getMsgSent() + "| Users joined :" + today.getHour().getJoins() +"| Users left : " + today.getHour().getQuits());;
+					if (today.getHour().getMsgSent() != 0)
+						irc.sendServer("PRIVMSG " + channels[i] + " Hourly Stats: Messages Sent : " + today.getHour().getMsgSent() + "| Users joined :" + today.getHour().getJoins() +"| Users left : " + today.getHour().getQuits());;
 			
 			if (hour.equals("00")&&min.equals("00")&&sec.equals("00"))
 			{

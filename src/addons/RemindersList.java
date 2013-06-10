@@ -15,7 +15,7 @@ public class RemindersList
 		ArrayList<Reminders> eventsAtThisTime = new ArrayList<Reminders>();
 		for (int i = 0; i < reminders.size();)
 		{
-			if (reminders.get(i).getTimeOfEvent().compareTo(timeOfEvent) >= 0)
+			if (reminders.get(i).getTimeOfEvent().compareTo(timeOfEvent) <= 0)
 			{
 				eventsAtThisTime.add(reminders.get(i));
 				reminders.remove(i);

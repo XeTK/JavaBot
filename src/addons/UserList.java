@@ -45,7 +45,7 @@ public class UserList
 	public boolean isUserDirty(String user)
 	{
 		for (int i = 0; i < users.size();i++)
-			if (users.get(i).getUser().equals(i))
+			if (users.get(i).getUser().equals(user))
 				return users.get(i).isDirty();
 		return false;
 	}

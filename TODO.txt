@@ -4,7 +4,10 @@ Refactor:
 Info
 Comment
 Write Readme.md / Fix Git
-fix delete quote and not saving quotes
+Channel Stats Dayly
+Reload Day if closed
+fix greating its self
+
 
 Add:
 Add RSS reader title set
@@ -12,6 +15,7 @@ Add String response
 Dice Roll
 TimeTable Support 
 Bug Reporting
+execute commands from .admin
 admin controls / hot config change
 reload plugins
 

@@ -12,7 +12,6 @@ import program.IRCException;
 
 public class Quote implements PluginTemp
 {
-	private UserList luq = UserList.getInstance();
 	@Override
 	public void onCreate(String in_str) throws IOException {System.out.println("\u001B[37mQuote Plugin Loaded");}
 	@Override
@@ -21,6 +20,7 @@ public class Quote implements PluginTemp
 	@Override
 	public void onMessage(String in_str) throws IRCException, IOException
 	{
+		UserList luq = UserList.getInstance();
 		Matcher m = 
 				Pattern.compile(":([\\w_\\-]+)!\\w+@([\\w\\d\\.-]+) PRIVMSG (#?\\w+) :(.*)$",
 						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(in_str);
@@ -100,14 +100,19 @@ public class Quote implements PluginTemp
 	    				Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(in_str);
 	    if (m.find())
 	    {
-	    	String user = m.group(1), host = m.group(2), channel = m.group(3);
+	    	String user = m.group(1).toLowerCase(), host = m.group(2), channel = m.group(3);
+	    	System.out.println(user + " Has joined");
 			try
 			{
 				IRC irc = IRC.getInstance();
+				UserList luq = UserList.getInstance();
 				
-				String[] quotes = luq.getQuotes(user);
-				if (quotes != null)
-					irc.sendServer("PRIVMSG " + channel + " " + quotes[new Random().nextInt(quotes.length)]);
+				if (luq.getUser(user) != null)
+				{
+					String[] quotes = luq.getQuotes(user);
+					if (quotes.length > 0)
+						irc.sendServer("PRIVMSG " + channel + " " + user + ": "+ quotes[new Random().nextInt(quotes.length)]);
+				}
 			}
 			catch (IRCException e){e.printStackTrace();} 
 			catch (IOException e){e.printStackTrace();}
