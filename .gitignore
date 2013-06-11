@@ -2,10 +2,12 @@
 .project
 .settings/
 doc/*
+com/*
 bin/*
 plugin/*
 *.class
 src/org/*
 bin/logs*
 *.json
-
+*.sh
+*.jar

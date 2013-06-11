@@ -15,7 +15,6 @@ Add String response
 Dice Roll
 TimeTable Support 
 Bug Reporting
-execute commands from .admin
 admin controls / hot config change
 reload plugins
 

@@ -71,6 +71,13 @@ public class Admin implements PluginTemp
 					}
 				}
 			}
+			else if(message.matches("^\\.cmd .*"))
+			{
+				Matcher p = Pattern.compile("^\\.cmd (.*)", 
+						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
+				if (p.find())
+					irc.sendServer(p.group(1));
+			}
 			else if(message.matches("^\\.help") || message.matches("^\\."))
 			{
 				irc.sendServer("PRIVMSG " + channel + " ADMIN: .join #* - Join Channel : .quit - Kill Bot : .nick ** - Change Bot's Nick : .help - Show Help Text");

@@ -9,13 +9,12 @@ public class Details
 {
 	private static Details details;
 	
-	private String server = "127.0.0.1", dbServer = "127.0.0.1", dbPort = "3306", 
-			dbTable = "jabot", dbUser = "root", dbpasswd = "password";
+	private String server = "127.0.0.1";;
 	
 	private int port = 6667;
 	
-	private String[] channels = {"#xetk"}, admins = {"XeTK"}, 
-			startup = {"User JaBotTest Java Bot JaBot :Java Bot", 
+	private String[] channels = {"#xetk"}, admins = {"xetk"}, 
+			startup = {"User BotNick Java Bot JaBot :Java Bot", 
 			"Nick JabotTest","PRIVMSG zippy identify helloworld"};
 	
 	/**
@@ -50,31 +49,6 @@ public class Details
 	public String getServer()
 	{
 		return server;
-	}
-
-	public String getDbServer()
-	{
-		return dbServer;
-	}
-
-	public String getDbPort()
-	{
-		return dbPort;
-	}
-
-	public String getDbTable()
-	{
-		return dbTable;
-	}
-
-	public String getDbUser()
-	{
-		return dbUser;
-	}
-
-	public String getDbpasswd()
-	{
-		return dbpasswd;
 	}
 
 	public int getPort()
