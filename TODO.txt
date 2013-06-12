@@ -15,6 +15,7 @@ TimeTable Support
 Bug Reporting
 admin controls / hot config change
 reload plugins
+add leaderboard
 
 Others:
 Write web front end (Snow)
