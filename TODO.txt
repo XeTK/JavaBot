@@ -6,8 +6,7 @@ Comment
 Write Readme.md / Fix Git
 Channel Stats Dayly
 Reload Day if closed
-fix greating its self
-
+fix sed
 
 Add:
 Add RSS reader title set

@@ -20,7 +20,19 @@ public class Stats implements PluginTemp
 
 	private StatDay today;
 	@Override
-	public void onCreate(String in_str) throws IRCException, IOException {System.out.println("\u001B[37mStats Plugin Loaded");}
+	public void onCreate(String in_str) throws IRCException, IOException 
+	{
+		System.out.println("\u001B[37mStats Plugin Loaded");
+		
+		String ti = new SimpleDateFormat("yyyyMMdd").format(new Date());
+		
+		String path = "logs/" + ti + ".json";
+		
+		File fi = new File(path);
+		
+		if (fi.exists())
+			today = (StatDay) JSON.loadGSON(path, StatDay.class);
+	}
 
 	@Override
 	public void onTime(String in_str) throws IRCException, IOException
@@ -55,8 +67,8 @@ public class Stats implements PluginTemp
 				
 				File fi = new File(path);
 				
-				if (fi.exists())
-					fi.delete();
+				//if (fi.exists())
+					//fi.delete();
 				
 				if (sec.equals("00"))
 					JSON.saveGSON(path, today);

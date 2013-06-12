@@ -22,7 +22,6 @@ public class Rep implements PluginTemp
 	public void onCreate(String in_str) throws IRCException, IOException 
 	{
 		System.out.println("\u001B[37mRep Plugin Loaded");
-		
 		if (new File(cfgFile).exists())
 			repList = (RepList)JSON.loadGSON(cfgFile, RepList.class);
 		else
