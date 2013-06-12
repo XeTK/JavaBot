@@ -5,6 +5,7 @@ doc/*
 com/*
 bin/*
 plugin/*
+META-INF/*
 *.class
 src/org/*
 bin/logs*

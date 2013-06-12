@@ -13,6 +13,8 @@ public class Details
 	
 	private int port = 6667;
 	
+	private boolean dayStats = true , hourStats = false;
+	
 	private String[] channels = {"#xetk"}, admins = {"xetk"}, 
 			startup = {"User BotNick Java Bot JaBot :Java Bot", 
 			"Nick JabotTest","PRIVMSG zippy identify helloworld"};
@@ -70,4 +72,15 @@ public class Details
 	{
 		return startup;
 	}
+
+	public boolean isDayStats()
+	{
+		return dayStats;
+	}
+
+	public boolean isHourStats()
+	{
+		return hourStats;
+	}
+	
 }

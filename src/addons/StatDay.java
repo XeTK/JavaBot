@@ -34,4 +34,31 @@ public class StatDay
 			hours[i] = new StatHour();
 		return hours[i];
 	}
+	
+	public int msgsSent()
+	{
+		int t = 0;
+		for (int i = 0; i < hours.length; i++)
+			if (hours[i] != null)
+				t += hours[i].getMsgSent();
+		return t;
+	}
+	
+	public int joins()
+	{
+		int t = 0;
+		for (int i = 0; i < hours.length; i++)
+			if (hours[i] != null)
+				t += hours[i].getJoins();
+		return t;
+	}
+	
+	public int quits()
+	{
+		int t = 0;
+		for (int i = 0; i < hours.length; i++)
+			if (hours[i] != null)
+				t += hours[i].getQuits();
+		return t;
+	}
 }

@@ -3,7 +3,7 @@ all:
 	echo Compiling
 	javac -cp gson-2.2.4.jar -d bin/ -sourcepath src/ src/*.java
 	echo Copying dependencies
-	cp com bin/ -R
+	cp -R com bin/
 	echo Running
 	cd bin/
 	java -cp bin/ program.Start

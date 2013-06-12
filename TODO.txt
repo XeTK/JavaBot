@@ -4,9 +4,8 @@ Refactor:
 Info
 Comment
 Write Readme.md / Fix Git
-Channel Stats Dayly
-Reload Day if closed
 fix sed
+80 line fix
 
 Add:
 Add RSS reader title set
