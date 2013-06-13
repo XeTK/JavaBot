@@ -16,6 +16,7 @@ Bug Reporting
 admin controls / hot config change
 reload plugins
 add leaderboard
+handle username change
 
 Others:
 Write web front end (Snow)
