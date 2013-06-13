@@ -2,6 +2,11 @@ package addons;
 
 import java.util.ArrayList;
 
+/**
+ * This holds the list of all the reputations that are tied to all the items
+ * within the IRC Bot, it also deals with getting and adding reputation.
+ * @author Tom Rosier (XeTK)
+ */
 public class RepList
 {
 	private ArrayList<Reputation> repList = new ArrayList<Reputation>();
