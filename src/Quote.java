@@ -22,7 +22,7 @@ public class Quote implements PluginTemp
 	{
 		UserList luq = UserList.getInstance();
 		Matcher m = 
-				Pattern.compile(":([\\w_\\-]+)!\\w+@([\\w\\d\\.-]+) PRIVMSG (#?\\w+) :(.*)$",
+				Pattern.compile(":(.*)!.*@(.*) PRIVMSG (#.*) :(.*)",
 						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(in_str);
 		if (m.find())
 		{
@@ -96,7 +96,7 @@ public class Quote implements PluginTemp
 	public void onJoin(String in_str)
 	{
 	    Matcher m = 
-	    		Pattern.compile(":([\\w_\\-]+)!\\w+@([\\w\\d\\.-]+) JOIN :(#?\\w+)",
+	    		Pattern.compile(":(.*)!.*@(.*) JOIN :(#.*)",
 	    				Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(in_str);
 	    if (m.find())
 	    {

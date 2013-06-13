@@ -34,7 +34,7 @@ public class Users implements PluginTemp
 	{
 		JSON.saveGSON(dbFile, UserList.getInstance());
 		Matcher m = 
-				Pattern.compile(":([\\w_\\-]+)!\\w+@([\\w\\d\\.-]+) PRIVMSG (#?\\w+) :(.*)$",
+				Pattern.compile(":(.*)!.*@(.*) PRIVMSG (#.*) :(.*)",
 						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(in_str);
 		if (m.find())
 		{
@@ -48,7 +48,7 @@ public class Users implements PluginTemp
 	{
 		JSON.saveGSON(dbFile, UserList.getInstance());
 		Matcher m = 
-		    		Pattern.compile(":([\\w_\\-]+)!\\w+@([\\w\\d\\.-]+) JOIN :(#?\\w+)",
+		    		Pattern.compile(":(.*)!.*@(.*) JOIN :(#?.*)",
 		    				Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(in_str);
 	    if (m.find())
 	    {
@@ -67,7 +67,7 @@ public class Users implements PluginTemp
 		JSON.saveGSON(dbFile, UserList.getInstance());
 		
 		Matcher m = 
-		    		Pattern.compile(":([\\w_\\-]+)!\\w+@([\\w\\d\\.-]+) PART (#?\\w+)",
+		    		Pattern.compile(":(.*)!\\(.*@.*) PART (#.*)",
 		    				Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(in_str);
 	    if (m.find())
 	    {

@@ -78,7 +78,7 @@ public class Stats implements PluginTemp
 	public void onMessage(String in_str) throws IRCException, IOException
 	{
 		Matcher m = 
-				Pattern.compile(":([\\w_\\-]+)!\\w+@([\\w\\d\\.-]+) PRIVMSG (#?\\w+) :(.*)$",
+				Pattern.compile(":(.*)!.*@(.*) PRIVMSG (#.*) :(.*)",
 						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(in_str);
 		if (m.find())
 		{

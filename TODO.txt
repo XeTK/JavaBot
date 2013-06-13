@@ -6,6 +6,7 @@ Comment
 Write Readme.md / Fix Git
 fix sed
 80 line fix
+add extra help to stats
 
 Add:
 Add RSS reader title set

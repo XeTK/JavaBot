@@ -2,30 +2,59 @@ package addons;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * This is a data class to hold all relevant information about a IRC User.
+ * @author Tom Rosier (XeTK)
+ */
 public class User
 {
+	
+	// Other data members about the user.
 	private String user, host;
 	private long msgSent, joins, quits;
 	private Date lastOnline;
 	private boolean isDirty = false;
 	
+	// List of reminders and quotes tied to a average user.
 	private ArrayList<String> quotes = new ArrayList<String>();
 	private ArrayList<String> reminders = new ArrayList<String>();
+	
+	/**
+	 * Set the username and host on creation of the class.
+	 * @param user this is the username of the user.
+	 * @param host this is the address of the user.
+	 */
 	public User(String user, String host)
 	{
 		this.user = user;
 		this.host = host;
 	}
+	
+	/**
+	 * This is the method to increment the number of messages sent by a user.
+	 * It also updates the time the user was last seen around the IRC session.
+	 * @param host this is the address the user is working from.
+	 */
 	public void incMsgSent(String host)
 	{
 		msgSent++;
 		lastOnline = new Date();
 		checkDirtyness(host);
 	}
+	
+	/**
+	 * Quick method to increment the number of quits a user has performed
+	 */
 	public void incQuits()
 	{
 		quits++;
 	}
+	
+	/**
+	 * Simple method to increment the number of joins a user has done.
+	 * @param host this is the address of the user is using, 
+	 * it needs to be passed to the dirty check
+	 */
 	public void incjoins(String host)
 	{
 		joins++;

@@ -1,6 +1,5 @@
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,7 +34,7 @@ public class Rep implements PluginTemp
 	public void onMessage(String in_str) throws IRCException, IOException
 	{
 		Matcher m = 
-				Pattern.compile(":([\\w_\\-]+)!\\w+@([\\w\\d\\.-]+) PRIVMSG (#?\\w+) :(.*)$",
+				Pattern.compile(":(.*)!.*@(.*) PRIVMSG (#.*) :(.*)",
 						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(in_str);
 		if (m.find())
 		{
