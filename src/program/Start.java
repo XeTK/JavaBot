@@ -15,6 +15,7 @@ public class Start
 	private static Start startInstance;
 	
 	private static final String cfgFile = "Details.json";
+	private static final String version = "Java Bot v2.11";
 			
 	private ArrayList<PluginTemp> pluginsglob = new ArrayList<PluginTemp>();
 	
@@ -86,6 +87,10 @@ public class Start
 			//Respond to pings
 			if (output.split(" ")[0].equals("PING"))
 				irc.sendServer("PONG " + output.split(" ")[1]);
+			
+			if (output.split(":")[1].equals("VERSION"))
+				irc.sendServer("PRIVMSG " + output.split("!")[0].substring(1) + " " + version);
+				
 
 		}
 		irc.closeConnection();
