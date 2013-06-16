@@ -4,11 +4,8 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
-import addons.UserList;
-
 import plugin.PluginLoader;
 import plugin.PluginTemp;
-
 
 public class Start
 {
@@ -16,21 +13,26 @@ public class Start
 	
 	private static final String cfgFile = "Details.json";
 	private static final String version = "Java Bot v2.11";
-			
+	private static String pluginPath = System.getProperty("user.dir");
+        
 	private ArrayList<PluginTemp> pluginsglob = new ArrayList<PluginTemp>();
 	
 	public static void main(String[] args) throws Exception
 	{
-		if (new File(cfgFile).exists())
-			Details.setInstance((Details)JSON.loadGSON(cfgFile,Details.class));
-		else
-			JSON.saveGSON(cfgFile,Details.getIntance());
-		
-		Start init = getInstance();
-		
-		init.loadPlugins();
-		init.connect();
-		init.mainLoop();
+            for (int i = 0; i < args.length;i++)
+                if (args[i].equals("-p"))
+                    pluginPath = args[++i];
+            
+            if (new File(cfgFile).exists())
+                    Details.setInstance((Details)JSON.loadGSON(cfgFile,Details.class));
+            else
+                    JSON.saveGSON(cfgFile,Details.getIntance());
+
+            Start init = getInstance();
+
+            init.loadPlugins();
+            init.connect();
+            init.mainLoop();
 	}
 	
 	public static Start getInstance()
@@ -99,7 +101,7 @@ public class Start
 	private void loadPlugins() throws Exception
 	{
 		pluginsglob = new ArrayList<PluginTemp>();
-		File dir = new File(System.getProperty("user.dir"));
+		File dir = new File(pluginPath);
 		
 		System.out.println("\u001B[33mPlugins Dir: " + dir.toString());
 		System.out.print("Plugins Found : ");

@@ -45,15 +45,13 @@ public class Sed implements PluginTemp
 		    				Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
 		    if (m.find())
 		    {
-
-		    	String tuser = m.group(1),
+		    	String tuser = m.group(1).toLowerCase(),
 		    			replacement = m.group(3),
 		    			source = m.group(2);
-
+                   
 		    	for (int i = 0; i < messages.size();i++)
 		    		if (messages.get(i).getUser().equals(tuser))
-		    			if ((Pattern.compile(source,
-		    				Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(messages.get(i).getMessage())).find())
+		    			if ((Pattern.compile(source, Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(messages.get(i).getMessage())).find())
 		    				irc.sendServer("PRIVMSG " + channel + " " + user + " thought " + tuser + " meant at " + new SimpleDateFormat("HH:mm:ss").format(messages.get(i).getDate()) + ": " + messages.get(i).getMessage().replaceFirst(source, replacement));
 
 		    }
