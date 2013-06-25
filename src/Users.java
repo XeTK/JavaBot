@@ -10,6 +10,7 @@ import plugin.PluginTemp;
 import program.IRC;
 import program.IRCException;
 import program.JSON;
+import program.Details;
 
 
 public class Users implements PluginTemp
@@ -57,7 +58,8 @@ public class Users implements PluginTemp
 	    	if (userOBJ != null)
 	    		userOBJ.incjoins(host);
 	    	else
-	    		IRC.getInstance().sendServer("PRIVMSG " + channel + " Hello " + user + ", Nice to see a new user arround here. Welcome and dont break things!");
+			if (!Details.getIntance().getNickName().toLowerCase().equals(user))
+	    			IRC.getInstance().sendServer("PRIVMSG " + channel + " Hello " + user + ", Nice to see a new user arround here. Welcome and dont break things!");
 	    }
 	}
 
