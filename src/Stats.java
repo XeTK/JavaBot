@@ -59,7 +59,7 @@ public class Stats implements PluginTemp
 				if (Details.getIntance().isDayStats())
 					if (today.msgsSent() != 0)
 						for (int i = 0; i < channels.length; i++)
-							irc.sendServer("PRIVMSG" + channels[i] + " /me has handled, " + today.msgsSent() + " Messages, " + today.joins() + "  Users Join and " + today.quits() + "User leave.");
+							irc.sendServer("PRIVMSG " + channels[i] + " /me has handled, " + today.msgsSent() + " Messages, " + today.joins() + "  Users Join and " + today.quits() + " User left.");
 
 				today = new StatDay();
 			}

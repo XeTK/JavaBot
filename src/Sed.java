@@ -50,9 +50,17 @@ public class Sed implements PluginTemp
 		    			source = m.group(2);
                    
 		    	for (int i = 0; i < messages.size();i++)
+		    	{
 		    		if (messages.get(i).getUser().equals(tuser))
+		    		{
 		    			if ((Pattern.compile(source, Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(messages.get(i).getMessage())).find())
-		    				irc.sendServer("PRIVMSG " + channel + " " + user + " thought " + tuser + " meant at " + new SimpleDateFormat("HH:mm:ss").format(messages.get(i).getDate()) + ": " + messages.get(i).getMessage().replaceFirst(source, replacement));
+		    			{
+		    				irc.sendServer("PRIVMSG " + channel + " " + user + " thought " + tuser + " meant at " + new SimpleDateFormat("HH:mm:ss").format(messages.get(i).getDate()) + ": " + messages.get(i).getMessage().replaceAll(source, replacement));
+		    				if (source.contains(".")||source.contains("$"))
+		    					break;
+		    			}
+		    		}
+		    	}
 
 		    }
 		    else
