@@ -78,4 +78,10 @@ public class Users implements PluginTemp
 	    }
 	}
 
+        @Override
+        public void onKick(String in_str) throws IRCException, IOException 
+	{
+		//ToDO implement number of times kicked
+	}
+
 }

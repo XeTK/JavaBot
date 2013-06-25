@@ -12,7 +12,7 @@ public class Start
 	private static Start startInstance;
 	
 	private static final String cfgFile = "Details.json";
-	private static final String version = "Java Bot v2.11";
+	private static final String version = "Java Bot v1.11";
 	private static String pluginPath = System.getProperty("user.dir");
         
 	private ArrayList<PluginTemp> pluginsglob = new ArrayList<PluginTemp>();
@@ -50,6 +50,10 @@ public class Start
 		
 		irc.connectServer(details.getServer(), details.getPort());
 		
+		String nick = details.getNickName();	
+		irc.sendServer("USER " + nick + " " + nick + " " + nick + " " + nick);
+		irc.sendServer("Nick " + nick);
+
 		for (int i = 0;i < details.getStartup().length;i++)
 			irc.sendServer(details.getStartup()[i]);
 		
@@ -67,12 +71,21 @@ public class Start
 		
 		new TimeThread().start();
 		
+		int rejoins = 0;
+		
 		while(true)
 		{			
 			String output = irc.getFromServer();
 
 			if (output == null)
-				break;
+			{
+				if (rejoins > 3)
+					System.exit(0);
+				irc.closeConnection();
+				connect();
+				rejoins++;
+				continue;
+			}
 			
 			//On Message
 			if (output.split(" ")[1].equals("PRIVMSG"))
@@ -86,16 +99,19 @@ public class Start
 			if (output.split(" ")[1].equals("PART"))
 				for (int i = 0;i< pluginsglob.size();i++)
 					pluginsglob.get(i).onQuit(output);
+
+			if (output.split(" ")[1].equals("KICK"))
+				for (int i = 0;i< pluginsglob.size();i++)
+					pluginsglob.get(i).onKick(output);
 			//Respond to pings
 			if (output.split(" ")[0].equals("PING"))
 				irc.sendServer("PONG " + output.split(" ")[1]);
-			
+				
 			if (output.split(":")[1].equals("VERSION"))
 				irc.sendServer("PRIVMSG " + output.split("!")[0].substring(1) + " " + version);
 				
 
 		}
-		irc.closeConnection();
 	}
 	
 	private void loadPlugins() throws Exception
@@ -116,7 +132,7 @@ public class Start
 					pluginsglob.add(pf);
 			}
 		}
-		System.out.println();
+		System.out.println("\nNumber of plugins loaded : " + pluginsglob.size());
 	}
 
 	public ArrayList<PluginTemp> getPluginsglob()

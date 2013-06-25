@@ -102,5 +102,21 @@ public class Admin implements PluginTemp
 	@Override
 	public void onQuit(String in_str) throws IRCException, IOException {}
 
+	@Override
+	public void onKick(String in_str) throws IRCException, IOException 
+	{
+		IRC irc = IRC.getInstance();
+		Matcher m = Pattern.compile(":([a-zA-Z0-9]*)!([a-zA-Z0-9@\\-\\.]*) KICK (#[a-zA-Z0-9]*) ([a-zA-Z0-9]*) :(.*)",
+						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(in_str);
 
+		if (m.find())
+		{
+			String kicker = m.group(1), host = m.group(2), channel = m.group(3), kicked = m.group(4), message = m.group(5);
+			if (kicked.equals(Details.getIntance().getNickName()))
+			{
+				irc.sendServer("JOIN " + channel); 
+				irc.sendServer("PRIVMSG " + channel + " Dont kick me!! " + kicker + "... bad bad bad person!");
+			}
+		}
+	}
 }

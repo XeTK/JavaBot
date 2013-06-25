@@ -176,5 +176,10 @@ public class Stats implements PluginTemp
 		
 		today.incQuits();
 	}
+        @Override
+        public void onKick(String in_str) throws IRCException, IOException 
+	{
+		//TODO Implement kicks
+	}
 
 }

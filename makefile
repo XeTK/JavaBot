@@ -1,21 +1,19 @@
-
 all:
 	echo Compiling
-	javac -cp gson-2.2.4.jar -d bin/ -sourcepath src/ src/*.java
+	javac -cp gson-2.2.4.jar -d bin/ -sourcepath src/ src/**/*.java
 	echo Copying dependencies
 	cp -R com bin/
 	echo Running
-	cd bin/
 	java -cp bin/ program.Start
-	cd ..
 
 clean:
 	echo Deleting old files
-	rm -r bin/*.class
+	rm -r bin/**/*.class
+	cp -R com bin/
 
 compile:
 	echo Deleting old files
-	rm -r -v bin/*.class
+	rm -r -v bin/**/*.class
 	echo Compiling source
 	javac -cp gson-2.2.4.jar -d bin/ -sourcepath src/ src/*.java
 prep:
@@ -25,3 +23,5 @@ prep:
 	mv google-gson-2.2.4/gson-2.2.4.jar .
 	rm -R google-gson-2.2.4
 	unzip gson-2.2.4.jar
+	cp run.sh bin/
+	chmod 777 bin/run.sh

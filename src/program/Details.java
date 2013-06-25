@@ -15,9 +15,10 @@ public class Details
 	
 	private boolean dayStats = true , hourStats = false;
 	
+	private String botNickName = "JavaBot";
+	
 	private String[] channels = {"#xetk"}, admins = {"xetk"}, 
-			startup = {"User BotNick Java Bot JaBot :Java Bot", 
-			"Nick JabotTest","PRIVMSG zippy identify helloworld"};
+			startup = {"PRIVMSG zippy identify helloworld"};
 	
 	/**
 	 * Get our instance of the details class back for us to use.
@@ -82,5 +83,13 @@ public class Details
 	{
 		return hourStats;
 	}
-	
+	public String getNickName()
+	{
+		return botNickName;
+	}
+	//Setters
+	public void setNickName(String nickname)
+	{
+		this.botNickName = nickname;
+	}
 }

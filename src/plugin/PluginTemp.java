@@ -16,5 +16,5 @@ public interface PluginTemp
 	public void onMessage(String in_str) throws IRCException, IOException;
 	public void onJoin(String in_str) throws IRCException, IOException;
 	public void onQuit(String in_str) throws IRCException, IOException;
-
+	public void onKick(String in_str) throws IRCException, IOException;
 }

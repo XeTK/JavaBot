@@ -136,5 +136,7 @@ public class Reminder implements PluginTemp
 	public void onJoin(String in_str) throws IRCException, IOException{}
 	@Override
 	public void onQuit(String in_str) throws IRCException, IOException{}
+        @Override
+        public void onKick(String in_str) throws IRCException, IOException{}
 
 }

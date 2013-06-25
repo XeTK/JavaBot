@@ -122,4 +122,7 @@ public class Quote implements PluginTemp
 	@Override
 	public void onQuit(String in_str) {}
 
+        @Override
+        public void onKick(String in_str) throws IRCException, IOException {}
+
 }
