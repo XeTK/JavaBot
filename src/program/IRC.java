@@ -78,7 +78,7 @@ public class IRC
 	public void sendServer(String in_str) throws IRCException, IOException
 	{
 			checkConnection();
-			outToServer.writeBytes(in_str + '\r'+'\n');
+			outToServer.writeChars(in_str + "\r\n");
 			System.out.println("\u001B[34m<- " +in_str);
 	}
 	

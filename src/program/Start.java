@@ -43,25 +43,28 @@ public class Start
 		return startInstance;
 	}
 	
-	private void connect() throws UnknownHostException, IOException, IRCException
+	private void connect() throws Exception
 	{
 		IRC irc = IRC.getInstance();
 		Details details = Details.getIntance();
 		
 		irc.connectServer(details.getServer(), details.getPort());
-		
-		String nick = details.getNickName();	
-		irc.sendServer("USER " + nick + " " + nick + " " + nick + " " + nick);
-		irc.sendServer("Nick " + nick);
+/*		for (int i = 0; i < 4;i++)
+			irc.getFromServer();
+*/		
+		String nick = details.getNickName();
+	
+                irc.sendServer("Nick " + nick);
+		irc.sendServer("USER " + nick + " 8 *" + ": " + nick + " " + nick);
 
 		for (int i = 0;i < details.getStartup().length;i++)
 			irc.sendServer(details.getStartup()[i]);
-		
+
 		for (int i = 0;i < details.getChannels().length;i++)
 			irc.sendServer("JOIN " + details.getChannels()[i]);
 	}
 	
-	private void mainLoop() throws IOException, IRCException
+	private void mainLoop() throws Exception
 	{
 		IRC irc = IRC.getInstance();
 		
