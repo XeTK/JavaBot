@@ -6,6 +6,9 @@ all:
 	echo Running
 	java -cp bin/ program.Start
 
+server:
+	/usr/lib/jvm/jdk1.7.0_21/bin/javac -d bin/ -sourcepath src/ src/*.java	
+
 clean:
 	echo Deleting old files
 	rm -r bin/**/*.class
