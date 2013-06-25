@@ -1,10 +1,11 @@
 package program;
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 
 /**
  * This class handles all interaction with the IRC client and remote server
@@ -15,7 +16,7 @@ public class IRC
 	//We are using the singleton pattern
 	private static IRC instance;
 	
-	private DataOutputStream outToServer;
+	private PrintWriter outToServer;
 	private BufferedReader inFromServer;
 	private Socket clientSocket;
 	
@@ -44,7 +45,7 @@ public class IRC
 			throws UnknownHostException, IOException
 	{
 		clientSocket = new Socket(server, port);
-		outToServer = new DataOutputStream(clientSocket.getOutputStream());
+		outToServer = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
 		inFromServer = new BufferedReader(
 				new InputStreamReader(clientSocket.getInputStream()));
 	}
@@ -78,7 +79,8 @@ public class IRC
 	public void sendServer(String in_str) throws IRCException, IOException
 	{
 			checkConnection();
-			outToServer.writeChars(in_str + "\r\n");
+			outToServer.write(in_str + "\r\n");
+			outToServer.flush();
 			System.out.println("\u001B[34m<- " +in_str);
 	}
 	
