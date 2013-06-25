@@ -7,7 +7,6 @@ Write Readme.md / Fix Git
 80 line fix
 add extra help to stats
 fix freenet bug 
-get bot name
 
 Add:
 Add RSS reader title set
@@ -19,7 +18,7 @@ admin controls / hot config change
 reload plugins
 add leaderboard
 handle username change
-auto reconnect
+/me on day stats
 
 Others:
 Write web front end (Snow)
