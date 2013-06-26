@@ -150,6 +150,8 @@ public class Start
 	{
 		pluginsglob = new ArrayList<PluginTemp>();
 		loadPlugins();
+		for (int i = 0;i < pluginsglob.size();i++)
+			pluginsglob.get(i).onCreate("");
 	}
 
 	public ArrayList<PluginTemp> getPluginsglob()

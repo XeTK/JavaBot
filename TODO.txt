@@ -6,6 +6,7 @@ Comment
 Write Readme.md / Fix Git
 80 line fix
 fix freenet bug 
+handle exceptions better
 
 Add:
 Add RSS reader title set

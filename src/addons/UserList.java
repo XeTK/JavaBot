@@ -107,10 +107,7 @@ public class UserList
 	}
 	public void removeQuote(String message)
 	{
-		boolean exists = false;
 		for (int i = 0; i < users.size();i++)
-		{
 			users.get(i).removeQuote(message);
-		}
 	}
 }
