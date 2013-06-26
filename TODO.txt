@@ -7,6 +7,8 @@ Write Readme.md / Fix Git
 80 line fix
 add extra help to stats
 fix freenet bug 
+/me on day stats
+remove quotes
 
 Add:
 Add RSS reader title set
@@ -15,10 +17,8 @@ Dice Roll
 TimeTable Support 
 Bug Reporting
 admin controls / hot config change
-reload plugins
 add leaderboard
 handle username change
-/me on day stats
 
 Others:
 Write web front end (Snow)

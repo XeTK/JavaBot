@@ -16,7 +16,7 @@ public class Sed implements PluginTemp
 	private ArrayList<Message> messages = new ArrayList<Message>();
 
 	@Override
-	public void onCreate(String in_str) throws IRCException, IOException{System.out.println("\u001B[37mSed Plugin Loaded");}
+	public void onCreate(String in_str) throws IRCException, IOException{}
 	@Override
 	public void onTime(String in_str) throws IRCException, IOException{}
 
@@ -72,8 +72,11 @@ public class Sed implements PluginTemp
 	public void onJoin(String in_str) throws IRCException, IOException{}
 	@Override
 	public void onQuit(String in_str) throws IRCException, IOException{}
-        @Override
-        public void onKick(String in_str) throws IRCException, IOException {}
-
-
+    @Override
+    public void onKick(String in_str) throws IRCException, IOException {}
+	@Override
+	public String name() 
+	{
+		return "Sed";
+	}
 }

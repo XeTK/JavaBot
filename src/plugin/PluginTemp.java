@@ -11,6 +11,7 @@ import program.IRCException;
  */
 public interface PluginTemp
 {
+	public String name();
 	public void onCreate(String in_str) throws IRCException, IOException;
 	public void onTime(String in_str) throws IRCException, IOException;
 	public void onMessage(String in_str) throws IRCException, IOException;

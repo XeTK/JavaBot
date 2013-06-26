@@ -20,7 +20,6 @@ public class Users implements PluginTemp
 	@Override
 	public void onCreate(String in_str) throws IRCException, IOException
 	{
-		System.out.println("\u001B[37mUsers Plugin Loaded");
 		if (new File(dbFile).exists())
 			UserList.setInstance((UserList)JSON.loadGSON(dbFile, UserList.class));
 		else
@@ -81,9 +80,15 @@ public class Users implements PluginTemp
 	}
 
         @Override
-        public void onKick(String in_str) throws IRCException, IOException 
+    public void onKick(String in_str) throws IRCException, IOException 
 	{
 		//ToDO implement number of times kicked
+	}
+
+	@Override
+	public String name() 
+	{
+		return "Users";
 	}
 
 }

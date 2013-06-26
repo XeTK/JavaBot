@@ -22,15 +22,11 @@ public class Stats implements PluginTemp
 	@Override
 	public void onCreate(String in_str) throws IRCException, IOException 
 	{
-		System.out.println("\u001B[37mStats Plugin Loaded");
-		
 		String ti = new SimpleDateFormat("yyyyMMdd").format(new Date());
 		
 		String path = "logs/" + ti + ".json";
 		
-		File fi = new File(path);
-		
-		if (fi.exists())
+		if (new File(path).exists())
 			today = (StatDay) JSON.loadGSON(path, StatDay.class);
 	}
 
@@ -177,9 +173,15 @@ public class Stats implements PluginTemp
 		today.incQuits();
 	}
         @Override
-        public void onKick(String in_str) throws IRCException, IOException 
+    public void onKick(String in_str) throws IRCException, IOException 
 	{
 		//TODO Implement kicks
+	}
+
+	@Override
+	public String name() 
+	{
+		return "Statistics";
 	}
 
 }

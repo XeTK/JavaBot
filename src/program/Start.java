@@ -123,7 +123,6 @@ public class Start
 		File dir = new File(pluginPath);
 		
 		System.out.println("\u001B[33mPlugins Dir: " + dir.toString());
-		System.out.print("Plugins Found : ");
 		
 		if (dir.exists() && dir.isDirectory()) 
 		{
@@ -135,7 +134,22 @@ public class Start
 					pluginsglob.add(pf);
 			}
 		}
-		System.out.println("\nNumber of plugins loaded : " + pluginsglob.size());
+		System.out.println("Plugins Loaded : " + loadedPlugins());
+		System.out.println("Number of Plugins Loaded : " + pluginsglob.size());
+	}
+	
+	public String loadedPlugins()
+	{
+		String lp = "";
+		for (int i = 0; i < pluginsglob.size();i++)
+			lp += pluginsglob.get(i).name() + ", ";
+		return lp;
+	}
+	
+	public void reloadPlugins() throws Exception
+	{
+		pluginsglob = new ArrayList<PluginTemp>();
+		loadPlugins();
 	}
 
 	public ArrayList<PluginTemp> getPluginsglob()

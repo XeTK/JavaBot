@@ -13,7 +13,7 @@ import program.IRCException;
 public class Quote implements PluginTemp
 {
 	@Override
-	public void onCreate(String in_str) throws IOException {System.out.println("\u001B[37mQuote Plugin Loaded");}
+	public void onCreate(String in_str) throws IOException {}
 	@Override
 	public void onTime(String in_str) {}
 
@@ -122,7 +122,13 @@ public class Quote implements PluginTemp
 	@Override
 	public void onQuit(String in_str) {}
 
-        @Override
-        public void onKick(String in_str) throws IRCException, IOException {}
+    @Override
+    public void onKick(String in_str) throws IRCException, IOException {}
+    
+	@Override
+	public String name() 
+	{
+		return "Quotation";
+	}
 
 }
