@@ -5,10 +5,7 @@ Info
 Comment
 Write Readme.md / Fix Git
 80 line fix
-add extra help to stats
 fix freenet bug 
-/me on day stats
-remove quotes
 
 Add:
 Add RSS reader title set

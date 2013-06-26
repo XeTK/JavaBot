@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class StatHour
 {
 	private ArrayList<StatUser> users = new ArrayList<StatUser>();
-	private int joins = 0, quits = 0;
+	private int joins = 0, quits = 0, kicks = 0;
 	
 	public void incJoins()
 	{
@@ -14,6 +14,10 @@ public class StatHour
 	public void incQuits()
 	{
 		quits++;
+	}
+	public void incKicks()
+	{
+		kicks++;
 	}
 	public void incMsgSent(String user)
 	{
@@ -38,6 +42,10 @@ public class StatHour
 	public int getQuits()
 	{
 		return quits;
+	}
+	public int getKicks()
+	{
+		return kicks;
 	}
 	public int getMsgSent()
 	{

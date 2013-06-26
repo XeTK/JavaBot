@@ -47,6 +47,7 @@ public class Users implements PluginTemp
 	public void onJoin(String in_str) throws IRCException, IOException
 	{
 		JSON.saveGSON(dbFile, UserList.getInstance());
+		IRC irc = IRC.getInstance();
 		Matcher m = 
 		    		Pattern.compile(":(.*)!.*@(.*) JOIN :(#?.*)",
 		    				Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(in_str);
@@ -55,20 +56,25 @@ public class Users implements PluginTemp
 	    	String user = m.group(1).toLowerCase(), host = m.group(2), channel = m.group(3);
 	    	User userOBJ = UserList.getInstance().getUser(user);
 	    	if (userOBJ != null)
+	    	{
 	    		userOBJ.incjoins(host);
+	    		irc.sendServer("PRIVMSG " + channel + " " + user + " Has joined " + userOBJ.getJoins() + " times.");
+	    	}
 	    	else
-			if (!Details.getIntance().getNickName().toLowerCase().equals(user))
-	    			IRC.getInstance().sendServer("PRIVMSG " + channel + " Hello " + user + ", Nice to see a new user arround here. Welcome and dont break things!");
+				if (!Details.getIntance().getNickName().toLowerCase().equals(user))
+		    			irc.sendServer("PRIVMSG " + channel + " Hello " + user + ", Nice to see a new user arround here. Welcome and dont break things!");
+	    	
 	    }
 	}
 
 	@Override
 	public void onQuit(String in_str) throws IRCException, IOException
 	{
+		IRC irc = IRC.getInstance();
 		JSON.saveGSON(dbFile, UserList.getInstance());
 		
 		Matcher m = 
-		    		Pattern.compile(":(.*)!\\(.*@.*) PART (#.*)",
+		    		Pattern.compile(":(.*)!(.*@.*) PART (#.*)",
 		    				Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(in_str);
 	    if (m.find())
 	    {
@@ -76,13 +82,27 @@ public class Users implements PluginTemp
 	    	User userOBJ = UserList.getInstance().getUser(user);
 	    	if (userOBJ != null)
 	    		userOBJ.incQuits();
+	    	
+	    	irc.sendServer("PRIVMSG " + channel + " " + user + " Has Left " + userOBJ.getQuits() + " times.");
 	    }
 	}
 
-        @Override
+    @Override
     public void onKick(String in_str) throws IRCException, IOException 
 	{
-		//ToDO implement number of times kicked
+    	IRC irc = IRC.getInstance();
+		Matcher m = Pattern.compile(":([a-zA-Z0-9]*)!([a-zA-Z0-9@\\-\\.]*) KICK (#[a-zA-Z0-9]*) ([a-zA-Z0-9]*) :(.*)",
+				Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(in_str);
+		
+		if (m.find())
+		{
+			String kicker = m.group(1), host = m.group(2), channel = m.group(3), kicked = m.group(4), message = m.group(5);
+			User userOBJ = UserList.getInstance().getUser(kicked);
+	    	if (userOBJ != null)
+	    		userOBJ.incKicks();
+	    	
+	    	irc.sendServer("PRIVMSG " + channel + " " + kicked + " Has been kicked " + userOBJ.getKicks() + " times.");
+		}
 	}
 
 	@Override

@@ -11,7 +11,7 @@ public class User
 	
 	// Other data members about the user.
 	private String user, host;
-	private long msgSent, joins, quits;
+	private long msgSent, joins, quits, kicks;
 	private Date lastOnline;
 	private boolean isDirty = false;
 	
@@ -48,6 +48,14 @@ public class User
 	public void incQuits()
 	{
 		quits++;
+	}
+	
+	/**
+	 * Quick method to increment the number of times a user has been kicked
+	 */
+	public void incKicks()
+	{
+		kicks++;
 	}
 	
 	/**
@@ -90,6 +98,13 @@ public class User
 		String[] reminderss = reminders.toArray(new String[0]);
 		reminders = new ArrayList<String>();
 		return reminderss;
+	}
+	
+	public void removeQuote(String message)
+	{
+		for (int i = 0; i < quotes.size();i++)
+			if (quotes.get(i).equals(message))
+				quotes.remove(i);
 	}
 	
 	// Return all the users quotes as an array converted from the ArrayList.
@@ -151,6 +166,11 @@ public class User
 	public boolean isDirty()
 	{
 		return isDirty;
+	}
+
+	public long getKicks() 
+	{
+		return kicks;
 	}
 	
 }

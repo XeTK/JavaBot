@@ -22,6 +22,11 @@ public class StatDay
 		getHour().incQuits();
 	}
 	
+	public void incKicks()
+	{
+		getHour().incKicks();
+	}
+	
 	public StatHour[] getHours()
 	{
 		return hours;
@@ -59,6 +64,15 @@ public class StatDay
 		for (int i = 0; i < hours.length; i++)
 			if (hours[i] != null)
 				t += hours[i].getQuits();
+		return t;
+	}
+	
+	public int kicks()
+	{
+		int t = 0;
+		for (int i = 0; i < hours.length; i++)
+			if (hours[i] != null)
+				t += hours[i].getKicks();
 		return t;
 	}
 }

@@ -69,17 +69,16 @@ public class Quote implements PluginTemp
 					}
 				}
  			}
-			/*else if (message.matches("(\\.quotedel)\\s([a-zA-Z\\w\\d\\s]*)"))
+			else if (message.matches("\\.quotedel ([a-zA-Z\\w\\d\\s]*)"))
 			{
-				Matcher r = Pattern.compile("(\\.quotedel)\\s([a-zA-Z\\w\\d\\s]*)",
+				Matcher r = Pattern.compile("\\.quotedel ([a-zA-Z\\w\\d\\s]*)",
 								Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
 				if (r.find())
 				{
-					db.delQuote(r.group(2));
+					luq.removeQuote(m.group(1));
 					irc.sendServer("PRIVMSG " + channel + " " + user + ": Quote Deleted.");
-					JSON.saveGSON(cfgFile, luq);
 				}
-			}*/
+			}
 			else if(message.matches("^\\.help") || message.matches("^\\."))
 			{
 				irc.sendServer("PRIVMSG " + channel + " QUOTE: " +
@@ -101,7 +100,7 @@ public class Quote implements PluginTemp
 	    if (m.find())
 	    {
 	    	String user = m.group(1).toLowerCase(), host = m.group(2), channel = m.group(3);
-	    	System.out.println(user + " Has joined");
+
 			try
 			{
 				IRC irc = IRC.getInstance();
