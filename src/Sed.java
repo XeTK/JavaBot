@@ -1,3 +1,4 @@
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -5,8 +6,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import addons.Message;
-
 import plugin.PluginTemp;
+
 import program.IRC;
 import program.IRCException;
 

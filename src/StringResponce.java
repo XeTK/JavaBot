@@ -59,7 +59,8 @@ public class StringResponce implements PluginTemp
 		    {
 			    for (int i = 0; i < responces.size();i++)
 			    {
-			    	m = Pattern.compile(responces.get(i).getRegex(),Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
+			    	System.out.println(responces.get(i).getRegex().replace("{0}", Details.getIntance().getNickName()));
+			    	m = Pattern.compile(responces.get(i).getRegex().replace("{0}", Details.getIntance().getNickName()),Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
 			    	if (m.find())
 			    	{
 			    		String[] replies = responces.get(i).getResponces();
@@ -67,7 +68,7 @@ public class StringResponce implements PluginTemp
 		    			int inx = 1 + (int)(Math.random() * ((replies.length - 1) + 1));
 		    			if (inx > replies.length -1)
 		    				inx--;
-		    			irc.sendServer("PRIVMSG " + channel + " " + user + ": " + replies[inx]);
+		    			irc.sendServer("PRIVMSG " + channel + " " +replies[inx].replace("{0}", Details.getIntance().getNickName()).replace("{1}", user));
 			    	}
 			    }
 		    }
