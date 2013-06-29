@@ -5,6 +5,11 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import event.Join;
+import event.Kick;
+import event.Message;
+import event.Quit;
+
 import addons.StatDay;
 import addons.UserList;
 
@@ -19,8 +24,15 @@ public class Stats implements PluginTemp
 {
 
 	private StatDay today;
+	
 	@Override
-	public void onCreate(String in_str) throws IRCException, IOException 
+	public String name() 
+	{
+		return "Statistics";
+	}
+	
+	@Override
+	public void onCreate() throws IRCException, IOException 
 	{
 		String ti = new SimpleDateFormat("yyyyMMdd").format(new Date());
 		
@@ -31,7 +43,7 @@ public class Stats implements PluginTemp
 	}
 
 	@Override
-	public void onTime(String in_str) throws IRCException, IOException
+	public void onTime() throws IRCException, IOException
 	{
 		IRC irc = IRC.getInstance();
 		String ti = new SimpleDateFormat("HH:mm:ss").format(new Date());
@@ -71,101 +83,94 @@ public class Stats implements PluginTemp
 	}
 
 	@Override
-	public void onMessage(String in_str) throws IRCException, IOException
-	{
-		Matcher m = 
-				Pattern.compile(":(.*)!.*@(.*) PRIVMSG (#.*) :(.*)",
-						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(in_str);
-		if (m.find())
-		{
-			String user = m.group(1).toLowerCase(), host = m.group(2), channel = m.group(3), message = m.group(4);
-			
-			if (message.charAt(message.length() - 1 ) == ' ')
-				message = message.substring(0, message.length() -1);
+	public void onMessage(Message in_message) throws IRCException, IOException
+	{		
+		String message = in_message.getMessage(), channel = in_message.getChannel(), user = in_message.getUser();
+		if (message.charAt(message.length() - 1 ) == ' ')
+			message = message.substring(0, message.length() -1);
 
-			IRC irc = IRC.getInstance();
-			
-			UserList ul = UserList.getInstance();
-			
-			if (today == null)
-				today = new StatDay();
-			
-			today.incMsgSent(user);
-			
-			if (message.matches("\\.msgsent [A-Za-z0-9#]+$"))
+		IRC irc = IRC.getInstance();
+		
+		UserList ul = UserList.getInstance();
+		
+		if (today == null)
+			today = new StatDay();
+		
+		today.incMsgSent(user);
+		
+		if (message.matches("\\.msgsent [A-Za-z0-9#]+$"))
+		{
+			String[] t = message.split(" ");
+			if (t.length > 0||t[1] != null)
+				if (ul.getUser(t[1]) != null)
+					irc.sendServer("PRIVMSG " + channel + " " + t[1] + ": Messages Sent = " + ul.getUser(t[1]).getMsgSent() + "!");
+		}
+		else if (message.matches("\\.lastonline [A-Za-z0-9#]+$"))
+		{
+			String[] t = message.split(" ");
+			if (t.length > 0||t[1] != null)
+				if (ul.getUser(t[1]) != null)
+					irc.sendServer("PRIVMSG " + channel + " " + t[1] + ": Last Online = " + new SimpleDateFormat("yyyy/MM/dd HH:mm").format(ul.getUser(t[1]).getLastOnline()) + "!");
+		}
+		else if (message.matches("\\.stats (hour|day) (msgsent|joins|quits|kicks)"))
+		{
+			Matcher m =	Pattern.compile("\\.stats (hour|day) (msgsent|joins|quits|kicks)",
+							Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
+			if (m.find())
 			{
-				String[] t = message.split(" ");
-				if (t.length > 0||t[1] != null)
-					if (ul.getUser(t[1]) != null)
-						irc.sendServer("PRIVMSG " + channel + " " + t[1] + ": Messages Sent = " + ul.getUser(t[1]).getMsgSent() + "!");
- 			}
-			else if (message.matches("\\.lastonline [A-Za-z0-9#]+$"))
-			{
-				String[] t = message.split(" ");
-				if (t.length > 0||t[1] != null)
-					if (ul.getUser(t[1]) != null)
-						irc.sendServer("PRIVMSG " + channel + " " + t[1] + ": Last Online = " + new SimpleDateFormat("yyyy/MM/dd HH:mm").format(ul.getUser(t[1]).getLastOnline()) + "!");
- 			}
-			else if (message.matches("\\.stats (hour|day) (msgsent|joins|quits|kicks)"))
-			{
-				m =	Pattern.compile("\\.stats (hour|day) (msgsent|joins|quits|kicks)",
-								Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(in_str);
-				if (m.find())
+				String t1 = m.group(1), cm = m.group(2);
+				if (t1.equals("hour"))
 				{
-					String t1 = m.group(1), cm = m.group(2);
-					if (t1.equals("hour"))
+					if (cm.equals("msgsent"))
 					{
-						if (cm.equals("msgsent"))
-						{
-							irc.sendServer("PRIVMSG " + channel + " Messages sent in the last hour : " + today.getHour().getMsgSent());
-						}
-						else if (cm.equals("joins"))
-						{
-							irc.sendServer("PRIVMSG " + channel + " Users joined in the last hour : " + today.getHour().getJoins());
-						}
-						else if (cm.equals("quits"))
-						{
-							irc.sendServer("PRIVMSG " + channel + " Users quit in the last hour : " + today.getHour().getQuits());
-						}
-						else if (cm.equals("kicks"))
-						{
-							irc.sendServer("PRIVMSG " + channel + " Users kicked in the last hour : " + today.getHour().getKicks());
-						}
+						irc.sendServer("PRIVMSG " + channel + " Messages sent in the last hour : " + today.getHour().getMsgSent());
 					}
-					else if (t1.equals("day"))
+					else if (cm.equals("joins"))
 					{
-						if (cm.equals("msgsent"))
-						{
-							irc.sendServer("PRIVMSG " + channel + " Messages sent today : " + today.msgsSent());
-						}
-						else if (cm.equals("joins"))
-						{
-							irc.sendServer("PRIVMSG " + channel + " Users joined today : " + today.joins());
-						}
-						else if (cm.equals("quits"))
-						{
-							irc.sendServer("PRIVMSG " + channel + " Users quit today : " + today.quits());
-						}
-						else if (cm.equals("kicks"))
-						{
-							irc.sendServer("PRIVMSG " + channel + " Users kicked today : " + today.kicks());
-						}
+						irc.sendServer("PRIVMSG " + channel + " Users joined in the last hour : " + today.getHour().getJoins());
+					}
+					else if (cm.equals("quits"))
+					{
+						irc.sendServer("PRIVMSG " + channel + " Users quit in the last hour : " + today.getHour().getQuits());
+					}
+					else if (cm.equals("kicks"))
+					{
+						irc.sendServer("PRIVMSG " + channel + " Users kicked in the last hour : " + today.getHour().getKicks());
+					}
+				}
+				else if (t1.equals("day"))
+				{
+					if (cm.equals("msgsent"))
+					{
+						irc.sendServer("PRIVMSG " + channel + " Messages sent today : " + today.msgsSent());
+					}
+					else if (cm.equals("joins"))
+					{
+						irc.sendServer("PRIVMSG " + channel + " Users joined today : " + today.joins());
+					}
+					else if (cm.equals("quits"))
+					{
+						irc.sendServer("PRIVMSG " + channel + " Users quit today : " + today.quits());
+					}
+					else if (cm.equals("kicks"))
+					{
+						irc.sendServer("PRIVMSG " + channel + " Users kicked today : " + today.kicks());
 					}
 				}
 			}
-			else if(message.matches("^\\.help") || message.matches("^\\."))
-			{
-				irc.sendServer("PRIVMSG " + channel + " STATS: " +
-						".lastonline *username* - check when a member was last active : " +
-						".msgsent *username* - check how many messages a user has sent globaly within the channel : " +
-						".stats (hour|day) (msgsent|joins|quits|kicks) - get stats for that given time frame : "
-						);
-			}
-	    }
+		}
+		else if(message.matches("^\\.help") || message.matches("^\\."))
+		{
+			irc.sendServer("PRIVMSG " + channel + " STATS: " +
+					".lastonline *username* - check when a member was last active : " +
+					".msgsent *username* - check how many messages a user has sent globaly within the channel : " +
+					".stats (hour|day) (msgsent|joins|quits|kicks) - get stats for that given time frame : "
+					);
+		}
 	}
 
 	@Override
-	public void onJoin(String in_str) throws IRCException, IOException
+	public void onJoin(Join in_join) throws IRCException, IOException
 	{
 		if (today == null)
 			today = new StatDay();
@@ -174,7 +179,7 @@ public class Stats implements PluginTemp
 	}
 	
 	@Override
-	public void onQuit(String in_str) throws IRCException, IOException
+	public void onQuit(Quit in_quit) throws IRCException, IOException
 	{
 		if (today == null)
 			today = new StatDay();
@@ -183,18 +188,12 @@ public class Stats implements PluginTemp
 	}
 	
     @Override
-    public void onKick(String in_str) throws IRCException, IOException 
+    public void onKick(Kick in_kick) throws IRCException, IOException 
 	{
 		if (today == null)
 			today = new StatDay();
 		
 		today.incKicks();
-	}
-
-	@Override
-	public String name() 
-	{
-		return "Statistics";
 	}
 
 }

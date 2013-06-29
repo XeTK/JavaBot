@@ -1,7 +1,10 @@
 import java.io.File;
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import event.Join;
+import event.Kick;
+import event.Message;
+import event.Quit;
 
 import addons.User;
 import addons.UserList;
@@ -17,8 +20,15 @@ public class Users implements PluginTemp
 {
 
 	private final String dbFile = "Users.json";
+	
 	@Override
-	public void onCreate(String in_str) throws IRCException, IOException
+	public String name() 
+	{
+		return "Users";
+	}
+	
+	@Override
+	public void onCreate() throws Exception
 	{
 		if (new File(dbFile).exists())
 			UserList.setInstance((UserList)JSON.loadGSON(dbFile, UserList.class));
@@ -27,88 +37,53 @@ public class Users implements PluginTemp
 	}
 
 	@Override
-	public void onTime(String in_str) throws IRCException, IOException {}
-
-	@Override
-	public void onMessage(String in_str) throws IRCException, IOException
+	public void onMessage(Message in_message) throws IRCException, IOException
 	{
 		JSON.saveGSON(dbFile, UserList.getInstance());
-		Matcher m = 
-				Pattern.compile(":(.*)!.*@(.*) PRIVMSG (#.*) :(.*)",
-						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(in_str);
-		if (m.find())
-		{
-			String user = m.group(1).toLowerCase(), host = m.group(2), channel = m.group(3), message = m.group(4);
-			UserList.getInstance().msgSent(user, host);
-		}
+		UserList.getInstance().msgSent(in_message.getUser(), in_message.getHost());
 	}
 
 	@Override
-	public void onJoin(String in_str) throws IRCException, IOException
+	public void onJoin(Join in_join) throws Exception
 	{
 		JSON.saveGSON(dbFile, UserList.getInstance());
 		IRC irc = IRC.getInstance();
-		Matcher m = 
-		    		Pattern.compile(":(.*)!.*@(.*) JOIN :(#?.*)",
-		    				Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(in_str);
-	    if (m.find())
-	    {
-	    	String user = m.group(1).toLowerCase(), host = m.group(2), channel = m.group(3);
-	    	User userOBJ = UserList.getInstance().getUser(user);
-	    	if (userOBJ != null)
-	    	{
-	    		userOBJ.incjoins(host);
-	    		irc.sendServer("PRIVMSG " + channel + " " + user + " Has joined " + userOBJ.getJoins() + " times.");
-	    	}
-	    	else
-				if (!Details.getIntance().getNickName().toLowerCase().equals(user))
-		    			irc.sendServer("PRIVMSG " + channel + " Hello " + user + ", Nice to see a new user arround here. Welcome and dont break things!");
-	    	
-	    }
+    	User userOBJ = UserList.getInstance().getUser(in_join.getUser());
+    	if (userOBJ != null)
+    	{
+    		userOBJ.incjoins(in_join.getHost());
+    		irc.sendServer("PRIVMSG " + in_join.getChannel() + " " + in_join.getUser() + " Has joined " + userOBJ.getJoins() + " times.");
+    	}
+    	else
+			if (!Details.getIntance().getNickName().toLowerCase().equals(in_join.getUser()))
+	    			irc.sendServer("PRIVMSG " + in_join.getChannel() + " Hello " + in_join.getUser() + ", Nice to see a new user arround here. Welcome and dont break things!");
 	}
 
 	@Override
-	public void onQuit(String in_str) throws IRCException, IOException
+	public void onQuit(Quit in_quit) throws Exception
 	{
 		IRC irc = IRC.getInstance();
 		JSON.saveGSON(dbFile, UserList.getInstance());
-		
-		Matcher m = 
-		    		Pattern.compile(":(.*)!(.*@.*) PART (#.*)",
-		    				Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(in_str);
-	    if (m.find())
-	    {
-	    	String user = m.group(1).toLowerCase(), host = m.group(2), channel = m.group(3);
-	    	User userOBJ = UserList.getInstance().getUser(user);
-	    	if (userOBJ != null)
-	    		userOBJ.incQuits();
-	    	
-	    	irc.sendServer("PRIVMSG " + channel + " " + user + " Has Left " + userOBJ.getQuits() + " times.");
-	    }
+
+    	User userOBJ = UserList.getInstance().getUser(in_quit.getUser());
+    	if (userOBJ != null)
+    		userOBJ.incQuits();
+    	
+    	irc.sendServer("PRIVMSG " + in_quit.getChannel() + " " + in_quit.getUser() + " Has Left " + userOBJ.getQuits() + " times.");
 	}
 
     @Override
-    public void onKick(String in_str) throws IRCException, IOException 
+    public void onKick(Kick in_kick) throws Exception 
 	{
     	IRC irc = IRC.getInstance();
-		Matcher m = Pattern.compile(":([a-zA-Z0-9]*)!([a-zA-Z0-9@\\-\\.]*) KICK (#[a-zA-Z0-9]*) ([a-zA-Z0-9]*) :(.*)",
-				Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(in_str);
-		
-		if (m.find())
-		{
-			String kicker = m.group(1), host = m.group(2), channel = m.group(3), kicked = m.group(4), message = m.group(5);
-			User userOBJ = UserList.getInstance().getUser(kicked);
-	    	if (userOBJ != null)
-	    		userOBJ.incKicks();
-	    	
-	    	irc.sendServer("PRIVMSG " + channel + " " + kicked + " Has been kicked " + userOBJ.getKicks() + " times.");
-		}
+
+		User userOBJ = UserList.getInstance().getUser(in_kick.getKicked());
+    	if (userOBJ != null)
+    		userOBJ.incKicks();
+    	
+    	irc.sendServer("PRIVMSG " + in_kick.getChannel() + " " + in_kick.getKicked() + " Has been kicked " + userOBJ.getKicks() + " times.");
 	}
 
 	@Override
-	public String name() 
-	{
-		return "Users";
-	}
-
+	public void onTime() throws Exception {}
 }

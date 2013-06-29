@@ -1,7 +1,5 @@
 package program;
 import java.io.File;
-import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,7 +17,6 @@ public class Start
 	private static Start startInstance;
 	
 	private static final String cfgFile = "Details.json";
-	private static final String version = "Java Bot v1.11";
 	private static String pluginPath = System.getProperty("user.dir");
         
 	private ArrayList<PluginTemp> pluginsglob = new ArrayList<PluginTemp>();
@@ -31,9 +28,9 @@ public class Start
                     pluginPath = args[++i];
             
             if (new File(cfgFile).exists())
-                    Details.setInstance((Details)JSON.loadGSON(cfgFile,Details.class));
+                    Details.setInstance((Details)JSON.loadGSON(cfgFile, Details.class));
             else
-                    JSON.saveGSON(cfgFile,Details.getIntance());
+                    JSON.saveGSON(cfgFile, Details.getIntance());
 
             Start init = getInstance();
 
@@ -56,12 +53,10 @@ public class Start
 		Details details = Details.getIntance();
 		
 		irc.connectServer(details.getServer(), details.getPort());
-/*		for (int i = 0; i < 4;i++)
-			irc.getFromServer();
-*/		
+	
 		String nick = details.getNickName();
 	
-                irc.sendServer("Nick " + nick);
+        irc.sendServer("Nick " + nick);
 		irc.sendServer("USER " + nick + " 8 *" + ": " + nick + " " + nick);
 
 		for (int i = 0;i < details.getStartup().length;i++)
@@ -71,7 +66,7 @@ public class Start
 			irc.sendServer("JOIN " + details.getChannels()[i]);
 	}
 	
-	private void mainLoop() throws IRCException, IOException
+	private void mainLoop() throws Exception
 	{
 		IRC irc = IRC.getInstance();
 		
@@ -101,33 +96,34 @@ public class Start
 				
 				Matcher m;
 				
-				m = Pattern.compile(":(.*)!.*@(.*) PRIVMSG (#.*) :(.*)",;
-						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(output);
 				//On Message
+				m = Pattern.compile(":(.*)!.*@(.*) PRIVMSG (#.*) :(.*)",
+						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(output);
+				
 				if (m.find())
 					for (int i = 0;i< pluginsglob.size();i++)
 						pluginsglob.get(i).onMessage(new Message(m));
 				
+				//On Join
 				m = Pattern.compile(":(.*)!.*@(.*) JOIN :(#?.*)",
 			    		Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(output);
 				
-				//On Join
 				if (m.find())
 					for (int i = 0;i< pluginsglob.size();i++)
 						pluginsglob.get(i).onJoin(new Join(m));
 				
+				//On Quit
 				m = Pattern.compile(":(.*)!(.*@.*) PART (#.*)",
 			    		Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(output);
 				
-				//On Quit
 				if (m.find())
 					for (int i = 0;i< pluginsglob.size();i++)
 						pluginsglob.get(i).onQuit(new Quit(m));
 				
+				//On Kick
 				m = Pattern.compile(":([a-zA-Z0-9]*)!([a-zA-Z0-9@\\-\\.]*) KICK (#[a-zA-Z0-9]*) ([a-zA-Z0-9]*) :(.*)",
 						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(output);
 				
-				//On Kick
 				if (m.find())
 					for (int i = 0;i< pluginsglob.size();i++)
 						pluginsglob.get(i).onKick(new Kick(m));

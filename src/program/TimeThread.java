@@ -1,6 +1,5 @@
 package program;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import plugin.PluginTemp;
@@ -31,9 +30,7 @@ public class TimeThread extends Thread
 				
 				super.sleep(1000);
 			} 
-			catch (IRCException e) {} 
-			catch (IOException e) {} 
-			catch (InterruptedException e) {}	
+			catch (Exception e) {} 
 		}
 	}
 	

@@ -1,133 +1,114 @@
-import java.io.IOException;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import event.Join;
+import event.Kick;
+import event.Message;
+import event.Quit;
 
 import addons.UserList;
 
 import plugin.PluginTemp;
 import program.IRC;
-import program.IRCException;
 
 
 public class Quote implements PluginTemp
 {
 	@Override
-	public void onCreate(String in_str) throws IOException {}
-	@Override
-	public void onTime(String in_str) {}
-
-	@Override
-	public void onMessage(String in_str) throws IRCException, IOException
-	{
-		UserList luq = UserList.getInstance();
-		Matcher m = 
-				Pattern.compile(":(.*)!.*@(.*) PRIVMSG (#.*) :(.*)",
-						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(in_str);
-		if (m.find())
-		{
-			String user = m.group(1).toLowerCase(), host = m.group(2), channel = m.group(3), message = m.group(4);
-			
-			if (message.charAt(message.length() - 1 ) == ' ')
-				message = message.substring(0, message.length() -1);
-
-			IRC irc = IRC.getInstance();
-			if (message.matches("(\\.quoteadd)\\s([a-zA-Z0-9]*)\\s([a-zA-Z\\w\\d\\s]*)"))
-			{
-				Matcher r = Pattern.compile("(\\.quoteadd)\\s([a-zA-Z0-9]*)\\s([a-zA-Z\\w\\d\\s]*)",
-								Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
-				if (r.find())
-				{
-					luq.addQuote(r.group(2),r.group(3));
-					irc.sendServer("PRIVMSG " + channel + " " + user + ": Quote Added.");
-				}
-			}
-			else if (message.matches("\\.quotes [A-Za-z0-9#]+$"))
-			{
-				String[] t = message.split(" ");
-				if (t.length > 0||t[1] != null)
-				{
-					if (luq.getUser(t[1]) != null)
-					{
-						String[] quotes = luq.getQuotes(t[1]);
-						if (quotes.length > 0)
-							for (int i = 0; i < quotes.length;i++)
-								irc.sendServer("PRIVMSG " + channel + " " + quotes[i]);
-					}
-				}
- 			}
-			else if (message.matches("\\.quote [A-Za-z0-9#]+$"))
-			{
-				String[] t = message.split(" ");
-				if (t.length > 0||t[1] != null)
-				{
-					if (luq.getUser(t[1]) != null)
-					{
-						String[] quotes = luq.getQuotes(t[1]);
-						if (quotes.length > 0)
-							irc.sendServer("PRIVMSG " + channel + " " + t[1] + ": "+ quotes[new Random().nextInt(quotes.length)]);
-					}
-				}
- 			}
-			else if (message.matches("\\.quotedel ([a-zA-Z\\w\\d\\s]*)"))
-			{
-				Matcher r = Pattern.compile("\\.quotedel ([a-zA-Z\\w\\d\\s]*)",
-								Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
-				if (r.find())
-				{
-					luq.removeQuote(m.group(1));
-					irc.sendServer("PRIVMSG " + channel + " " + user + ": Quote Deleted.");
-				}
-			}
-			else if(message.matches("^\\.help") || message.matches("^\\."))
-			{
-				irc.sendServer("PRIVMSG " + channel + " QUOTE: " +
-						".quotes *item* - returns all the quotes tied to this item : " +
-						".quote *item* - returns a random quote for that item : " +
-						".quoteadd *item* *message* - will add a new quote to the appropriate item : " +
-						".quotedel *message* - will remove the message from the libary of quotes : "
-						);
-			}
-		}
-	}
-
-	@Override
-	public void onJoin(String in_str)
-	{
-	    Matcher m = 
-	    		Pattern.compile(":(.*)!.*@(.*) JOIN :(#.*)",
-	    				Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(in_str);
-	    if (m.find())
-	    {
-	    	String user = m.group(1).toLowerCase(), host = m.group(2), channel = m.group(3);
-
-			try
-			{
-				IRC irc = IRC.getInstance();
-				UserList luq = UserList.getInstance();
-				
-				if (luq.getUser(user) != null)
-				{
-					String[] quotes = luq.getQuotes(user);
-					if (quotes.length > 0)
-						irc.sendServer("PRIVMSG " + channel + " " + user + ": "+ quotes[new Random().nextInt(quotes.length)]);
-				}
-			}
-			catch (IRCException e){e.printStackTrace();} 
-			catch (IOException e){e.printStackTrace();}
-	    }
-	}
-
-	@Override
-	public void onQuit(String in_str) {}
-
-    @Override
-    public void onKick(String in_str) throws IRCException, IOException {}
-    
-	@Override
 	public String name() 
 	{
 		return "Quotation";
 	}
+	
+	@Override
+	public void onMessage(Message in_message) throws Exception
+	{
+		UserList luq = UserList.getInstance();
+		
+		String message = in_message.getMessage(), channel = in_message.getChannel(), user = in_message.getUser();
+		if (message.charAt(message.length() - 1 ) == ' ')
+			message = message.substring(0, message.length() -1);
 
+		IRC irc = IRC.getInstance();
+		if (message.matches("(\\.quoteadd)\\s([a-zA-Z0-9]*)\\s([a-zA-Z\\w\\d\\s]*)"))
+		{
+			Matcher r = Pattern.compile("(\\.quoteadd)\\s([a-zA-Z0-9]*)\\s([a-zA-Z\\w\\d\\s]*)",
+							Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
+			if (r.find())
+			{
+				luq.addQuote(r.group(2),r.group(3));
+				irc.sendServer("PRIVMSG " + channel + " " + user + ": Quote Added.");
+			}
+		}
+		else if (message.matches("\\.quotes [A-Za-z0-9#]+$"))
+		{
+			String[] t = message.split(" ");
+			if (t.length > 0||t[1] != null)
+			{
+				if (luq.getUser(t[1]) != null)
+				{
+					String[] quotes = luq.getQuotes(t[1]);
+					if (quotes.length > 0)
+						for (int i = 0; i < quotes.length;i++)
+							irc.sendServer("PRIVMSG " + channel + " " + quotes[i]);
+				}
+			}
+		}
+		else if (message.matches("\\.quote [A-Za-z0-9#]+$"))
+		{
+			String[] t = message.split(" ");
+			if (t.length > 0||t[1] != null)
+			{
+				if (luq.getUser(t[1]) != null)
+				{
+					String[] quotes = luq.getQuotes(t[1]);
+					if (quotes.length > 0)
+						irc.sendServer("PRIVMSG " + channel + " " + t[1] + ": "+ quotes[new Random().nextInt(quotes.length)]);
+				}
+			}
+		}
+		else if (message.matches("\\.quotedel ([a-zA-Z\\w\\d\\s]*)"))
+		{
+			Matcher r = Pattern.compile("\\.quotedel ([a-zA-Z\\w\\d\\s]*)",
+							Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
+			if (r.find())
+			{
+				luq.removeQuote(r.group(1));
+				irc.sendServer("PRIVMSG " + channel + " " + user + ": Quote Deleted.");
+			}
+		}
+		else if(message.matches("^\\.help") || message.matches("^\\."))
+		{
+			irc.sendServer("PRIVMSG " + channel + " QUOTE: " +
+					".quotes *item* - returns all the quotes tied to this item : " +
+					".quote *item* - returns a random quote for that item : " +
+					".quoteadd *item* *message* - will add a new quote to the appropriate item : " +
+					".quotedel *message* - will remove the message from the libary of quotes : "
+					);
+		}
+	}
+
+	@Override
+	public void onJoin(Join in_join) throws Exception
+	{
+		IRC irc = IRC.getInstance();
+		UserList luq = UserList.getInstance();
+		
+		if (luq.getUser(in_join.getUser()) != null)
+		{
+			String[] quotes = luq.getQuotes(in_join.getUser());
+			if (quotes.length > 0)
+				irc.sendServer("PRIVMSG " + in_join.getChannel() + " " + in_join.getUser() + ": "+ quotes[new Random().nextInt(quotes.length)]);
+		}
+	}
+
+	@Override
+	public void onCreate() throws Exception {}
+	@Override
+	public void onTime() throws Exception {}
+	@Override
+	public void onQuit(Quit in_quit) throws Exception {}
+	@Override
+	public void onKick(Kick in_kick) throws Exception {}	
 }
