@@ -64,7 +64,7 @@ public class Start
 			irc.sendServer("JOIN " + details.getChannels()[i]);
 	}
 	
-	private void mainLoop() throws Exception
+	private void mainLoop() throws IRCException, IOException
 	{
 		IRC irc = IRC.getInstance();
 		
@@ -77,44 +77,55 @@ public class Start
 		int rejoins = 0;
 		
 		while(true)
-		{			
-			String output = irc.getFromServer();
-
-			if (output == null)
+		{		
+			try
 			{
-				if (rejoins > 3)
-					System.exit(0);
-				irc.closeConnection();
-				connect();
-				rejoins++;
-				continue;
+				String output = irc.getFromServer();
+	
+				if (output == null)
+				{
+					if (rejoins > 3)
+						System.exit(0);
+					irc.closeConnection();
+					connect();
+					rejoins++;
+					continue;
+				}
+				
+				//On Message
+				if (output.split(" ")[1].equals("PRIVMSG"))
+					for (int i = 0;i< pluginsglob.size();i++)
+						pluginsglob.get(i).onMessage(output);
+				//On Join
+				if (output.split(" ")[1].equals("JOIN"))
+					for (int i = 0;i< pluginsglob.size();i++)
+						pluginsglob.get(i).onJoin(output);
+				//On Quit
+				if (output.split(" ")[1].equals("PART"))
+					for (int i = 0;i< pluginsglob.size();i++)
+						pluginsglob.get(i).onQuit(output);
+	
+				if (output.split(" ")[1].equals("KICK"))
+					for (int i = 0;i< pluginsglob.size();i++)
+						pluginsglob.get(i).onKick(output);
+				//Respond to pings
+				if (output.split(" ")[0].equals("PING"))
+					irc.sendServer("PONG " + output.split(" ")[1]);
+					
+				if (output.split(":")[1].equals("VERSION"))
+					irc.sendServer("PRIVMSG " + output.split("!")[0].substring(1) + " " + version);
+					
+				rejoins = 0;
 			}
-			
-			//On Message
-			if (output.split(" ")[1].equals("PRIVMSG"))
-				for (int i = 0;i< pluginsglob.size();i++)
-					pluginsglob.get(i).onMessage(output);
-			//On Join
-			if (output.split(" ")[1].equals("JOIN"))
-				for (int i = 0;i< pluginsglob.size();i++)
-					pluginsglob.get(i).onJoin(output);
-			//On Quit
-			if (output.split(" ")[1].equals("PART"))
-				for (int i = 0;i< pluginsglob.size();i++)
-					pluginsglob.get(i).onQuit(output);
-
-			if (output.split(" ")[1].equals("KICK"))
-				for (int i = 0;i< pluginsglob.size();i++)
-					pluginsglob.get(i).onKick(output);
-			//Respond to pings
-			if (output.split(" ")[0].equals("PING"))
-				irc.sendServer("PONG " + output.split(" ")[1]);
-				
-			if (output.split(":")[1].equals("VERSION"))
-				irc.sendServer("PRIVMSG " + output.split("!")[0].substring(1) + " " + version);
-				
-
+			catch (Exception ex)
+			{
+				String[] admins = Details.getIntance().getAdmins();
+				for (int i = 0; i < admins.length;i++)
+					irc.sendServer("PRIVMSG " + admins[i] + " " + ex.toString());
+				System.err.println(ex.toString());
+			}
 		}
+			
 	}
 	
 	private void loadPlugins() throws Exception

@@ -5,10 +5,8 @@ Info
 Comment
 Write Readme.md / Fix Git
 80 line fix
-fix freenet bug 
-handle exceptions better
+fix freenet bug
 handle regex's better for string responce
-string responce use bot name rather than random
 
 Add:
 Add RSS reader title set
