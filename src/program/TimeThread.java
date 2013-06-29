@@ -27,7 +27,7 @@ public class TimeThread extends Thread
 			try
 			{
 				for (int i = 0; i < plugins.size();i++)
-					plugins.get(i).onTime("");
+					plugins.get(i).onTime();
 				
 				super.sleep(1000);
 			} 

@@ -3,6 +3,13 @@ import java.io.File;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import event.Join;
+import event.Kick;
+import event.Message;
+import event.Quit;
 
 import plugin.PluginLoader;
 import plugin.PluginTemp;
@@ -70,7 +77,7 @@ public class Start
 		
 		//On Create
 		for (int i = 0;i < pluginsglob.size();i++)
-			pluginsglob.get(i).onCreate("");
+			pluginsglob.get(i).onCreate();
 		
 		new TimeThread().start();
 		
@@ -92,28 +99,42 @@ public class Start
 					continue;
 				}
 				
+				Matcher m;
+				
+				m = Pattern.compile(":(.*)!.*@(.*) PRIVMSG (#.*) :(.*)",;
+						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(output);
 				//On Message
-				if (output.split(" ")[1].equals("PRIVMSG"))
+				if (m.find())
 					for (int i = 0;i< pluginsglob.size();i++)
-						pluginsglob.get(i).onMessage(output);
+						pluginsglob.get(i).onMessage(new Message(m));
+				
+				m = Pattern.compile(":(.*)!.*@(.*) JOIN :(#?.*)",
+			    		Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(output);
+				
 				//On Join
-				if (output.split(" ")[1].equals("JOIN"))
+				if (m.find())
 					for (int i = 0;i< pluginsglob.size();i++)
-						pluginsglob.get(i).onJoin(output);
+						pluginsglob.get(i).onJoin(new Join(m));
+				
+				m = Pattern.compile(":(.*)!(.*@.*) PART (#.*)",
+			    		Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(output);
+				
 				//On Quit
-				if (output.split(" ")[1].equals("PART"))
+				if (m.find())
 					for (int i = 0;i< pluginsglob.size();i++)
-						pluginsglob.get(i).onQuit(output);
-	
-				if (output.split(" ")[1].equals("KICK"))
+						pluginsglob.get(i).onQuit(new Quit(m));
+				
+				m = Pattern.compile(":([a-zA-Z0-9]*)!([a-zA-Z0-9@\\-\\.]*) KICK (#[a-zA-Z0-9]*) ([a-zA-Z0-9]*) :(.*)",
+						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(output);
+				
+				//On Kick
+				if (m.find())
 					for (int i = 0;i< pluginsglob.size();i++)
-						pluginsglob.get(i).onKick(output);
+						pluginsglob.get(i).onKick(new Kick(m));
+				
 				//Respond to pings
 				if (output.split(" ")[0].equals("PING"))
 					irc.sendServer("PONG " + output.split(" ")[1]);
-					
-				if (output.split(":")[1].equals("VERSION"))
-					irc.sendServer("PRIVMSG " + output.split("!")[0].substring(1) + " " + version);
 					
 				rejoins = 0;
 			}
@@ -145,8 +166,8 @@ public class Start
 					pluginsglob.add(pf);
 			}
 		}
-		System.out.println("Plugins Loaded : " + loadedPlugins());
-		System.out.println("Number of Plugins Loaded : " + pluginsglob.size());
+		System.out.println("Plugins Loaded : " + loadedPlugins() +
+							"\nNumber of Plugins Loaded : " + pluginsglob.size());
 	}
 	
 	public String loadedPlugins()
@@ -162,7 +183,7 @@ public class Start
 		pluginsglob = new ArrayList<PluginTemp>();
 		loadPlugins();
 		for (int i = 0;i < pluginsglob.size();i++)
-			pluginsglob.get(i).onCreate("");
+			pluginsglob.get(i).onCreate();
 	}
 
 	public ArrayList<PluginTemp> getPluginsglob()

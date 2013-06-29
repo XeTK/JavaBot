@@ -1,8 +1,6 @@
 package plugin;
 
-import java.io.IOException;
-
-import program.IRCException;
+import event.*;
 
 /**
  * This is the interface that all the plugins inherit from it makes sure 
@@ -12,10 +10,10 @@ import program.IRCException;
 public interface PluginTemp
 {
 	public String name();
-	public void onCreate(String in_str) throws IRCException, IOException;
-	public void onTime(String in_str) throws IRCException, IOException;
-	public void onMessage(String in_str) throws IRCException, IOException;
-	public void onJoin(String in_str) throws IRCException, IOException;
-	public void onQuit(String in_str) throws IRCException, IOException;
-	public void onKick(String in_str) throws IRCException, IOException;
+	public void onCreate() throws Exception;
+	public void onTime() throws Exception;
+	public void onMessage(Message in_message) throws Exception;
+	public void onJoin(Join in_join) throws Exception;
+	public void onQuit(Quit in_quit) throws Exception;
+	public void onKick(Kick in_kick) throws Exception;
 }
