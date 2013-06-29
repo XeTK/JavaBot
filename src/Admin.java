@@ -18,6 +18,7 @@ public class Admin implements PluginTemp
 	{
 		return "Adminstration";
 	}
+	
 	@Override
 	public void onMessage(Message in_message) throws Exception
 	{
