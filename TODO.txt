@@ -8,6 +8,7 @@ Write Readme.md / Fix Git
 fix freenet bug
 handle regex's better for string responce
 user regex throughout rather than .split
++= -= Rep
 
 Add:
 Add RSS reader title set
