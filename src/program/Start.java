@@ -1,5 +1,6 @@
 package program;
 import java.io.File;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -139,9 +140,10 @@ public class Start
 				String[] admins = Details.getIntance().getAdmins();
 				for (int i = 0; i < admins.length;i++)
 				{
-					String[] except = ex.toString().split("\n");
+					/*String[] except = ex.toString().split("\n");
 					for (int j = 0; j < except.length;j++)
-						irc.sendServer("PRIVMSG " + admins[i] + " " + except[j]);
+						irc.sendServer("PRIVMSG " + admins[i] + " " + except[j]);*/
+					irc.sendServer("PRIVMSG " + admins[i] + " " + Arrays.toString(ex.getStackTrace()));
 				}
 				System.err.println(ex.toString());
 			}
