@@ -98,7 +98,7 @@ public class Start
 				Matcher m;
 				
 				//On Message
-				m = Pattern.compile(":(.*)!.*@(.*) PRIVMSG (#.*) :(.*)",
+				m = Pattern.compile(":(.*)!.*@(.*) PRIVMSG (.*) :(.*)",
 						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(output);
 				
 				if (m.find())

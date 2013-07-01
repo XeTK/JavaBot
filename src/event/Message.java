@@ -11,6 +11,8 @@ public class Message
 		host = m.group(2); 
 		channel = m.group(3); 
 		message = m.group(4);
+		if (channel.charAt(0) != '#')
+			channel = user;
 	}
 	public String getUser() 
 	{
