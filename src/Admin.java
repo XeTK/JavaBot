@@ -10,6 +10,7 @@ import plugin.PluginTemp;
 import program.Details;
 import program.IRC;
 import program.Start;
+import program.IRCException;
 
 public class Admin implements PluginTemp
 {
@@ -68,6 +69,11 @@ public class Admin implements PluginTemp
 					}
 					catch (Exception ex){}
 					irc.sendServer("PRIVMSG " + channel + " Plugins Loaded : " + Start.getInstance().loadedPlugins());
+				}
+				else if(message.matches("^.exception"))
+				{
+					irc.sendServer("PRIVMSG " + channel + " I like throwing exceptions");
+					throw new IRCException("Called by user");
 				}
 				else if(message.matches("^\\.help") || message.matches("^\\."))
 				{
