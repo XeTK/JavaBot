@@ -23,6 +23,7 @@ public class Message
 	 */
 	public Message(Matcher m)
 	{
+		date = new Date();
 		user = m.group(1).toLowerCase();
 		host = m.group(2); 
 		channel = m.group(3); 
