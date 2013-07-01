@@ -44,45 +44,48 @@ public class Rep implements PluginTemp
 			message = message.substring(0, message.length() -1);
 		
 		IRC irc = IRC.getInstance();
-		if (message.matches("(^[a-zA-Z0-9]*)([\\s+-]*)([\\s\\d]*)"))
+		if (message.matches("(^[a-zA-Z0-9]*)[\\s\\+-]([-\\+])[\\=\\s]*([\\d]*)"))
 		{
-			Matcher r = Pattern.compile("(^[a-zA-Z0-9]*)([\\s+-]*)([\\s\\d]*)",
+			Matcher r = Pattern.compile("(^[a-zA-Z0-9]*)[\\s\\+-]([-\\+])[\\=\\s]*([\\d]*)",
 					Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
 			if (r.find())
 			{
 				String item = r.group(1),
 						type = r.group(2),
 						ammount = r.group(3);
-				if (!type.equals(""))
+				if (!in_message.getUser().equals(item.toLowerCase()))
 				{
-					int iAmmount = 0;
+					if (!type.equals(""))
+					{
+						int iAmmount = 0;
 					
-					if (type.equals("++"))
-					{
-						iAmmount = 1;
-					}
-					else if(type.equals("--"))
-					{
-						iAmmount = -1;
-					}
-					else
-					{
-						type = type.trim();
-						ammount = ammount.trim();
-						if (type.equals("+"))
-							iAmmount = Integer.valueOf(ammount);
-						else	
-							iAmmount = Integer.valueOf(type + ammount);
-					}
-					if (iAmmount > 100||iAmmount < -100)
-					{
-						irc.sendServer("PRIVMSG " + channel + " You cant do that its to much rep...");
-					}
-					else
-					{
-						Reputation tRep = repList.getRep(item);
-						tRep.modRep(iAmmount);
-						irc.sendServer("PRIVMSG " + channel + " " + item + ": Rep = " + tRep.getRep() + "!");
+						if (type.equals("++"))
+						{
+							iAmmount = 1;
+						}
+						else if(type.equals("--"))
+						{
+							iAmmount = -1;
+						}
+						else
+						{
+							type = type.trim();
+							ammount = ammount.trim();
+							if (type.equals("+"))
+								iAmmount = Integer.valueOf(ammount);
+							else	
+								iAmmount = Integer.valueOf(type + ammount);
+						}
+						if (iAmmount > 100||iAmmount < -100)
+						{
+							irc.sendServer("PRIVMSG " + channel + " You cant do that its to much rep...");
+						}
+						else
+						{
+							Reputation tRep = repList.getRep(item);
+							tRep.modRep(iAmmount);
+							irc.sendServer("PRIVMSG " + channel + " " + item + ": Rep = " + tRep.getRep() + "!");
+						}
 					}
 				}
 			}
