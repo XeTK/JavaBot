@@ -67,9 +67,10 @@ public class Users implements PluginTemp
 
     	User userOBJ = UserList.getInstance().getUser(in_quit.getUser());
     	if (userOBJ != null)
+    	{
     		userOBJ.incQuits();
-    	
-    	irc.sendServer("PRIVMSG " + in_quit.getChannel() + " " + in_quit.getUser() + " Has Left " + userOBJ.getQuits() + " times.");
+    		irc.sendServer("PRIVMSG " + in_quit.getChannel() + " " + in_quit.getUser() + " Has Left " + userOBJ.getQuits() + " times.");
+    	}
 	}
 
     @Override
@@ -79,9 +80,10 @@ public class Users implements PluginTemp
 
 		User userOBJ = UserList.getInstance().getUser(in_kick.getKicked());
     	if (userOBJ != null)
+    	{
     		userOBJ.incKicks();
-    	
-    	irc.sendServer("PRIVMSG " + in_kick.getChannel() + " " + in_kick.getKicked() + " Has been kicked " + userOBJ.getKicks() + " times.");
+    		irc.sendServer("PRIVMSG " + in_kick.getChannel() + " " + in_kick.getKicked() + " Has been kicked " + userOBJ.getKicks() + " times.");
+    	}
 	}
 
 	@Override

@@ -57,7 +57,7 @@ public class Start
 	
 		String nick = details.getNickName();
 	
-        irc.sendServer("Nick " + nick);
+        irc.sendServer("NICK " + nick);
 		irc.sendServer("USER " + nick + " 8 *" + ": " + nick + " " + nick);
 
 		for (int i = 0;i < details.getStartup().length;i++)
@@ -122,7 +122,7 @@ public class Start
 						pluginsglob.get(i).onQuit(new Quit(m));
 				
 				//On Kick
-				m = Pattern.compile(":([a-zA-Z0-9]*)!([a-zA-Z0-9@\\-\\.]*) KICK (#[a-zA-Z0-9]*) ([a-zA-Z0-9]*) :(.*)",
+				m = Pattern.compile(":(.*)!(.*@.*) KICK (#.*) (.*) :(.*)",
 						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(output);
 				
 				if (m.find())
@@ -139,7 +139,10 @@ public class Start
 			{
 				String[] admins = Details.getIntance().getAdmins();
 				for (int i = 0; i < admins.length;i++)
-					irc.sendServer("PRIVMSG " + admins[i] + " " + ex.toString() + ", " + Arrays.toString(ex.getStackTrace()));
+				{
+					irc.sendServer("PRIVMSG " + admins[i] + " " + 
+							ex.toString() + ", " + Arrays.toString(ex.getStackTrace()));
+				}
 			}
 		}
 			
