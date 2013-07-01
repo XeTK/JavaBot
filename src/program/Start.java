@@ -139,13 +139,7 @@ public class Start
 			{
 				String[] admins = Details.getIntance().getAdmins();
 				for (int i = 0; i < admins.length;i++)
-				{
-					/*String[] except = ex.toString().split("\n");
-					for (int j = 0; j < except.length;j++)
-						irc.sendServer("PRIVMSG " + admins[i] + " " + except[j]);*/
-					irc.sendServer("PRIVMSG " + admins[i] + " " + Arrays.toString(ex.getStackTrace()));
-				}
-				System.err.println(ex.toString());
+					irc.sendServer("PRIVMSG " + admins[i] + " " + ex.toString() + ", " + Arrays.toString(ex.getStackTrace()));
 			}
 		}
 			
