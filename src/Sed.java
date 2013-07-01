@@ -6,11 +6,9 @@ import java.util.regex.Pattern;
 
 import event.Join;
 import event.Kick;
+import event.Message;
 import event.Quit;
-
-import addons.Message;
 import plugin.PluginTemp;
-
 import program.IRC;
 
 
@@ -24,7 +22,7 @@ public class Sed implements PluginTemp
 	}
 	
 	@Override
-	public void onMessage(event.Message in_message) throws Exception
+	public void onMessage(Message in_message) throws Exception
 	{
 		IRC irc = IRC.getInstance();
 		  
@@ -61,7 +59,7 @@ public class Sed implements PluginTemp
 
 	    }
 	    else
-	    	messages.add(new Message(user,message));
+	    	messages.add(in_message);
 	}
 
 	@Override
