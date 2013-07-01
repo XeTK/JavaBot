@@ -26,6 +26,12 @@ public class RSS implements PluginTemp {
 	}
 	
 	@Override
+	public void onOther(String in_str) throws Exception 
+	{
+		
+	}
+	
+	@Override
 	public void onCreate() throws Exception {}
 	@Override
 	public void onJoin(Join in_join) throws Exception {}
@@ -33,6 +39,5 @@ public class RSS implements PluginTemp {
 	public void onQuit(Quit in_quit) throws Exception {}
 	@Override
 	public void onKick(Kick in_kick) throws Exception {}
-
 }
 
