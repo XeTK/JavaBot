@@ -15,6 +15,7 @@ public class Message
 	
 	// Global variables for the users
 	private String user, host, channel, message;
+	
 	/**
 	 * Default constructor converts are 
 	 * Regex Matcher to the various 

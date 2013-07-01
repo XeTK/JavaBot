@@ -5,7 +5,6 @@ import event.Join;
 import event.Kick;
 import event.Message;
 import event.Quit;
-
 import plugin.PluginTemp;
 import program.Details;
 import program.IRC;
@@ -117,4 +116,12 @@ public class Admin implements PluginTemp
 	public void onTime() throws Exception {}
 	@Override
 	public void onQuit(Quit in_quit) throws Exception {}
+	@Override
+	public void onOther(String in_str) throws Exception 
+	{
+		IRC irc = IRC.getInstance();
+		//Respond to pings
+		if (in_str.split(" ")[0].equals("PING"))
+			irc.sendServer("PONG " + in_str.split(" ")[1]);
+	}
 }

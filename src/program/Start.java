@@ -129,9 +129,8 @@ public class Start
 					for (int i = 0;i< pluginsglob.size();i++)
 						pluginsglob.get(i).onKick(new Kick(m));
 				
-				//Respond to pings
-				if (output.split(" ")[0].equals("PING"))
-					irc.sendServer("PONG " + output.split(" ")[1]);
+				for (int i = 0; i < pluginsglob.size();i++)
+					pluginsglob.get(i).onOther(output);
 					
 				rejoins = 0;
 			}

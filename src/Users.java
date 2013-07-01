@@ -5,10 +5,8 @@ import event.Join;
 import event.Kick;
 import event.Message;
 import event.Quit;
-
 import addons.User;
 import addons.UserList;
-
 import plugin.PluginTemp;
 import program.IRC;
 import program.IRCException;
@@ -88,4 +86,6 @@ public class Users implements PluginTemp
 
 	@Override
 	public void onTime() throws Exception {}
+	@Override
+	public void onOther(String in_str) throws Exception {}
 }

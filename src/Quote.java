@@ -6,9 +6,7 @@ import event.Join;
 import event.Kick;
 import event.Message;
 import event.Quit;
-
 import addons.UserList;
-
 import plugin.PluginTemp;
 import program.IRC;
 
@@ -111,4 +109,6 @@ public class Quote implements PluginTemp
 	public void onQuit(Quit in_quit) throws Exception {}
 	@Override
 	public void onKick(Kick in_kick) throws Exception {}	
+	@Override
+	public void onOther(String in_str) throws Exception {}
 }

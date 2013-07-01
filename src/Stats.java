@@ -9,10 +9,8 @@ import event.Join;
 import event.Kick;
 import event.Message;
 import event.Quit;
-
 import addons.StatDay;
 import addons.UserList;
-
 import plugin.PluginTemp;
 import program.Details;
 import program.IRC;
@@ -195,5 +193,6 @@ public class Stats implements PluginTemp
 		
 		today.incKicks();
 	}
-
+	@Override
+	public void onOther(String in_str) throws Exception {}
 }
