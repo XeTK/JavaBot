@@ -11,3 +11,5 @@ src/org/*
 bin/logs*
 *.json
 *.jar
+*.xml
+*.properties
