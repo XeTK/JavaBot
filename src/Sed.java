@@ -58,25 +58,27 @@ public class Sed implements PluginTemp
 	    	}
 
 	    }
-	    
-    	m = Pattern.compile("s/([^/]*)/([^/]*)/",
-				Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
-	    
-	    if (m.find())
+	    else 
 	    {
-	    	String replacement = m.group(2), source = m.group(1);
-	    	for (int i = 0; i < messages.size();i++)
-	    	{
-    			if ((Pattern.compile(source, Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(messages.get(i).getMessage())).find())
-    			{
-    				irc.sendPrivmsg(channel, user + " thought " + messages.get(i).getUser() + " meant at " + new SimpleDateFormat("HH:mm:ss").format(messages.get(i).getDate()) + ": " + messages.get(i).getMessage().replaceAll(source, replacement));
-    				if (source.contains(".")||source.contains("$"))
-    					break;
-    			}
-	    	}
+	    	m = Pattern.compile("s/([^/]*)/([^/]*)/",
+					Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
+		    
+		    if (m.find())
+		    {
+		    	String replacement = m.group(2), source = m.group(1);
+		    	for (int i = 0; i < messages.size();i++)
+		    	{
+	    			if ((Pattern.compile(source, Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(messages.get(i).getMessage())).find())
+	    			{
+	    				irc.sendPrivmsg(channel, user + " thought " + messages.get(i).getUser() + " meant at " + new SimpleDateFormat("HH:mm:ss").format(messages.get(i).getDate()) + ": " + messages.get(i).getMessage().replaceAll(source, replacement));
+	    				if (source.contains(".")||source.contains("$"))
+	    					break;
+	    			}
+		    	}
+		    }
+		    else
+		    	messages.add(in_message);
 	    }
-	    else
-	    	messages.add(in_message);
 	}
 
 	@Override
