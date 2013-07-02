@@ -85,6 +85,20 @@ public class IRC
 	}
 	
 	/**
+	 * Makes the privmsg stick to the IRC Standard, 
+	 * along with shortening long server messages
+	 * @param channel this is the place the message will be sent to.
+	 * @param message this is the message.
+	 * @throws IOException 
+	 * @throws IRCException 
+	 */
+	public void sendPrivmsg(String channel, String message) 
+			throws IRCException, IOException
+	{
+		sendServer("PRIVMSG " + channel + " :" + message);
+	}
+	
+	/**
 	 * This method gets the data from the server 
 	 * and returns it to be used within the application
 	 * @return this returns the string in from the server

@@ -52,7 +52,7 @@ public class Reminder implements PluginTemp
 		
 		for (int i = 0; i < reminders.length; i++)
 			for (int j = 0; j < channels.length;j++)
-				irc.sendServer("PRIVMSG " + channels[j] + " " + reminders[i].getReminder());
+				irc.sendPrivmsg(channels[j], reminders[i].getReminder());
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public class Reminder implements PluginTemp
 		    if (r.find())
 		    {
 		    	ul.addReminder(r.group(1),  r.group(1) + ": " + user + " Said to you earlier " + r.group(2));
-				irc.sendServer("PRIVMSG " + channel + " " + user + ": I will remind " + r.group(1) + " next time they are here.");
+		    	irc.sendPrivmsg(channel, user + ": I will remind " + r.group(1) + " next time they are here.");
 		    }
 		}
 		else if(message.matches("^\\.reminder ([\\d//:]*) ([\\d:]*).*"))
@@ -89,12 +89,12 @@ public class Reminder implements PluginTemp
 		    		date = new SimpleDateFormat("dd/MM/yyyy").format(new Date()) + " " + m.group(1);
 		    	eventtime = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ENGLISH).parse(date);
 	    		rl.addReminder(reminder, eventtime);
-	    		irc.sendServer("PRIVMSG " + channel + " " + user + ": Reminder Added.");
+	    		irc.sendPrivmsg(channel, user + ": Reminder Added.");
 		    }
 		}
 		else if(message.matches("^\\.help") || message.matches("^\\."))
 	    {
-			irc.sendServer("PRIVMSG " + channel + " REMINDER: " +
+			irc.sendPrivmsg(channel, "REMINDER: " +
 							".reminder *username* *Message* - leave a message for another member : " +
 							".reminder 00:00 *Message* - Leave reminder for the channel to view later today : " +
 							".reminder 01/01/1970 00:00 *Message* Leave a reminder for the future on a different date : "
@@ -112,12 +112,12 @@ public class Reminder implements PluginTemp
 					{
 						for (int i = 0; i < reminders.length;i++)
 						{
-							irc.sendServer("PRIVMSG " + channel + " " + reminders[i]);
+							irc.sendPrivmsg(channel, reminders[i]);
 						}
 					}
 					else
 					{
-						irc.sendServer("PRIVMSG " + channel + " " + user + ": Your host has changed...");
+						irc.sendPrivmsg(channel, user + ": Your host has changed...");
 					}
 				}
 			}

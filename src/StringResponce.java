@@ -58,7 +58,7 @@ public class StringResponce implements PluginTemp
 	    			int inx = 1 + (int)(Math.random() * ((replies.length - 1) + 1));
 	    			if (inx > replies.length -1)
 	    				inx--;
-	    			irc.sendServer("PRIVMSG " + in_message.getChannel() + " " +replies[inx].replace("{0}", Details.getIntance().getNickName()).replace("{1}", in_message.getUser()));
+	    			irc.sendPrivmsg(in_message.getChannel(), replies[inx].replace("{0}", Details.getIntance().getNickName()).replace("{1}", in_message.getUser()));
 		    	}
 		    }
 	    }

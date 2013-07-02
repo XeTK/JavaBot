@@ -50,11 +50,11 @@ public class Users implements PluginTemp
     	if (userOBJ != null)
     	{
     		userOBJ.incjoins(in_join.getHost());
-    		irc.sendServer("PRIVMSG " + in_join.getChannel() + " " + in_join.getUser() + " Has joined " + userOBJ.getJoins() + " times.");
+    		irc.sendPrivmsg(in_join.getChannel(), in_join.getUser() + " Has joined " + userOBJ.getJoins() + " times.");
     	}
     	else
 			if (!Details.getIntance().getNickName().toLowerCase().equals(in_join.getUser()))
-	    			irc.sendServer("PRIVMSG " + in_join.getChannel() + " Hello " + in_join.getUser() + ", Nice to see a new user arround here. Welcome and dont break things!");
+				irc.sendPrivmsg(in_join.getChannel(), "Hello " + in_join.getUser() + ", Nice to see a new user arround here. Welcome and dont break things!");
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class Users implements PluginTemp
     	if (userOBJ != null)
     	{
     		userOBJ.incQuits();
-    		irc.sendServer("PRIVMSG " + in_quit.getChannel() + " " + in_quit.getUser() + " Has Left " + userOBJ.getQuits() + " times.");
+    		irc.sendPrivmsg(in_quit.getChannel(), in_quit.getUser() + " Has Left " + userOBJ.getQuits() + " times.");
     	}
 	}
 
@@ -80,7 +80,7 @@ public class Users implements PluginTemp
     	if (userOBJ != null)
     	{
     		userOBJ.incKicks();
-    		irc.sendServer("PRIVMSG " + in_kick.getChannel() + " " + in_kick.getKicked() + " Has been kicked " + userOBJ.getKicks() + " times.");
+    		irc.sendPrivmsg(in_kick.getChannel(),in_kick.getKicked() + " Has been kicked " + userOBJ.getKicks() + " times.");
     	}
 	}
 

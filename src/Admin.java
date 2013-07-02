@@ -37,7 +37,7 @@ public class Admin implements PluginTemp
 				{
 					String str[] = message.split(" ");
 					irc.sendServer("JOIN " + str[1]);
-					irc.sendServer("PRIVMSG " + channel + " I Have Joined " + str[1]);
+					irc.sendPrivmsg(channel, "I Have Joined " + str[1]);
 				}
 				else if (message.matches("^\\.quit"))
 				{
@@ -57,26 +57,26 @@ public class Admin implements PluginTemp
 				}
 				else if (message.matches("^\\.loaded"))
 				{
-					irc.sendServer("PRIVMSG " + channel + " Plugins Loaded : " + Start.getInstance().loadedPlugins());
+					irc.sendPrivmsg(channel,"Plugins Loaded : " + Start.getInstance().loadedPlugins());
 				}
 				else if(message.matches("^\\.reload"))
 				{
-					irc.sendServer("PRIVMSG " + channel + " Reloading plugins");
+					irc.sendPrivmsg(channel, "Reloading plugins");
 					try
 					{
 						Start.getInstance().reloadPlugins();
 					}
 					catch (Exception ex){}
-					irc.sendServer("PRIVMSG " + channel + " Plugins Loaded : " + Start.getInstance().loadedPlugins());
+					irc.sendPrivmsg(channel, "Plugins Loaded : " + Start.getInstance().loadedPlugins());
 				}
 				else if(message.matches("^.exception"))
 				{
-					irc.sendServer("PRIVMSG " + channel + " I like throwing exceptions");
+					irc.sendPrivmsg(channel, "I like throwing exceptions");
 					throw new IRCException("Called by user");
 				}
 				else if(message.matches("^\\.help") || message.matches("^\\."))
 				{
-					irc.sendServer("PRIVMSG " + channel + " ADMIN: " +
+					irc.sendPrivmsg(channel, "ADMIN: " +
 							".join #* - Join Channel : " +
 							".quit - Kill Bot : " +
 							".nick ** - Change Bot's Nick : " +
@@ -106,16 +106,10 @@ public class Admin implements PluginTemp
 		if (in_kick.getKicked().equals(Details.getIntance().getNickName()))
 		{
 			irc.sendServer("JOIN " + in_kick.getChannel()); 
-			irc.sendServer("PRIVMSG " + in_kick.getChannel() + " Dont kick me!! " + in_kick.getKicked() + "... bad bad bad person!");
+			irc.sendPrivmsg(in_kick.getChannel(), "Dont kick me!! " + in_kick.getKicked() + "... bad bad bad person!");
 		}
 	}
 	
-	@Override
-	public void onCreate() throws Exception {}
-	@Override
-	public void onTime() throws Exception {}
-	@Override
-	public void onQuit(Quit in_quit) throws Exception {}
 	@Override
 	public void onOther(String in_str) throws Exception 
 	{
@@ -124,4 +118,11 @@ public class Admin implements PluginTemp
 		if (in_str.split(" ")[0].equals("PING"))
 			irc.sendServer("PONG " + in_str.split(" ")[1]);
 	}
+	
+	@Override
+	public void onCreate() throws Exception {}
+	@Override
+	public void onTime() throws Exception {}
+	@Override
+	public void onQuit(Quit in_quit) throws Exception {}
 }

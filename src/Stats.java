@@ -58,14 +58,14 @@ public class Stats implements PluginTemp
 				if (min.equals("59")&&sec.equals("59"))
 					for (int i = 0; i < channels.length;i++)
 						if (today.getHour().getMsgSent() != 0)
-							irc.sendServer("PRIVMSG " + channels[i] + " Hourly Stats: Messages Sent : " + today.getHour().getMsgSent() + "| Users joined :" + today.getHour().getJoins() +"| Users left : " + today.getHour().getQuits() + "| Users kicked" + today.getHour().getKicks());
+							irc.sendPrivmsg(channels[i], "Hourly Stats: Messages Sent : " + today.getHour().getMsgSent() + "| Users joined :" + today.getHour().getJoins() +"| Users left : " + today.getHour().getQuits() + "| Users kicked" + today.getHour().getKicks());
 			
 			if (hour.equals("00")&&min.equals("00")&&sec.equals("00"))
 			{
 				if (Details.getIntance().isDayStats())
 					if (today.msgsSent() != 0)
 						for (int i = 0; i < channels.length; i++)
-							irc.sendServer("PRIVMSG " + channels[i] + " I has handled, " + today.msgsSent() + " Messages, " + today.joins() + "  Users Join, " + today.quits() + " User left and " + today.kicks() + " users kicked!");
+							irc.sendPrivmsg(channels[i], "I has handled, " + today.msgsSent() + " Messages, " + today.joins() + "  Users Join, " + today.quits() + " User left and " + today.kicks() + " users kicked!");
 
 				today = new StatDay();
 			}
@@ -101,14 +101,14 @@ public class Stats implements PluginTemp
 			String[] t = message.split(" ");
 			if (t.length > 0||t[1] != null)
 				if (ul.getUser(t[1]) != null)
-					irc.sendServer("PRIVMSG " + channel + " " + t[1] + ": Messages Sent = " + ul.getUser(t[1]).getMsgSent() + "!");
+					irc.sendPrivmsg(channel, t[1] + ": Messages Sent = " + ul.getUser(t[1]).getMsgSent() + "!");
 		}
 		else if (message.matches("\\.lastonline [A-Za-z0-9#]+$"))
 		{
 			String[] t = message.split(" ");
 			if (t.length > 0||t[1] != null)
 				if (ul.getUser(t[1]) != null)
-					irc.sendServer("PRIVMSG " + channel + " " + t[1] + ": Last Online = " + new SimpleDateFormat("yyyy/MM/dd HH:mm").format(ul.getUser(t[1]).getLastOnline()) + "!");
+					irc.sendPrivmsg(channel, t[1] + ": Last Online = " + new SimpleDateFormat("yyyy/MM/dd HH:mm").format(ul.getUser(t[1]).getLastOnline()) + "!");
 		}
 		else if (message.matches("\\.stats (hour|day) (msgsent|joins|quits|kicks)"))
 		{
@@ -121,45 +121,45 @@ public class Stats implements PluginTemp
 				{
 					if (cm.equals("msgsent"))
 					{
-						irc.sendServer("PRIVMSG " + channel + " Messages sent in the last hour : " + today.getHour().getMsgSent());
+						irc.sendPrivmsg(channel, "Messages sent in the last hour : " + today.getHour().getMsgSent());
 					}
 					else if (cm.equals("joins"))
 					{
-						irc.sendServer("PRIVMSG " + channel + " Users joined in the last hour : " + today.getHour().getJoins());
+						irc.sendPrivmsg(channel, "Users joined in the last hour : " + today.getHour().getJoins());
 					}
 					else if (cm.equals("quits"))
 					{
-						irc.sendServer("PRIVMSG " + channel + " Users quit in the last hour : " + today.getHour().getQuits());
+						irc.sendPrivmsg(channel, "Users quit in the last hour : " + today.getHour().getQuits());
 					}
 					else if (cm.equals("kicks"))
 					{
-						irc.sendServer("PRIVMSG " + channel + " Users kicked in the last hour : " + today.getHour().getKicks());
+						irc.sendPrivmsg(channel, "Users kicked in the last hour : " + today.getHour().getKicks());
 					}
 				}
 				else if (t1.equals("day"))
 				{
 					if (cm.equals("msgsent"))
 					{
-						irc.sendServer("PRIVMSG " + channel + " Messages sent today : " + today.msgsSent());
+						irc.sendPrivmsg(channel, "Messages sent today : " + today.msgsSent());
 					}
 					else if (cm.equals("joins"))
 					{
-						irc.sendServer("PRIVMSG " + channel + " Users joined today : " + today.joins());
+						irc.sendPrivmsg(channel, "Users joined today : " + today.joins());
 					}
 					else if (cm.equals("quits"))
 					{
-						irc.sendServer("PRIVMSG " + channel + " Users quit today : " + today.quits());
+						irc.sendPrivmsg(channel, "Users quit today : " + today.quits());
 					}
 					else if (cm.equals("kicks"))
 					{
-						irc.sendServer("PRIVMSG " + channel + " Users kicked today : " + today.kicks());
+						irc.sendPrivmsg(channel, "Users kicked today : " + today.kicks());
 					}
 				}
 			}
 		}
 		else if(message.matches("^\\.help") || message.matches("^\\."))
 		{
-			irc.sendServer("PRIVMSG " + channel + " STATS: " +
+			irc.sendPrivmsg(channel, "STATS: " +
 					".lastonline *username* - check when a member was last active : " +
 					".msgsent *username* - check how many messages a user has sent globaly within the channel : " +
 					".stats (hour|day) (msgsent|joins|quits|kicks) - get stats for that given time frame : "

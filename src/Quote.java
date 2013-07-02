@@ -36,7 +36,7 @@ public class Quote implements PluginTemp
 			if (r.find())
 			{
 				luq.addQuote(r.group(2),r.group(3));
-				irc.sendServer("PRIVMSG " + channel + " " + user + ": Quote Added.");
+				irc.sendPrivmsg(channel, user + ": Quote Added.");
 			}
 		}
 		else if (message.matches("\\.quotes [A-Za-z0-9#]+$"))
@@ -49,7 +49,7 @@ public class Quote implements PluginTemp
 					String[] quotes = luq.getQuotes(t[1]);
 					if (quotes.length > 0)
 						for (int i = 0; i < quotes.length;i++)
-							irc.sendServer("PRIVMSG " + channel + " " + quotes[i]);
+							irc.sendPrivmsg(channel, quotes[i]);
 				}
 			}
 		}
@@ -62,7 +62,7 @@ public class Quote implements PluginTemp
 				{
 					String[] quotes = luq.getQuotes(t[1]);
 					if (quotes.length > 0)
-						irc.sendServer("PRIVMSG " + channel + " " + t[1] + ": "+ quotes[new Random().nextInt(quotes.length)]);
+						irc.sendPrivmsg(channel, t[1] + ": "+ quotes[new Random().nextInt(quotes.length)]);
 				}
 			}
 		}
@@ -73,12 +73,12 @@ public class Quote implements PluginTemp
 			if (r.find())
 			{
 				luq.removeQuote(r.group(1));
-				irc.sendServer("PRIVMSG " + channel + " " + user + ": Quote Deleted.");
+				irc.sendPrivmsg(channel, user + ": Quote Deleted.");
 			}
 		}
 		else if(message.matches("^\\.help") || message.matches("^\\."))
 		{
-			irc.sendServer("PRIVMSG " + channel + " QUOTE: " +
+			irc.sendPrivmsg(channel, "QUOTE: " +
 					".quotes *item* - returns all the quotes tied to this item : " +
 					".quote *item* - returns a random quote for that item : " +
 					".quoteadd *item* *message* - will add a new quote to the appropriate item : " +
@@ -97,7 +97,7 @@ public class Quote implements PluginTemp
 		{
 			String[] quotes = luq.getQuotes(in_join.getUser());
 			if (quotes.length > 0)
-				irc.sendServer("PRIVMSG " + in_join.getChannel() + " " + in_join.getUser() + ": "+ quotes[new Random().nextInt(quotes.length)]);
+				irc.sendPrivmsg(in_join.getChannel(), in_join.getUser() + ": "+ quotes[new Random().nextInt(quotes.length)]);
 		}
 	}
 

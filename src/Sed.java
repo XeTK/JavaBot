@@ -29,7 +29,7 @@ public class Sed implements PluginTemp
 		String message = in_message.getMessage(), channel = in_message.getChannel(), user = in_message.getUser();
 		
 	    if(message.matches("^\\.help") || message.matches("^\\."))
-			irc.sendServer("PRIVMSG " + channel + " SED: " +
+	    	irc.sendPrivmsg(channel, "SED: " +
 							"*Username*: s/*Source*/*Replacement*/ - e.g XeTK: s/.*/hello/ is used to replace the previous statement with hello :"
 							);
 	    
@@ -50,7 +50,7 @@ public class Sed implements PluginTemp
 	    		{
 	    			if ((Pattern.compile(source, Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(messages.get(i).getMessage())).find())
 	    			{
-	    				irc.sendServer("PRIVMSG " + channel + " " + user + " thought " + tuser + " meant at " + new SimpleDateFormat("HH:mm:ss").format(messages.get(i).getDate()) + ": " + messages.get(i).getMessage().replaceAll(source, replacement));
+	    				irc.sendPrivmsg(channel, user + " thought " + tuser + " meant at " + new SimpleDateFormat("HH:mm:ss").format(messages.get(i).getDate()) + ": " + messages.get(i).getMessage().replaceAll(source, replacement));
 	    				if (source.contains(".")||source.contains("$"))
 	    					break;
 	    			}
@@ -69,7 +69,7 @@ public class Sed implements PluginTemp
 	    	{
     			if ((Pattern.compile(source, Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(messages.get(i).getMessage())).find())
     			{
-    				irc.sendServer("PRIVMSG " + channel + " " + user + " thought " + messages.get(i).getUser() + " meant at " + new SimpleDateFormat("HH:mm:ss").format(messages.get(i).getDate()) + ": " + messages.get(i).getMessage().replaceAll(source, replacement));
+    				irc.sendPrivmsg(channel, user + " thought " + messages.get(i).getUser() + " meant at " + new SimpleDateFormat("HH:mm:ss").format(messages.get(i).getDate()) + ": " + messages.get(i).getMessage().replaceAll(source, replacement));
     				if (source.contains(".")||source.contains("$"))
     					break;
     			}

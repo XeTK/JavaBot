@@ -76,13 +76,13 @@ public class Rep implements PluginTemp
 						}
 						if (iAmmount > 100||iAmmount < -100)
 						{
-							irc.sendServer("PRIVMSG " + channel + " You cant do that its to much rep...");
+							irc.sendPrivmsg(channel, "You cant do that its to much rep...");
 						}
 						else
 						{
 							Reputation tRep = repList.getRep(item);
 							tRep.modRep(iAmmount);
-							irc.sendServer("PRIVMSG " + channel + " " + item + ": Rep = " + tRep.getRep() + "!");
+							irc.sendPrivmsg(channel, item + ": Rep = " + tRep.getRep() + "!");
 						}
 					}
 				}
@@ -92,11 +92,11 @@ public class Rep implements PluginTemp
 		{
 			String[] t = message.split(" ");
 			if (t.length > 0||t[1] != null)
-				irc.sendServer("PRIVMSG " + channel + " " + t[1] + ": Rep = " + repList.getRep(t[1]).getRep() + "!");
+				irc.sendPrivmsg(channel, t[1] + ": Rep = " + repList.getRep(t[1]).getRep() + "!");
 		}
 		else if(message.matches("^\\.help") || message.matches("^\\."))
 		{
-			irc.sendServer("PRIVMSG " + channel + " REP: " +
+			irc.sendPrivmsg(channel, "REP: " +
 					".rep *Item* - view the reputation of a item : " +
 					"*Item*--/++ - increment or decrement the rep of a desired item / : " +
 					"*Item* +/- *Ammount - increment or decrement the rep of a set item by a set amount : "
