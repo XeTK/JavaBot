@@ -24,7 +24,10 @@ public class Quote implements PluginTemp
 	{
 		UserList luq = UserList.getInstance();
 		
-		String message = in_message.getMessage(), channel = in_message.getChannel(), user = in_message.getUser();
+		String message = in_message.getMessage(), 
+				channel = in_message.getChannel(), 
+				user = in_message.getUser();
+		
 		if (message.charAt(message.length() - 1 ) == ' ')
 			message = message.substring(0, message.length() -1);
 
@@ -62,7 +65,8 @@ public class Quote implements PluginTemp
 				{
 					String[] quotes = luq.getQuotes(t[1]);
 					if (quotes.length > 0)
-						irc.sendPrivmsg(channel, t[1] + ": "+ quotes[new Random().nextInt(quotes.length)]);
+						irc.sendPrivmsg(channel, 
+								t[1] + ": "+ quotes[new Random().nextInt(quotes.length)]);
 				}
 			}
 		}
@@ -97,7 +101,8 @@ public class Quote implements PluginTemp
 		{
 			String[] quotes = luq.getQuotes(in_join.getUser());
 			if (quotes.length > 0)
-				irc.sendPrivmsg(in_join.getChannel(), in_join.getUser() + ": "+ quotes[new Random().nextInt(quotes.length)]);
+				irc.sendPrivmsg(in_join.getChannel(), 
+						in_join.getUser() + ": "+ quotes[new Random().nextInt(quotes.length)]);
 		}
 	}
 

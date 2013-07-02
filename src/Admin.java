@@ -25,7 +25,10 @@ public class Admin implements PluginTemp
 		IRC irc = IRC.getInstance();
 		Details details = Details.getIntance();
 		
-		String message = in_message.getMessage(), user = in_message.getUser(), channel = in_message.getChannel();
+		String message = in_message.getMessage(), 
+				user = in_message.getUser(), 
+				channel = in_message.getChannel();
+		
         for (int i = 0;i < details.getAdmins().length;i++)
 		{
 			if (user.equals(details.getAdmins()[i]))
@@ -52,22 +55,27 @@ public class Admin implements PluginTemp
 				{
 					Matcher p = Pattern.compile("^\\.cmd (.*)", 
 							Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
+					
 					if (p.find())
 						irc.sendServer(p.group(1));
 				}
 				else if (message.matches("^\\.loaded"))
 				{
-					irc.sendPrivmsg(channel,"Plugins Loaded : " + Start.getInstance().loadedPlugins());
+					irc.sendPrivmsg(channel,
+							"Plugins Loaded : " + Start.getInstance().loadedPlugins());
 				}
 				else if(message.matches("^\\.reload"))
 				{
 					irc.sendPrivmsg(channel, "Reloading plugins");
+					
 					try
 					{
 						Start.getInstance().reloadPlugins();
 					}
 					catch (Exception ex){}
-					irc.sendPrivmsg(channel, "Plugins Loaded : " + Start.getInstance().loadedPlugins());
+					
+					irc.sendPrivmsg(channel, 
+							"Plugins Loaded : " + Start.getInstance().loadedPlugins());
 				}
 				else if(message.matches("^.exception"))
 				{
@@ -106,7 +114,8 @@ public class Admin implements PluginTemp
 		if (in_kick.getKicked().equals(Details.getIntance().getNickName()))
 		{
 			irc.sendServer("JOIN " + in_kick.getChannel()); 
-			irc.sendPrivmsg(in_kick.getChannel(), "Dont kick me!! " + in_kick.getKicked() + "... bad bad bad person!");
+			irc.sendPrivmsg(in_kick.getChannel(), 
+					"Dont kick me!! " + in_kick.getKicked() + "... bad bad bad person!");
 		}
 	}
 	

@@ -61,7 +61,9 @@ public class Reminder implements PluginTemp
 		IRC irc = IRC.getInstance();
 		UserList ul = UserList.getInstance();
 		
-		String user = in_message.getUser(), channel = in_message.getChannel(), message = in_message.getMessage();
+		String user = in_message.getUser(), 
+				channel = in_message.getChannel(), 
+				message = in_message.getMessage();
 		    
 		if (message.matches("(\\.reminder)\\s([a-zA-Z0-9]*)\\s([a-zA-Z\\w\\d\\s]*)"))
 		{
@@ -69,8 +71,11 @@ public class Reminder implements PluginTemp
 		    				Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
 		    if (r.find())
 		    {
-		    	ul.addReminder(r.group(1),  r.group(1) + ": " + user + " Said to you earlier " + r.group(2));
-		    	irc.sendPrivmsg(channel, user + ": I will remind " + r.group(1) + " next time they are here.");
+		    	ul.addReminder(r.group(1),  
+		    			r.group(1) + ": " + user + " Said to you earlier " + r.group(2));
+		    	
+		    	irc.sendPrivmsg(channel, 
+		    			user + ": I will remind " + r.group(1) + " next time they are here.");
 		    }
 		}
 		else if(message.matches("^\\.reminder ([\\d//:]*) ([\\d:]*).*"))
@@ -83,10 +88,12 @@ public class Reminder implements PluginTemp
 		    	
 		    	String date = m.group(1), reminder = m.group(3);
 		    	Date eventtime;
+		    	
 		    	if (date.matches("([0-3][0-9]/[0-1][0-9]/20[1-9][0-9])"))
 		    		date += " " + m.group(2);	
 		    	else
 		    		date = new SimpleDateFormat("dd/MM/yyyy").format(new Date()) + " " + m.group(1);
+		    	
 		    	eventtime = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ENGLISH).parse(date);
 	    		rl.addReminder(reminder, eventtime);
 	    		irc.sendPrivmsg(channel, user + ": Reminder Added.");
