@@ -44,7 +44,7 @@ public class Sed implements PluginTemp
 	    			replacement = m.group(3),
 	    			source = m.group(2);
                
-	    	for (int i = 0; i < messages.size();i++)
+	    	for (int i = messages.size() -1; i >= 0 ;i--)
 	    	{
 	    		if (messages.get(i).getUser().equals(tuser))
 	    		{
