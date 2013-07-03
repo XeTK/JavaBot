@@ -1,7 +1,6 @@
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,6 +12,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+import addons.AuthenticatedUsers;
 import addons.User;
 import addons.UserList;
 import event.Join;
@@ -26,8 +26,8 @@ import program.IRC;
 
 public class Authenticate implements PluginTemp
 {
-
-	private ArrayList<User> authenticated_users = new ArrayList<User>();
+	AuthenticatedUsers auth_Users = AuthenticatedUsers.getInstance();
+	
 	@Override
 	public String name() 
 	{
@@ -52,7 +52,7 @@ public class Authenticate implements PluginTemp
 			{
 				if (in_message.getMessage().matches("LOGIN .*"))
 				{
-					if (!authenticated_users.contains(user))
+					if (!auth_Users.contains(user))
 					{
 						if (user.getEmail() == null||user.getEmail().isEmpty())
 						{
@@ -75,7 +75,7 @@ public class Authenticate implements PluginTemp
 										&& user.getEmail().equals(email))
 								{
 									irc.sendPrivmsg(in_message.getChannel(), "Authenticated");
-									authenticated_users.add(user);
+									auth_Users.add(user);
 								}
 								else
 								{
@@ -111,19 +111,19 @@ public class Authenticate implements PluginTemp
 						}
 						else
 						{
-							//Already registered
+							irc.sendPrivmsg(in_message.getChannel(), "You are already registered");
 						}
 					}
 					else
 					{
-						//Incorrect CMD
+						irc.sendPrivmsg(in_message.getChannel(), "REGISTER (EMAIL) (PASSWORD)");
 					}
 				}
 				else if (in_message.getMessage().matches("LOGOUT"))
 				{
-					if (authenticated_users.contains(user))
+					if (auth_Users.contains(user))
 					{
-						authenticated_users.remove(user);
+						auth_Users.remove(user);
 						irc.sendPrivmsg(in_message.getChannel(), "You have been logged out!");
 					}
 					else
@@ -138,7 +138,7 @@ public class Authenticate implements PluginTemp
 							.matcher(in_message.getMessage());
 					if (m.find())
 					{
-						
+						//Implement email first
 					}
 					else
 					{
@@ -152,19 +152,26 @@ public class Authenticate implements PluginTemp
 	@Override
 	public void onJoin(Join in_join) throws Exception 
 	{
+		System.out.println("Joined");
+		IRC irc = IRC.getInstance();
+		User user = UserList.getInstance().getUser(in_join.getUser());
+		if (user.getEmail() != null&&!user.getEmail().isEmpty())
+			irc.sendPrivmsg(user.getUser(), "Please Login!");
 		
 	}
 
 	@Override
 	public void onQuit(Quit in_quit) throws Exception
 	{
-		
+		User user = UserList.getInstance().getUser(in_quit.getUser());
+		auth_Users.remove(user);
 	}
 
 	@Override
 	public void onKick(Kick in_kick) throws Exception
 	{
-		
+		User user = UserList.getInstance().getUser(in_kick.getKicked());
+		auth_Users.remove(user);
 	}
 	
 	private byte[] hashPassword(String password) throws NoSuchAlgorithmException
