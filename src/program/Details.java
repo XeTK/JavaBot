@@ -20,6 +20,8 @@ public class Details
 	private String[] channels = {"#xetk"}, admins = {"xetk"}, 
 			startup = {"PRIVMSG zippy identify helloworld"};
 	
+	private String encryptionKey = "helloworldthomas";
+	
 	/**
 	 * Get our instance of the details class back for us to use.
 	 * @return we get the original instance of the class back
@@ -86,6 +88,10 @@ public class Details
 	public String getNickName()
 	{
 		return botNickName;
+	}
+	public byte[] getEncryptionKey()
+	{
+		return encryptionKey.getBytes();
 	}
 	//Setters
 	public void setNickName(String nickname)

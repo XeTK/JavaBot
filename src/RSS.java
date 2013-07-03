@@ -5,7 +5,8 @@ import event.Quit;
 import plugin.PluginTemp;
 
 
-public class RSS implements PluginTemp {
+public class RSS implements PluginTemp 
+{
 
 	@Override
 	public String name() 

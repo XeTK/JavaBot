@@ -10,10 +10,15 @@ public class User
 {
 	
 	// Other data members about the user.
-	private String user, host;
+	private String user, host, email;
+	
 	private long msgSent, joins, quits, kicks;
+	
 	private Date lastOnline;
+	
 	private boolean isDirty = false;
+	
+	private byte[] encyptedPasswordHash = new byte[16];
 	
 	// List of reminders and quotes tied to a average user.
 	private ArrayList<String> quotes = new ArrayList<String>();
@@ -137,6 +142,16 @@ public class User
 		this.user = user;
 	}
 	
+	public void setEncyptedPasswordHash(byte[] encyptedPasswordHash)
+	{
+		this.encyptedPasswordHash = encyptedPasswordHash;
+	}
+	
+	public void setEmail(String email)
+	{
+		this.email = email;
+	}
+	
 	// Getters.
 	public String getUser()
 	{
@@ -173,4 +188,12 @@ public class User
 		return kicks;
 	}
 	
+	public byte[] getEncryptedPasswordHash()
+	{
+		return encyptedPasswordHash;
+	}
+	public String getEmail()
+	{
+		return email;
+	}
 }

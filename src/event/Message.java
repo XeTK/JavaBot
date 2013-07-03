@@ -16,6 +16,8 @@ public class Message
 	// Global variables for the users
 	private String user, host, channel, message;
 	
+	private boolean privmsg = false;
+	
 	/**
 	 * Default constructor converts are 
 	 * Regex Matcher to the various 
@@ -31,7 +33,10 @@ public class Message
 		message = m.group(4);
 		//Converts a channel message to a PM
 		if (channel.charAt(0) != '#')
+		{
 			channel = user;
+			privmsg = true;
+		}
 	}
 	
 	// Getters
@@ -54,5 +59,9 @@ public class Message
 	public String getMessage() 
 	{
 		return message;
+	}
+	public boolean isPrivMsg()
+	{
+		return privmsg;
 	}
 }
