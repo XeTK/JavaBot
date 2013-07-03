@@ -181,9 +181,9 @@ public class Authenticate implements PluginTemp
 		byte[] encryptkey = Details.getIntance().getEncryptionKey();
 		SecretKey sKey = new SecretKeySpec(encryptkey,0,encryptkey.length, "AES");
 		
-	    Cipher desCipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+		Cipher desCipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
 	    
-	    desCipher.init(Cipher.ENCRYPT_MODE, sKey);
+	    	desCipher.init(Cipher.ENCRYPT_MODE, sKey);
 	    
 	   	return desCipher.doFinal(paswordHash);
 	}
@@ -195,10 +195,10 @@ public class Authenticate implements PluginTemp
 		byte[] decryptkey = Details.getIntance().getEncryptionKey();
 		SecretKey sKey = new SecretKeySpec(decryptkey,0,decryptkey.length, "AES");
 		
-	    Cipher desCipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+		Cipher desCipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
 	    
-	    desCipher.init(Cipher.DECRYPT_MODE, sKey);
-	    return desCipher.doFinal(enPasswordHash);
+		desCipher.init(Cipher.DECRYPT_MODE, sKey);
+		return desCipher.doFinal(enPasswordHash);
 	}
 	
 	@Override
