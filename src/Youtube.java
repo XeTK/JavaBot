@@ -70,6 +70,8 @@ public class Youtube implements PluginTemp
 						.matcher(line);
 		    	if (m.find())
 		    		title = m.group(1);
+		    	
+		    	//ADD UPLOADED TIME
 		    }
 		    IRC irc = IRC.getInstance();
 		    title = title.replace("You", "\u000300YOU").replace("Tube", "\u000304TUBE\u000f");

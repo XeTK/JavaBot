@@ -152,12 +152,11 @@ public class Authenticate implements PluginTemp
 	@Override
 	public void onJoin(Join in_join) throws Exception 
 	{
-		System.out.println("Joined");
 		IRC irc = IRC.getInstance();
 		User user = UserList.getInstance().getUser(in_join.getUser());
-		if (user.getEmail() != null&&!user.getEmail().isEmpty())
-			irc.sendPrivmsg(user.getUser(), "Please Login!");
-		
+		if (!auth_Users.contains(user))
+			if (user.getEmail() != null&&!user.getEmail().isEmpty())
+				irc.sendPrivmsg(user.getUser(), "Please Login!");
 	}
 
 	@Override
