@@ -65,7 +65,7 @@ public class Youtube implements PluginTemp
 		    	if (m.find())
 		    		views = true;
 		    	
-		    	m = Pattern.compile("<title>([\\d\\w\\s\\&\\;-]*)</title>",
+		    	m = Pattern.compile("<title>(.*)</title>",
 						Pattern.CASE_INSENSITIVE | Pattern.DOTALL)
 						.matcher(line);
 		    	if (m.find())

@@ -33,10 +33,10 @@ public class Imgur implements PluginTemp
 		    BufferedReader in = new BufferedReader(new InputStreamReader(
 		                        myUrl.openStream()));
 		
-		    String line, dislikes = "", likes = "", viewcount = "",
+		    String line, dislikes = "", likes = "" , viewcount = "",
 		    		title = "", time = "", bandwidth = "";
 		    
-		    boolean gallery = false, date = false;
+		    boolean date = false;
 		    
 		    int dateind = 0;
 		    
