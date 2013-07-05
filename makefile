@@ -30,11 +30,9 @@ prep:
 mac:
 	brew install curl
 	brew install wget
-	brew install tmux
 	brew install vim
 	
 linux:
 	apt-get install curl
 	apt-get install wget
-	apt-get install tmux
 	apt-get install vim
