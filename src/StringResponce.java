@@ -2,6 +2,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.Random;
 
 import event.Join;
 import event.Kick;
@@ -18,6 +19,7 @@ public class StringResponce implements PluginTemp
 {
 	// Keep a farm of possible responses along with there regex's
 	private ResponceList rl = new ResponceList();
+	private Random random = new Random();
 
 	/**
 	 * Returns the Name of the class for the plugin loader.
@@ -51,51 +53,34 @@ public class StringResponce implements PluginTemp
 	}
 
 	@Override
-	public void onMessage(Message in_message) throws Exception 
+	public void onMessage(Message in_message) throws Exception
 	{
 		IRC irc = IRC.getInstance();
-
-		// Pull all the responses out of the farm to make them easier to access.
 		ArrayList<Responce> responces = rl.getResponces();
-
 		Details details = Details.getIntance();
-
-		// Get the bot's nickname to make life easier later.
 		String botname = details.getNickName();
 
-		// Detecting responables
-		if (responces.size() > 0) 
+		if (responces.size() > 0)
 		{
-			// Loop through all the responses so we can check if the strings match.
-			for (int i = 0; i < responces.size(); i++) 
+			for (Responce resp : responces)
 			{
-				// Get the regex ready for us to check against.
-				String regex = responces.get(i).getRegex();
+				String resp_regex = resp.getRegex();
 
-				// Replace the preset value with the bot's name.
-				regex = regex.replace("{0}", botname);
+        // set botname at start of regex
+				resp_regex = resp_regex.replace("{0}", botname);
 
-				// Match the current message that has been sent to the regex
-				if (in_message.getMessage().matches(regex)) 
+				if (in_message.getMessage().matches(resp_regex))
 				{
-					// If the string matches return all the possible responses to an array
-					String[] replies = responces.get(i).getResponces();
+					// grab array of actual valid responses for this input
+					String[] replies = resp.getResponces();
 
-					// Get a random index for are response
-					int inx = 1 + (int) (Math.random() * ((replies.length - 1) + 1));
-
-					// If we are outside the array size then we decrement by 1;
-					if (inx > replies.length - 1)
-						inx--;
-
-					// Select the final final reply and assign it to a string for easy manipulation.
+          int inx = random.nextInt(replies.length);
 					String reply = replies[inx];
 
-					// Again replace are pre set strings with either botname or username.
+					// fix up reply strings to include target usernames
 					reply = reply.replace("{0}", botname);
 					reply = reply.replace("{1}", in_message.getUser());
 
-					// Finally Send the message back to the channel
 					irc.sendPrivmsg(in_message.getChannel(), reply);
 				}
 			}
