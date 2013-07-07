@@ -18,6 +18,7 @@ import program.JSON;
 public class StringResponce implements PluginTemp
 {
 	private ResponceList rl = new ResponceList();
+	
 	@Override
 	public String name()
 	{
@@ -45,40 +46,61 @@ public class StringResponce implements PluginTemp
 		
 	    ArrayList<Responce> responces = rl.getResponces();
 	    
+	    Details details = Details.getIntance();
+	    
+	    String botname = details.getNickName();
+	    
 	    if (responces.size() > 0)
 	    {
 		    for (int i = 0; i < responces.size();i++)
 		    {
-		    	System.out.println(responces.get(i).getRegex().replace("{0}", Details.getIntance().getNickName()));
-		    	Matcher m = Pattern.compile(responces.get(i).getRegex().replace("{0}", Details.getIntance().getNickName()),Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(in_message.getMessage());
-		    	if (m.find())
+		    	String regex = responces.get(i).getRegex();
+		    	
+		    	regex = regex.replace("{0}", botname);
+		    	
+		    	if (in_message.getMessage().matches(regex))
 		    	{
 		    		String[] replies = responces.get(i).getResponces();
 
 	    			int inx = 1 + (int)(Math.random() * ((replies.length - 1) + 1));
+	    			
 	    			if (inx > replies.length -1)
 	    				inx--;
-	    			irc.sendPrivmsg(in_message.getChannel(), replies[inx].replace("{0}", Details.getIntance().getNickName()).replace("{1}", in_message.getUser()));
+	    			
+	    			String reply = replies[inx];
+	    			
+	    			reply = reply.replace("{0}", botname);
+	    			reply = reply.replace("{1}", in_message.getUser());
+	    			
+	    			irc.sendPrivmsg(in_message.getChannel(), reply);
 		    	}
 		    }
 	    }
 	    
-	    Details details = Details.getIntance();
+	    
         for (int i = 0;i < details.getAdmins().length;i++)
 		{
 			if (in_message.getUser().equals(details.getAdmins()[i]))
 			{
-			    Matcher m = Pattern.compile("^\\.responce ([a-zA-Z0-9\\.\\*\\\\\\^]*) ,([a-zA-Z0-9 ,]*)",Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(in_message.getMessage());
+			    Matcher m = Pattern.compile("^\\.responce ([a-zA-Z0-9\\.\\*\\\\\\^]*) ,([a-zA-Z0-9 ,]*)"
+			    		,Pattern.CASE_INSENSITIVE | Pattern.DOTALL)
+			    		.matcher(in_message.getMessage());
+			    
 			    if (m.find())
 			    {
-			    	System.out.println("Adding new Responce");
 			    	Responce re = new Responce();
+			    	
 			    	re.setRegex(m.group(1));
+			    	
 			    	String[] replies = m.group(2).split(",");
+			    	
 			    	for (int j = 0; j < replies.length;j++)
 			    		re.addResponce(replies[j]);
+			    	
 			    	rl.addResponce(re);
+			    	
 			    	JSON.saveGSON("responces.json", rl);
+			    	irc.sendPrivmsg(in_message.getChannel(), "Added new Responce");
 			    }
 			}
 		}
