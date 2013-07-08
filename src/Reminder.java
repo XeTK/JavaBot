@@ -84,8 +84,7 @@ public class Reminder implements PluginTemp
 		    				Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
 		    
 		    if (m.find())
-		    {
-		    	
+		    {	
 		    	String date = m.group(1), reminder = m.group(3);
 		    	Date eventtime;
 		    	

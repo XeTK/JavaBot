@@ -44,6 +44,19 @@ public class Details
 	}
 	
 	/**
+	 * Check if a user is an admin without reusing the same code over and over.
+	 * @param name The user we want to check if is a admin.
+	 * @return true or false to if the user is a admin.
+	 */
+	public boolean isAdmin(String name)
+	{
+		for (int i = 0; i < admins.length;i++)
+			if (name.equalsIgnoreCase(admins[i]))
+				return true;
+		return false;
+	}
+	
+	/**
 	 * Getters
 	 */
 	public static Details getDetails()

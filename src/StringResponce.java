@@ -66,7 +66,7 @@ public class StringResponce implements PluginTemp
 			{
 				String resp_regex = resp.getRegex();
 
-        // set botname at start of regex
+				// set botname at start of regex
 				resp_regex = resp_regex.replace("{0}", botname);
 
 				if (in_message.getMessage().matches(resp_regex))
@@ -74,7 +74,7 @@ public class StringResponce implements PluginTemp
 					// grab array of actual valid responses for this input
 					String[] replies = resp.getResponces();
 
-          int inx = random.nextInt(replies.length);
+					int inx = random.nextInt(replies.length);
 					String reply = replies[inx];
 
 					// fix up reply strings to include target usernames
@@ -88,49 +88,45 @@ public class StringResponce implements PluginTemp
 
 		// Adding a new response.
 		
-		// Loop through all the admins for the bot to check if we are aloud to add a response.
-		for (int i = 0; i < details.getAdmins().length; i++) 
+		// If the user is a member of the admin.
+		if (details.isAdmin(in_message.getUser()))
 		{
-			// If the user is a member of the admin.
-			if (in_message.getUser().equals(details.getAdmins()[i])) 
+			/* 
+			 * Regex to check if the string is attached to this class and 
+			 * if we want to add a new responce,
+			 * .responce (Regex Here), [Responces]...
+			 * .responce .* ,helloworld, blah
+			 */
+			Matcher m = Pattern
+					.compile("^\\.responce (.*),([a-zA-Z0-9 ,]*)",
+							Pattern.CASE_INSENSITIVE | Pattern.DOTALL)
+					.matcher(in_message.getMessage());
+
+			// If the message matches the regex.
+			if (m.find()) 
 			{
-				/* 
-				 * Regex to check if the string is attached to this class and 
-				 * if we want to add a new responce,
-				 * .responce (Regex Here), [Responces]...
-				 * .responce .* ,helloworld, blah
-				 */
-				Matcher m = Pattern
-						.compile("^\\.responce ([a-zA-Z0-9\\.\\*\\\\\\^]*) ,([a-zA-Z0-9 ,]*)",
-								Pattern.CASE_INSENSITIVE | Pattern.DOTALL)
-						.matcher(in_message.getMessage());
+				// Instantiate a new response object.
+				Responce re = new Responce();
 
-				// If the message matches the regex.
-				if (m.find()) 
-				{
-					// Instantiate a new response object.
-					Responce re = new Responce();
+				// Set the regex for the response to the first group in the add regex.
+				re.setRegex(m.group(1));
 
-					// Set the regex for the response to the first group in the add regex.
-					re.setRegex(m.group(1));
+				// Split the Responses on a ,
+				String[] replies = m.group(2).split(",");
 
-					// Split the Responses on a ,
-					String[] replies = m.group(2).split(",");
+				// For each new response add it to the array of responses.
+				for (int j = 0; j < replies.length; j++)
+					re.addResponce(replies[j]);
 
-					// For each new response add it to the array of responses.
-					for (int j = 0; j < replies.length; j++)
-						re.addResponce(replies[j]);
+				// Add the new response to the farm of responses so that is kept.
+				rl.addResponce(re);
 
-					// Add the new response to the farm of responses so that is kept.
-					rl.addResponce(re);
-
-					// Resave the farm so we don't loose are new response/
-					JSON.saveGSON("responces.json", rl);
-					
-					// Finaly Prompt the user that the response has been added.
-					irc.sendPrivmsg(in_message.getChannel(),
-							"Added new Responce");
-				}
+				// Resave the farm so we don't loose are new response/
+				JSON.saveGSON("responces.json", rl);
+				
+				// Finaly Prompt the user that the response has been added.
+				irc.sendPrivmsg(in_message.getChannel(),
+						"Added new Responce");
 			}
 		}
 	}

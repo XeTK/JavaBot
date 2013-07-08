@@ -1,14 +1,9 @@
-import java.security.InvalidKeyException;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -176,16 +171,15 @@ public class Authenticate implements PluginTemp
 		auth_Users.remove(user);
 	}
 	
-	private byte[] hashPassword(String password) throws NoSuchAlgorithmException
+	
+	private byte[] hashPassword(String password) throws Exception
 	{
 		MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
 		messageDigest.update(password.getBytes());
 		return new String(messageDigest.digest()).getBytes();
 	}
 	
-	private byte[] encryptPasswordHash(byte[] paswordHash) throws 
-	NoSuchAlgorithmException, NoSuchPaddingException, 
-	IllegalBlockSizeException, BadPaddingException, InvalidKeyException
+	private byte[] encryptPasswordHash(byte[] paswordHash) throws Exception
 	{
 		byte[] encryptkey = Details.getIntance().getEncryptionKey();
 		SecretKey sKey = new SecretKeySpec(encryptkey,0,encryptkey.length, "AES");
@@ -197,9 +191,7 @@ public class Authenticate implements PluginTemp
 	   	return desCipher.doFinal(paswordHash);
 	}
 
-	private byte[] decrpytPasswordHash(byte[] enPasswordHash) throws 
-	NoSuchAlgorithmException, NoSuchPaddingException, 
-	InvalidKeyException, IllegalBlockSizeException, BadPaddingException
+	private byte[] decrpytPasswordHash(byte[] enPasswordHash) throws Exception
 	{
 		byte[] decryptkey = Details.getIntance().getEncryptionKey();
 		SecretKey sKey = new SecretKeySpec(decryptkey,0,decryptkey.length, "AES");
@@ -214,5 +206,4 @@ public class Authenticate implements PluginTemp
 	public void onCreate() throws Exception {}
 	@Override
 	public void onOther(String in_str) throws Exception {}
-
 }
