@@ -69,7 +69,7 @@ public class Sed implements PluginTemp
 		    	{
 	    			if ((Pattern.compile(source, Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(messages.get(i).getMessage())).find())
 	    			{
-	    				irc.sendPrivmsg(channel, user + " thought " + messages.get(i).getUser() + " meant at " + new SimpleDateFormat("HH:mm:ss").format(messages.get(i).getDate()) + ": " + messages.get(i).getMessage().replaceAll(source, replacement));)
+	    				irc.sendPrivmsg(channel, user + " thought " + messages.get(i).getUser() + " meant at " + new SimpleDateFormat("HH:mm:ss").format(messages.get(i).getDate()) + ": " + messages.get(i).getMessage().replaceAll(source, replacement));
 	    				break;
 	    			}
 		    	}
