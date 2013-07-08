@@ -65,7 +65,7 @@ public class Sed implements PluginTemp
 		    if (m.find())
 		    {
 		    	String replacement = m.group(2), source = m.group(1);
-		    	for (int i = 0; i < messages.size();i++)
+		    	for (int i = messages.size() -1; i >= 0 ;i--)
 		    	{
 	    			if ((Pattern.compile(source, Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(messages.get(i).getMessage())).find())
 	    			{
