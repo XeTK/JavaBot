@@ -1,17 +1,17 @@
 import java.io.File;
 import java.io.IOException;
 
-import event.Join;
-import event.Kick;
-import event.Message;
-import event.Quit;
-import addons.User;
-import addons.UserList;
-import plugin.PluginTemp;
-import program.IRC;
-import program.IRCException;
-import program.JSON;
-import program.Details;
+import core.Details;
+import core.IRC;
+import core.JSON;
+import core.event.Join;
+import core.event.Kick;
+import core.event.Message;
+import core.event.Quit;
+import core.helpers.IRCException;
+import core.plugin.PluginTemp;
+import addons.users.User;
+import addons.users.UserList;
 
 
 public class Users implements PluginTemp

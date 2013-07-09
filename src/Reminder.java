@@ -6,19 +6,19 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import event.Join;
-import event.Kick;
-import event.Message;
-import event.Quit;
-import addons.Reminders;
-import addons.RemindersList;
-import addons.User;
-import addons.UserList;
-import plugin.PluginTemp;
-import program.Details;
-import program.IRC;
-import program.IRCException;
-import program.JSON;
+import core.Details;
+import core.IRC;
+import core.JSON;
+import core.event.Join;
+import core.event.Kick;
+import core.event.Message;
+import core.event.Quit;
+import core.helpers.IRCException;
+import core.plugin.PluginTemp;
+import addons.reminders.Reminders;
+import addons.reminders.RemindersList;
+import addons.users.User;
+import addons.users.UserList;
 
 
 public class Reminder implements PluginTemp

@@ -7,16 +7,16 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
-import addons.AuthenticatedUsers;
-import addons.User;
-import addons.UserList;
-import event.Join;
-import event.Kick;
-import event.Message;
-import event.Quit;
-import plugin.PluginTemp;
-import program.Details;
-import program.IRC;
+import core.Details;
+import core.IRC;
+import core.event.Join;
+import core.event.Kick;
+import core.event.Message;
+import core.event.Quit;
+import core.plugin.PluginTemp;
+import addons.authentication.AuthenticatedUsers;
+import addons.users.User;
+import addons.users.UserList;
 
 
 public class Authenticate implements PluginTemp

@@ -1,8 +1,8 @@
-import event.Join;
-import event.Kick;
-import event.Message;
-import event.Quit;
-import plugin.PluginTemp;
+import core.event.Join;
+import core.event.Kick;
+import core.event.Message;
+import core.event.Quit;
+import core.plugin.PluginTemp;
 
 
 public class RSS implements PluginTemp 

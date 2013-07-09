@@ -1,15 +1,15 @@
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import event.Join;
-import event.Kick;
-import event.Message;
-import event.Quit;
-import plugin.PluginTemp;
-import program.Details;
-import program.IRC;
-import program.Start;
-import program.IRCException;
+import core.Details;
+import core.IRC;
+import core.Core;
+import core.event.Join;
+import core.event.Kick;
+import core.event.Message;
+import core.event.Quit;
+import core.helpers.IRCException;
+import core.plugin.PluginTemp;
 
 public class Admin implements PluginTemp
 {
@@ -60,16 +60,16 @@ public class Admin implements PluginTemp
 			else if (message.matches("^\\.loaded"))
 			{
 				irc.sendPrivmsg(channel,
-						"Plugins Loaded : " + Start.getInstance().loadedPlugins());
+						"Plugins Loaded : " + Core.getInstance().loadedPlugins());
 			}
 			else if(message.matches("^\\.reload"))
 			{
 				irc.sendPrivmsg(channel, "Reloading plugins");
 				
-				Start.getInstance().reloadPlugins();
+				Core.getInstance().reloadPlugins();
 				
 				irc.sendPrivmsg(channel, 
-						"Plugins Loaded : " + Start.getInstance().loadedPlugins());
+						"Plugins Loaded : " + Core.getInstance().loadedPlugins());
 			}
 			else if(message.matches("^.exception"))
 			{

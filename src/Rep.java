@@ -2,15 +2,15 @@ import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import event.Join;
-import event.Kick;
-import event.Message;
-import event.Quit;
-import addons.RepList;
-import addons.Reputation;
-import plugin.PluginTemp;
-import program.IRC;
-import program.JSON;
+import core.IRC;
+import core.JSON;
+import core.event.Join;
+import core.event.Kick;
+import core.event.Message;
+import core.event.Quit;
+import core.plugin.PluginTemp;
+import addons.reputation.RepList;
+import addons.reputation.Reputation;
 
 
 public class Rep implements PluginTemp

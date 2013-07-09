@@ -5,17 +5,17 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import event.Join;
-import event.Kick;
-import event.Message;
-import event.Quit;
-import addons.StatDay;
-import addons.UserList;
-import plugin.PluginTemp;
-import program.Details;
-import program.IRC;
-import program.IRCException;
-import program.JSON;
+import core.Details;
+import core.IRC;
+import core.JSON;
+import core.event.Join;
+import core.event.Kick;
+import core.event.Message;
+import core.event.Quit;
+import core.helpers.IRCException;
+import core.plugin.PluginTemp;
+import addons.stats.StatDay;
+import addons.users.UserList;
 
 
 public class Stats implements PluginTemp
