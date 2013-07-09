@@ -36,12 +36,6 @@ public class Authenticate implements PluginTemp
 	}
 
 	@Override
-	public void onTime() throws Exception 
-	{
-		
-	}
-
-	@Override
 	public void onMessage(Message in_message) throws Exception 
 	{
 		IRC irc = IRC.getInstance();
@@ -220,6 +214,8 @@ public class Authenticate implements PluginTemp
 		return line.getBytes();
 	}
 	
+	@Override
+	public void onTime() throws Exception {}
 	@Override
 	public void onCreate() throws Exception {}
 	@Override
