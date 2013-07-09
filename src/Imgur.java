@@ -9,7 +9,7 @@ import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
 import core.plugin.PluginTemp;
-import program.IRC;
+import core.utils.IRC;
 
 
 public class Imgur implements PluginTemp

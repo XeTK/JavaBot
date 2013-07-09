@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.regex.Matcher;
@@ -7,13 +10,13 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
-import core.Details;
-import core.IRC;
 import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
 import core.plugin.PluginTemp;
+import core.utils.Details;
+import core.utils.IRC;
 import addons.authentication.AuthenticatedUsers;
 import addons.users.User;
 import addons.users.UserList;
@@ -21,7 +24,10 @@ import addons.users.UserList;
 
 public class Authenticate implements PluginTemp
 {
-	AuthenticatedUsers auth_Users = AuthenticatedUsers.getInstance();
+	private final String key_Path = "key.txt";
+	
+	private AuthenticatedUsers auth_Users = AuthenticatedUsers.getInstance();
+	
 	
 	@Override
 	public String name() 
@@ -181,7 +187,7 @@ public class Authenticate implements PluginTemp
 	
 	private byte[] encryptPasswordHash(byte[] paswordHash) throws Exception
 	{
-		byte[] encryptkey = Details.getIntance().getEncryptionKey();
+		byte[] encryptkey = getEncryptionKey();
 		SecretKey sKey = new SecretKeySpec(encryptkey,0,encryptkey.length, "AES");
 		
 		Cipher desCipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
@@ -193,13 +199,25 @@ public class Authenticate implements PluginTemp
 
 	private byte[] decrpytPasswordHash(byte[] enPasswordHash) throws Exception
 	{
-		byte[] decryptkey = Details.getIntance().getEncryptionKey();
+		byte[] decryptkey = getEncryptionKey();
 		SecretKey sKey = new SecretKeySpec(decryptkey,0,decryptkey.length, "AES");
 		
 		Cipher desCipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
 	    
 		desCipher.init(Cipher.DECRYPT_MODE, sKey);
 		return desCipher.doFinal(enPasswordHash);
+	}
+	
+	private byte[] getEncryptionKey() throws IOException
+	{ 
+		BufferedReader reader = new BufferedReader(new FileReader(key_Path));
+		
+		String line = reader.readLine();
+		
+		// Close the file read to prevent us problems late.
+		reader.close();
+		
+		return line.getBytes();
 	}
 	
 	@Override

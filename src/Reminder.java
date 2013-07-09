@@ -6,15 +6,15 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import core.Details;
-import core.IRC;
-import core.JSON;
 import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
 import core.helpers.IRCException;
 import core.plugin.PluginTemp;
+import core.utils.Details;
+import core.utils.IRC;
+import core.utils.JSON;
 import addons.reminders.Reminders;
 import addons.reminders.RemindersList;
 import addons.users.User;

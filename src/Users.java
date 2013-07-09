@@ -1,15 +1,15 @@
 import java.io.File;
 import java.io.IOException;
 
-import core.Details;
-import core.IRC;
-import core.JSON;
 import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
 import core.helpers.IRCException;
 import core.plugin.PluginTemp;
+import core.utils.Details;
+import core.utils.IRC;
+import core.utils.JSON;
 import addons.users.User;
 import addons.users.UserList;
 

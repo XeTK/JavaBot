@@ -2,13 +2,14 @@ import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import core.IRC;
-import core.JSON;
+
 import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
 import core.plugin.PluginTemp;
+import core.utils.IRC;
+import core.utils.JSON;
 import addons.reputation.RepList;
 import addons.reputation.Reputation;
 

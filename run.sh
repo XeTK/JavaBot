@@ -1,4 +1,4 @@
 cd ../
 make compile
 cd bin/
-java program.Start
+java core.Start

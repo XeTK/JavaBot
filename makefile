@@ -4,7 +4,7 @@ all:
 	echo Copying dependencies
 	cp -R com bin/
 	echo Running
-	java -cp bin/ program.Start
+	java -cp bin/ core.Start
 
 clean:
 	echo Deleting old files

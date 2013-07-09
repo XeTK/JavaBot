@@ -4,7 +4,6 @@ import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
-import event.*;
 
 /**
  * This is the interface that all the plugins inherit from it makes sure 

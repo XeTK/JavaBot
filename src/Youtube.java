@@ -4,12 +4,12 @@ import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import core.IRC;
 import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
 import core.plugin.PluginTemp;
+import core.utils.IRC;
 
 
 public class Youtube implements PluginTemp

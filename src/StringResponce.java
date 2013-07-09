@@ -4,14 +4,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Random;
 
-import core.Details;
-import core.IRC;
-import core.JSON;
 import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
 import core.plugin.PluginTemp;
+import core.utils.Details;
+import core.utils.IRC;
+import core.utils.JSON;
 import addons.responce.Responce;
 import addons.responce.ResponceList;
 
@@ -98,7 +98,7 @@ public class StringResponce implements PluginTemp
 			 * .responce .* ,helloworld, blah
 			 */
 			Matcher m = Pattern
-					.compile("^\\.responce (.*),([a-zA-Z0-9 ,]*)",
+					.compile("^\\.responce[\\s](.*),([a-zA-Z0-9 ,]*)",
 							Pattern.CASE_INSENSITIVE | Pattern.DOTALL)
 					.matcher(in_message.getMessage());
 

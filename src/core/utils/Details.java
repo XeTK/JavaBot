@@ -23,14 +23,6 @@ public class Details
 	private String[] channels = {"#xetk"}, admins = {"xetk"}, 
 			startup = {"PRIVMSG zippy identify helloworld"};
 	
-	private Details() throws IOException
-	{
-        if (new File(cfgFile).exists())
-            details = (Details)JSON.loadGSON(cfgFile, Details.class);
-        else
-            JSON.saveGSON(cfgFile, details);
-	}
-	
 	/**
 	 * Get our instance of the details class back for us to use.
 	 * @return we get the original instance of the class back
@@ -38,8 +30,15 @@ public class Details
 	 */
 	public static Details getIntance() throws IOException
 	{
-		if (details == null)
-			details = new Details();
+		if (new File(cfgFile).exists())
+        {
+            details = (Details)JSON.loadGSON(cfgFile, Details.class);
+        }
+        else
+        {
+        	details = new Details();
+            JSON.saveGSON(cfgFile, details);
+        }
 		return details;
 	}
 	

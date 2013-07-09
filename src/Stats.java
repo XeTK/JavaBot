@@ -5,16 +5,17 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import core.Details;
-import core.IRC;
-import core.JSON;
 import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
 import core.helpers.IRCException;
 import core.plugin.PluginTemp;
+import core.utils.Details;
+import core.utils.IRC;
+import core.utils.JSON;
 import addons.stats.StatDay;
+import addons.stats.StatOption;
 import addons.users.UserList;
 
 
@@ -22,6 +23,7 @@ public class Stats implements PluginTemp
 {
 
 	private StatDay today;
+	private StatOption options;
 	
 	@Override
 	public String name() 
@@ -38,6 +40,13 @@ public class Stats implements PluginTemp
 		
 		if (new File(path).exists())
 			today = (StatDay) JSON.loadGSON(path, StatDay.class);
+		
+		String opt_path = "stat_options.json";
+		
+		if (new File(opt_path).exists())
+			options = (StatOption) JSON.loadGSON(opt_path, StatOption.class);
+		else
+			JSON.saveGSON(opt_path, new StatOption());
 	}
 
 	@Override
@@ -54,7 +63,7 @@ public class Stats implements PluginTemp
 			String hour = m.group(1), min = m.group(2), sec = m.group(3);			
 			
 			String[] channels = Details.getIntance().getChannels();
-			if (Details.getIntance().isHourStats())
+			if (options.isHour_Stats());
 				if (min.equals("59")&&sec.equals("59"))
 					for (int i = 0; i < channels.length;i++)
 						if (today.getHour().getMsgSent() != 0)
@@ -62,7 +71,7 @@ public class Stats implements PluginTemp
 			
 			if (hour.equals("00")&&min.equals("00")&&sec.equals("00"))
 			{
-				if (Details.getIntance().isDayStats())
+				if (options.isDay_Stats());
 					if (today.msgsSent() != 0)
 						for (int i = 0; i < channels.length; i++)
 							irc.sendPrivmsg(channels[i], "I has handled, " + today.msgsSent() + " Messages, " + today.joins() + "  Users Join, " + today.quits() + " User left and " + today.kicks() + " users kicked!");
