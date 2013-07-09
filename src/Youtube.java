@@ -4,12 +4,12 @@ import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import core.colour.Colours;
-import core.colour.Colouriser;
 import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
+import core.helpers.Colour;
+import core.helpers.Colouriser;
 import core.plugin.PluginTemp;
 import core.utils.IRC;
 
@@ -77,8 +77,8 @@ public class Youtube implements PluginTemp
 		    }
 		    IRC irc = IRC.getInstance();
 		    
-		    String yt = Colouriser.colour("You", Colours.BLACK, Colours.WHITE);
-		    yt += Colouriser.colour("Tube", Colours.WHITE, Colours.RED);
+		    String yt = Colour.colour("You", Colour.BLACK, Colour.WHITE);
+		    yt += Colour.colour("Tube", Colour.WHITE, Colour.RED);
 		    title = title.replace("YouTube", yt);
 		    irc.sendPrivmsg(in_message.getChannel(), title + ", " + viewcount + " Views, " + likes + "|" + dislikes + " Likes|Dislikes");
 		    in.close();
