@@ -1,6 +1,8 @@
 package addons.users;
 import java.util.ArrayList;
 
+import core.event.Message;
+
 /**
  * This Class encapsulate users objects and also interacts with them.
  * @author Tom Rosier(XeTK)
@@ -53,11 +55,13 @@ public class UserList
 	 * This updates the number of message that a user sends,
 	 * Along with passing in the latest host address to check if the user,
 	 * host has changed and this can be marked.
-	 * @param user this is the user that we want to increment the message sent for
-	 * @param host this is the host of the user so we can check if there host has changed
+	 * @param in_msg this is the message object being passed into the class
 	 */
-	public void msgSent(String user, String host)
+	public void msgSent(Message in_msg)
 	{
+		String user = in_msg.getUser(),
+				host = in_msg.getHost();
+		
 		User usr = getUser(user);
 		if (usr != null)
 			usr.incMsgSent(host);

@@ -9,7 +9,6 @@ import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
 import core.helpers.Colour;
-import core.helpers.Colouriser;
 import core.plugin.PluginTemp;
 import core.utils.IRC;
 

@@ -29,7 +29,7 @@ public class Users implements PluginTemp
 	public void onCreate() throws Exception
 	{
 		if (new File(dbFile).exists())
-			UserList.setInstance((UserList)JSON.loadGSON(dbFile, UserList.class));
+			UserList.setInstance((UserList)JSON.loadGSON(dbFile,UserList.class));
 		else
 			JSON.saveGSON(dbFile, UserList.getInstance());
 	}
@@ -38,7 +38,7 @@ public class Users implements PluginTemp
 	public void onMessage(Message in_message) throws IRCException, IOException
 	{
 		JSON.saveGSON(dbFile, UserList.getInstance());
-		UserList.getInstance().msgSent(in_message.getUser(), in_message.getHost());
+		UserList.getInstance().msgSent(in_message);
 	}
 
 	@Override
@@ -50,11 +50,20 @@ public class Users implements PluginTemp
     	if (userOBJ != null)
     	{
     		userOBJ.incjoins(in_join.getHost());
-    		irc.sendPrivmsg(in_join.getChannel(), in_join.getUser() + " Has joined " + userOBJ.getJoins() + " times.");
+    		String reply = "%s Has joined %s times";
+    		irc.sendPrivmsg(in_join.getChannel(), String.format(reply, 
+    				in_join.getUser(), userOBJ.getJoins()));
     	}
     	else
-			if (!Details.getIntance().getNickName().toLowerCase().equals(in_join.getUser()))
-				irc.sendPrivmsg(in_join.getChannel(), "Hello " + in_join.getUser() + ", Nice to see a new user arround here. Welcome and dont break things!");
+    	{
+    		String botname = Details.getIntance().getNickName();
+    		if (!botname.equalsIgnoreCase(in_join.getUser()))
+    		{
+    			String reply = "Hello %s and welcome! Don't break things!";
+    			irc.sendPrivmsg(in_join.getChannel(), 
+    					String.format(reply, in_join.getUser()));
+    		}
+    	}
 	}
 
 	@Override
@@ -67,7 +76,9 @@ public class Users implements PluginTemp
     	if (userOBJ != null)
     	{
     		userOBJ.incQuits();
-    		irc.sendPrivmsg(in_quit.getChannel(), in_quit.getUser() + " Has Left " + userOBJ.getQuits() + " times.");
+    		String reply = "%s Has quit %s times";
+    		irc.sendPrivmsg(in_quit.getChannel(), String.format(reply, 
+    				in_quit.getUser(), userOBJ.getQuits()));
     	}
 	}
 
@@ -80,7 +91,9 @@ public class Users implements PluginTemp
     	if (userOBJ != null)
     	{
     		userOBJ.incKicks();
-    		irc.sendPrivmsg(in_kick.getChannel(),in_kick.getKicked() + " Has been kicked " + userOBJ.getKicks() + " times.");
+    		String reply = "%s Has be kicked %s times";
+    		irc.sendPrivmsg(in_kick.getChannel(), String.format(reply,
+    				in_kick.getKicked(), userOBJ.getKicks()));
     	}
 	}
 

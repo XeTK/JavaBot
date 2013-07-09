@@ -27,7 +27,9 @@ public class Sed implements PluginTemp
 	{
 		IRC irc = IRC.getInstance();
 		  
-		String message = in_message.getMessage(), channel = in_message.getChannel(), user = in_message.getUser();
+		String message = in_message.getMessage(), 
+				channel = in_message.getChannel(), 
+				user = in_message.getUser();
 		
 	    if(message.matches("^\\.help") || message.matches("^\\."))
 	    	irc.sendPrivmsg(channel, "SED: " +
@@ -37,21 +39,49 @@ public class Sed implements PluginTemp
 		if (messages.size() > 10)
 			messages.remove(0);
 
-	    Matcher m = Pattern.compile("(^[a-zA-Z0-9]*): s/([^/]*)/([^/]*)/",
-	    				Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
+	    Matcher m = Pattern.compile("(?:(.*):\\s)?s/(.*)/(.*)/",
+	    				Pattern.CASE_INSENSITIVE | Pattern.DOTALL)
+	    				.matcher(message);
+	    
 	    if (m.find())
 	    {
-	    	String tuser = m.group(1).toLowerCase(),
-	    			replacement = m.group(3),
-	    			source = m.group(2);
-               
-	    	for (int i = messages.size() -1; i >= 0 ;i--)
+	    	String tuser = "", replacement = "", source = "";
+	    	if (m.group(3) != null)
 	    	{
-	    		if (messages.get(i).getUser().equals(tuser))
+		    	replacement = m.group(2);
+		    	source = m.group(1);
+	    	}
+	    	else
+	    	{
+	    		tuser = m.group(1).toLowerCase();
+	    		replacement = m.group(3);
+	    		source = m.group(2);
+	    	}
+               
+	    	System.out.println("Tuser " + tuser +
+	    						"\nreplacement " + replacement +
+	    						"\nsource " + source);
+	    	
+	    	for (int i = messages.size() -1; i >= 0; i--)
+	    	{
+	    		Message mmessage = messages.get(i);
+	    		
+	    		if ((mmessage.getUser().equals(tuser)||tuser.equals(""))&&mmessage != null)
 	    		{
-	    			if ((Pattern.compile(source, Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(messages.get(i).getMessage())).find())
+	    			m = Pattern.compile(source, 
+	    					Pattern.CASE_INSENSITIVE | Pattern.DOTALL)
+	    					.matcher(mmessage.getMessage());
+	    			
+	    			if (m.find())
 	    			{
-	    				irc.sendPrivmsg(channel, user + " thought " + tuser + " meant at " + new SimpleDateFormat("HH:mm:ss").format(messages.get(i).getDate()) + ": " + messages.get(i).getMessage().replaceAll(source, replacement));
+	    				String reply = "";
+	    				if (!tuser.equalsIgnoreCase(tuser))
+	    					 reply = user + " thought ";
+	    				
+	    				reply += "%s meant : %s"; 
+	    				irc.sendPrivmsg(channel, String.format(reply, 
+	    						mmessage.getUser(), 
+	    						mmessage.getMessage().replaceAll(source, replacement)));
 	    				break;
 	    			}
 	    		}
@@ -60,22 +90,6 @@ public class Sed implements PluginTemp
 	    }
 	    else 
 	    {
-	    	m = Pattern.compile("s/([^/]*)/([^/]*)/",
-					Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
-		    
-		    if (m.find())
-		    {
-		    	String replacement = m.group(2), source = m.group(1);
-		    	for (int i = messages.size() -1; i >= 0 ;i--)
-		    	{
-	    			if ((Pattern.compile(source, Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(messages.get(i).getMessage())).find())
-	    			{
-	    				irc.sendPrivmsg(channel, user + " thought " + messages.get(i).getUser() + " meant at " + new SimpleDateFormat("HH:mm:ss").format(messages.get(i).getDate()) + ": " + messages.get(i).getMessage().replaceAll(source, replacement));
-	    				break;
-	    			}
-		    	}
-		    }
-		    else
 		    	messages.add(in_message);
 	    }
 	}

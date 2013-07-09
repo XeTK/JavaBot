@@ -92,7 +92,10 @@ public class Stats implements PluginTemp
 	@Override
 	public void onMessage(Message in_message) throws IRCException, IOException
 	{		
-		String message = in_message.getMessage(), channel = in_message.getChannel(), user = in_message.getUser();
+		String message = in_message.getMessage(), 
+				channel = in_message.getChannel(), 
+				user = in_message.getUser();
+		
 		if (message.charAt(message.length() - 1 ) == ' ')
 			message = message.substring(0, message.length() -1);
 
@@ -108,16 +111,18 @@ public class Stats implements PluginTemp
 		if (message.matches("\\.msgsent [A-Za-z0-9#]+$"))
 		{
 			String[] t = message.split(" ");
-			if (t.length > 0||t[1] != null)
-				if (ul.getUser(t[1]) != null)
-					irc.sendPrivmsg(channel, t[1] + ": Messages Sent = " + ul.getUser(t[1]).getMsgSent() + "!");
+			if ((t.length > 0||t[1] != null)&&ul.getUser(t[1]) != null)
+			{
+				irc.sendPrivmsg(channel, t[1] + ": Messages Sent = " + ul.getUser(t[1]).getMsgSent() + "!");
+			}
 		}
 		else if (message.matches("\\.lastonline [A-Za-z0-9#]+$"))
 		{
 			String[] t = message.split(" ");
-			if (t.length > 0||t[1] != null)
-				if (ul.getUser(t[1]) != null)
-					irc.sendPrivmsg(channel, t[1] + ": Last Online = " + new SimpleDateFormat("yyyy/MM/dd HH:mm").format(ul.getUser(t[1]).getLastOnline()) + "!");
+			if ((t.length > 0||t[1] != null)&&ul.getUser(t[1]) != null)
+			{
+				irc.sendPrivmsg(channel, t[1] + ": Last Online = " + new SimpleDateFormat("yyyy/MM/dd HH:mm").format(ul.getUser(t[1]).getLastOnline()) + "!");
+			}
 		}
 		else if (message.matches("\\.stats (hour|day) (msgsent|joins|quits|kicks)"))
 		{
