@@ -16,6 +16,8 @@ import core.utils.IRC;
 public class Youtube implements PluginTemp
 {
 
+//This needs rewritting again from scratch
+
 	@Override
 	public String name()
 	{
