@@ -11,7 +11,7 @@ import core.event.Quit;
 import core.plugin.PluginTemp;
 import core.utils.IRC;
 
-
+//Refactor
 public class Imgur implements PluginTemp
 {
 
