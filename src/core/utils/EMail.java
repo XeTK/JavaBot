@@ -27,13 +27,14 @@ public class EMail
 				{
 					protected PasswordAuthentication getPasswordAuthentication() 
 					{
-						try
+						Details details = null;
+						try 
 						{
-							Details details = Details.getIntance();
-							return new PasswordAuthentication(details.getStmpUser(),
-									details.getStmpPassword());
-						} catch (Exception ex){}
-						return null;
+							details = Details.getIntance();
+						} 
+						catch (IOException e) {e.printStackTrace();}
+						return new PasswordAuthentication(details.getStmpUser(),
+								details.getStmpPassword());
 					}
 				});
 
