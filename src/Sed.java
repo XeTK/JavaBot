@@ -1,9 +1,8 @@
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 
 import core.event.Join;
 import core.event.Kick;
@@ -39,52 +38,39 @@ public class Sed implements PluginTemp
 		if (messages.size() > 10)
 			messages.remove(0);
 
-	    Matcher m = Pattern.compile("(?:(.*):\\s)?s/(.*)/(.*)/",
+	    Matcher m = Pattern.compile("(?:([\\s\\w]*):\\s)?s/([\\s\\w\\d\\$\\*\\.]*)/([\\s\\w\\d]*)(?:/)?",
 	    				Pattern.CASE_INSENSITIVE | Pattern.DOTALL)
 	    				.matcher(message);
 	    
 	    if (m.find())
 	    {
 	    	String tuser = "", replacement = "", source = "";
-	    	if (m.group(3) != null)
-	    	{
-		    	replacement = m.group(2);
-		    	source = m.group(1);
-	    	}
-	    	else
-	    	{
-	    		tuser = m.group(1).toLowerCase();
-	    		replacement = m.group(3);
-	    		source = m.group(2);
-	    	}
-               
-	    	System.out.println("Tuser " + tuser +
-	    						"\nreplacement " + replacement +
-	    						"\nsource " + source);
-	    	
+	    	if (m.group(1) != null)
+	    		tuser = m.group(1);
+
+    		replacement = m.group(3);
+    		source = m.group(2);
+             
 	    	for (int i = messages.size() -1; i >= 0; i--)
 	    	{
 	    		Message mmessage = messages.get(i);
 	    		
-	    		if ((mmessage.getUser().equals(tuser)||tuser.equals(""))&&mmessage != null)
-	    		{
-	    			m = Pattern.compile(source, 
-	    					Pattern.CASE_INSENSITIVE | Pattern.DOTALL)
-	    					.matcher(mmessage.getMessage());
-	    			
-	    			if (m.find())
-	    			{
-	    				String reply = "";
-	    				if (!tuser.equalsIgnoreCase(tuser))
-	    					 reply = user + " thought ";
-	    				
-	    				reply += "%s meant : %s"; 
-	    				irc.sendPrivmsg(channel, String.format(reply, 
-	    						mmessage.getUser(), 
-	    						mmessage.getMessage().replaceAll(source, replacement)));
-	    				break;
-	    			}
-	    		}
+    			m = Pattern.compile(source, 
+    					Pattern.CASE_INSENSITIVE | Pattern.DOTALL)
+    					.matcher(mmessage.getMessage());
+    			
+    			if (m.find())
+    			{
+    				String reply = "";
+    				if (!tuser.equalsIgnoreCase(tuser))
+    					 reply = user + " thought ";
+    				
+    				reply += "%s meant : %s"; 
+    				irc.sendPrivmsg(channel, String.format(reply, 
+    						mmessage.getUser(), 
+    						mmessage.getMessage().replaceAll(source, replacement)));
+    				break;
+    			}
 	    	}
 
 	    }
