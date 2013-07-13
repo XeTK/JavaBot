@@ -23,7 +23,7 @@ public class EMail
 
 		// Get the default Session object.
 		Session session = Session.getInstance(props,
-				new javax.mail.Authenticator() 
+				new Authenticator() 
 				{
 					protected PasswordAuthentication getPasswordAuthentication() 
 					{
@@ -44,7 +44,7 @@ public class EMail
 		message.setFrom(new InternetAddress(details.getStmpEmail()));
 
 		// Set To: header field of the header.
-		message.addRecipient(Message.RecipientType.TO, new InternetAddress("tom.rosier92@gmail.com"));
+		message.addRecipient(Message.RecipientType.TO, new InternetAddress(eMail_Address));
 
 		// Set Subject: header field
 		message.setSubject(topic);
