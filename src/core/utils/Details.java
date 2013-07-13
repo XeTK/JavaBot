@@ -18,7 +18,8 @@ public class Details
 	
 	private int port = 6667;
 	
-	private String botNickName = "JavaBot";
+	private String botNickName = "JavaBot", stmpEmail = "Spunky@Spunkybot.co.uk",
+			stmpHost = "stmp.gmail.com", stmpUser = "spunky@gmail.com", stmpPassword = "Helloworld";
 	
 	private String[] channels = {"#xetk"}, admins = {"xetk"}, 
 			startup = {"PRIVMSG zippy identify helloworld"};
@@ -102,6 +103,27 @@ public class Details
 		return botNickName;
 	}
 	
+
+	public String getStmpEmail() 
+	{
+		return stmpEmail;
+	}
+
+	public String getStmpHost() 
+	{
+		return stmpHost;
+	}
+
+	public String getStmpUser() 
+	{
+		return stmpUser;
+	}
+
+	public String getStmpPassword() 
+	{
+		return stmpPassword;
+	}
+
 	// Setters
 	public void setNickName(String nickname)
 	{

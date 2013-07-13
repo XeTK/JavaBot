@@ -16,6 +16,7 @@ import core.event.Message;
 import core.event.Quit;
 import core.plugin.PluginTemp;
 import core.utils.Details;
+import core.utils.EMail;
 import core.utils.IRC;
 import addons.authentication.AuthenticatedUsers;
 import addons.users.User;
@@ -133,7 +134,8 @@ public class Authenticate implements PluginTemp
 							.matcher(in_message.getMessage());
 					if (m.find())
 					{
-						//Implement email first
+						EMail.sendEmail(user.getEmail(), "Test Lemons", "I like to lemons");
+						irc.sendPrivmsg(in_message.getUser(), "MsgSent");
 					}
 					else
 					{
