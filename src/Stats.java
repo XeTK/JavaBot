@@ -52,6 +52,7 @@ public class Stats implements PluginTemp
 	@Override
 	public void onTime() throws IRCException, IOException
 	{
+		System.out.println(options.isDay_Stats() + " " + options.isHour_Stats());
 		IRC irc = IRC.getInstance();
 		String ti = new SimpleDateFormat("HH:mm:ss").format(new Date());
 		
@@ -63,7 +64,7 @@ public class Stats implements PluginTemp
 			String hour = m.group(1), min = m.group(2), sec = m.group(3);			
 			
 			String[] channels = Details.getIntance().getChannels();
-			if (options.isHour_Stats());
+			if (options.isHour_Stats())
 				if (min.equals("59")&&sec.equals("59"))
 					for (int i = 0; i < channels.length;i++)
 						if (today.getHour().getMsgSent() != 0)
@@ -71,7 +72,7 @@ public class Stats implements PluginTemp
 			
 			if (hour.equals("00")&&min.equals("00")&&sec.equals("00"))
 			{
-				if (options.isDay_Stats());
+				if (options.isDay_Stats())
 					if (today.msgsSent() != 0)
 						for (int i = 0; i < channels.length; i++)
 							irc.sendPrivmsg(channels[i], "I has handled, " + today.msgsSent() + " Messages, " + today.joins() + "  Users Join, " + today.quits() + " User left and " + today.kicks() + " users kicked!");
