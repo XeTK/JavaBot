@@ -104,6 +104,9 @@ public class Authenticate implements PluginTemp
 							user.setEncyptedPasswordHash(enPassword);
 							user.setEmail(email);
 							irc.sendPrivmsg(in_message.getChannel(), "You are now Registered");
+							EMail.sendEmail(user.getEmail(),
+								"Hello\n\nYou have Registered with Spunky using the email " + email
+								, "You are now registered with Spunky!");
 						}
 						else
 						{
