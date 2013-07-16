@@ -24,7 +24,6 @@ public class Admin implements PluginTemp
 	{
 		IRC irc = IRC.getInstance();
 		Details details = Details.getIntance();
-		PluginsCore pc = PluginsCore.getInstance();
 		
 		String message = in_message.getMessage(), 
 				user = in_message.getUser(), 
@@ -59,7 +58,7 @@ public class Admin implements PluginTemp
 				if (p.find())
 					irc.sendServer(p.group(1));
 			}
-			else if (message.matches("^\\.loaded"))
+			/*else if (message.matches("^\\.loaded"))
 			{
 				irc.sendPrivmsg(channel,
 						"Plugins Loaded : " + pc.loadedPlugins());
@@ -72,7 +71,7 @@ public class Admin implements PluginTemp
 				
 				irc.sendPrivmsg(channel, 
 						"Plugins Loaded : " + pc.loadedPlugins());
-			}
+			}*/
 			else if(message.matches("^.exception"))
 			{
 				irc.sendPrivmsg(channel, "I like throwing exceptions");
@@ -113,14 +112,6 @@ public class Admin implements PluginTemp
 		}
 	}
 	
-	@Override
-	public void onOther(String in_str) throws Exception 
-	{
-		IRC irc = IRC.getInstance();
-		//Respond to pings
-		if (in_str.split(" ")[0].equals("PING"))
-			irc.sendServer("PONG " + in_str.split(" ")[1]);
-	}
 	
 	@Override
 	public void onCreate() throws Exception {}

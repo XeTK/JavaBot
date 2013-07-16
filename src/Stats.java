@@ -208,6 +208,4 @@ public class Stats implements PluginTemp
 		
 		today.incKicks();
 	}
-	@Override
-	public void onOther(String in_str) throws Exception {}
 }

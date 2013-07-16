@@ -9,15 +9,13 @@ import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
-import core.helpers.TimeThread;
-import core.plugin.PluginTemp;
-import core.plugin.PluginsCore;
 import core.utils.Details;
 import core.utils.IRC;
 
 public class Core
 {
 	
+	private ArrayList<Channel> channels = new ArrayList<Channel>();
 	public Core() throws Exception
 	{
         connect();
@@ -40,19 +38,16 @@ public class Core
 			irc.sendServer(details.getStartup()[i]);
 
 		for (int i = 0;i < details.getChannels().length;i++)
-			irc.sendServer("JOIN " + details.getChannels()[i]);
+		{	
+			String chan_name = details.getChannels()[i];
+			irc.sendServer("JOIN " + chan_name);
+			channels.add(new Channel(chan_name));
+		}
 	}
 	
 	private void mainLoop() throws Exception
 	{
 		IRC irc = IRC.getInstance();
-		
-		ArrayList<PluginTemp> pluginsglob = PluginsCore.getInstance().getPluginsglob();
-		//On Create
-		for (int i = 0;i < pluginsglob.size();i++)
-			pluginsglob.get(i).onCreate();
-		
-		new TimeThread().start();
 		
 		int rejoins = 0;
 		
@@ -79,35 +74,52 @@ public class Core
 						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(output);
 				
 				if (m.find())
-					for (int i = 0;i< pluginsglob.size();i++)
-						pluginsglob.get(i).onMessage(new Message(m));
+				{
+					Message message = new Message(m);
+					for (int i = 0;i< channels.size();i++)
+						channels.get(i).onMessage(message);
+					continue;
+				}
 				
 				//On Join
 				m = Pattern.compile(":(.*)!.*@(.*) JOIN :(#?.*)",
 			    		Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(output);
 				
 				if (m.find())
-					for (int i = 0;i< pluginsglob.size();i++)
-						pluginsglob.get(i).onJoin(new Join(m));
+				{
+					Join join = new Join(m);
+					for (int i = 0;i< channels.size();i++)
+						channels.get(i).onJoin(join);
+					continue;
+				}
 				
 				//On Quit
 				m = Pattern.compile(":(.*)!(.*@.*) PART (#.*)",
 			    		Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(output);
 				
 				if (m.find())
-					for (int i = 0;i< pluginsglob.size();i++)
-						pluginsglob.get(i).onQuit(new Quit(m));
+				{
+					Quit quit = new Quit(m);
+					for (int i = 0;i< channels.size();i++)
+						channels.get(i).onQuit(quit);
+					continue;
+				}
 				
 				//On Kick
 				m = Pattern.compile(":(.*)!(.*@.*) KICK (#.*) (.*) :(.*)",
 						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(output);
 				
 				if (m.find())
-					for (int i = 0;i< pluginsglob.size();i++)
-						pluginsglob.get(i).onKick(new Kick(m));
+				{
+					Kick kick = new Kick(m);
+					for (int i = 0;i< channels.size();i++)
+						channels.get(i).onKick(kick);
+					continue;
+				}
 				
-				for (int i = 0; i < pluginsglob.size();i++)
-					pluginsglob.get(i).onOther(output);
+				//Respond to pings
+				if (output.split(" ")[0].equals("PING"))
+					irc.sendServer("PONG " + output.split(" ")[1]);
 					
 				rejoins = 0;
 			}

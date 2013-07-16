@@ -143,7 +143,4 @@ public class StringResponce implements PluginTemp
 
 	@Override
 	public void onKick(Kick in_kick) throws Exception {}
-
-	@Override
-	public void onOther(String in_str) throws Exception {}
 }

@@ -5,28 +5,11 @@ import java.util.ArrayList;
 
 public class PluginsCore 
 {
-	private ArrayList<PluginTemp> pluginsglob = new ArrayList<PluginTemp>();
 	
-	private static PluginsCore pcInstance;
-	
-	private PluginsCore() throws Exception
+	public static ArrayList<PluginTemp> loadPlugins() throws Exception
 	{
-		loadPlugins();
-	}
-	
-	public static PluginsCore getInstance() throws Exception
-	{
-		if (pcInstance == null)
-			pcInstance = new PluginsCore();
-		return pcInstance;
-	}
-	
-	private void loadPlugins() throws Exception
-	{
-		pluginsglob = new ArrayList<PluginTemp>();
+		ArrayList<PluginTemp> pluginsglob = new ArrayList<PluginTemp>();
 		File dir = new File(System.getProperty("user.dir"));
-		
-		System.out.println("\u001B[33mPlugins Dir: " + dir.toString());
 		
 		if (dir.exists() && dir.isDirectory()) 
 		{
@@ -38,11 +21,11 @@ public class PluginsCore
 					pluginsglob.add(pf);
 			}
 		}
-		System.out.println("Plugins Loaded : " + loadedPlugins() +
-							"\nNumber of Plugins Loaded : " + pluginsglob.size());
+
+		return pluginsglob;
 	}
 	
-	public String loadedPlugins()
+	public static String loadedPlugins(ArrayList<PluginTemp> pluginsglob)
 	{
 		String lp = "";
 		for (int i = 0; i < pluginsglob.size();i++)
@@ -50,7 +33,7 @@ public class PluginsCore
 		return lp;
 	}
 	
-	public void reloadPlugins() throws Exception
+	public static void reloadPlugins(ArrayList<PluginTemp> pluginsglob) throws Exception
 	{
 		pluginsglob = new ArrayList<PluginTemp>();
 		loadPlugins();
@@ -58,8 +41,4 @@ public class PluginsCore
 			pluginsglob.get(i).onCreate();
 	}
 
-	public ArrayList<PluginTemp> getPluginsglob()
-	{
-		return pluginsglob;
-	}
 }

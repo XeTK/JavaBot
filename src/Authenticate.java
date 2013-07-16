@@ -224,6 +224,4 @@ public class Authenticate implements PluginTemp
 	public void onTime() throws Exception {}
 	@Override
 	public void onCreate() throws Exception {}
-	@Override
-	public void onOther(String in_str) throws Exception {}
 }

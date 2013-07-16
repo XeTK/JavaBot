@@ -99,6 +99,4 @@ public class Users implements PluginTemp
 
 	@Override
 	public void onTime() throws Exception {}
-	@Override
-	public void onOther(String in_str) throws Exception {}
 }

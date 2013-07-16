@@ -114,7 +114,5 @@ public class Rep implements PluginTemp
 	public void onQuit(Quit in_quit) throws Exception {}
 	@Override
 	public void onKick(Kick in_kick) throws Exception {}
-	@Override
-	public void onOther(String in_str) throws Exception {}
 }
 

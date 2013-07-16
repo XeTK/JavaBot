@@ -3,7 +3,6 @@ package core.helpers;
 import java.util.ArrayList;
 
 import core.plugin.PluginTemp;
-import core.plugin.PluginsCore;
 
 /**
  * Thread to run the timed events as we can't just leave it in the main loop
@@ -35,14 +34,9 @@ public class TimeThread extends Thread
 		}
 	}
 	
-	/**
-	 * When we deploy the class we want to get the plugins from Start.java
-	 * so that we can reference them later, when this class is deployed we
-	 * get an instance of start and pull the plugins into this one.
-	 * @throws Exception exceptions from loading the plugins
-	 */
-	public TimeThread() throws Exception
+
+	public TimeThread(ArrayList<PluginTemp> plugins) throws Exception
 	{
-		plugins = PluginsCore.getInstance().getPluginsglob();
+		this.plugins = plugins;
 	}
 }
