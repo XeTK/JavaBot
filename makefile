@@ -10,6 +10,7 @@ clean:
 	echo Deleting old files
 	rm -r bin/**/*.class
 	cp -R com bin/
+	echo CLEANED!!!
 
 compile:
 	echo Compiling source
