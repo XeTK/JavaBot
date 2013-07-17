@@ -49,4 +49,8 @@ public class Channel
 			for (int i = 0;i< plugins.size();i++)
 				plugins.get(i).onKick(in_kick);
 	}
+	public String getChannel_name()
+	{
+		return channel_name;
+	}
 }

@@ -69,6 +69,33 @@ public class Core
 				
 				Matcher m;
 				
+				m = Pattern.compile(":(.*)!(?:~)?([\\w\\d\\.@-]*)\\s(PART|JOIN|PRIVMSG|KICK)\\s(?::)?((?:#)?[\\d\\w]*)(?:.*)?",
+						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(output);
+				
+				if (m.find())
+				{
+					String channel = m.group(4);
+					if (channel.charAt(0) == '#')
+					{
+						boolean found = false;
+						for (int i = 0; i < channels.size();i++)
+						{
+							if (channels.get(i).getChannel_name().equals(channel))
+							{
+								found = true;
+								break;
+							}
+						}
+						if (!found)
+							channels.add(new Channel(channel));
+					}
+					else
+					{
+						System.out.println("Hello Privmsg");
+					}
+							
+				}
+						
 				//On Message
 				m = Pattern.compile(":(.*)!.*@(.*) PRIVMSG (.*) :(.*)",
 						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(output);

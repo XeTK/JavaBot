@@ -52,7 +52,6 @@ public class Stats implements PluginTemp
 	@Override
 	public void onTime() throws IRCException, IOException
 	{
-		System.out.println(options.isDay_Stats() + " " + options.isHour_Stats());
 		IRC irc = IRC.getInstance();
 		String ti = new SimpleDateFormat("HH:mm:ss").format(new Date());
 		
