@@ -8,7 +8,11 @@ Make Prep
 
 cd bin/
 
-run.sh
+./run.sh
+
+Then edit details
+
+./run.sh
 
 #Make commands
 
