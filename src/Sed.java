@@ -31,7 +31,7 @@ public class Sed implements PluginTemp
 		
 	    if(message.matches("^\\.help") || message.matches("^\\."))
 	    	irc.sendPrivmsg(channel, "SED: " +
-							"*Username*: s/*Source*/*Replacement*/ - e.g XeTK: s/.*/hello/ is used to replace the previous statement with hello :"
+							"[<username>: ]s/<search>/<replacement>/ - e.g XeTK: s/.*/hello/ is used to replace the previous statement with hello :"
 							);
 	    
 		if (messages.size() > 10)
