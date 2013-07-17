@@ -13,6 +13,8 @@ import core.utils.IRC;
 
 public class Sed implements PluginTemp
 {
+  private static final int MESSAGE_HISTORY = 10;
+
 	private ArrayList<Message> messages = new ArrayList<Message>();
 
 	public String name() 
@@ -25,55 +27,62 @@ public class Sed implements PluginTemp
 	{
 		IRC irc = IRC.getInstance();
 		  
-		String message = in_message.getMessage(), 
-				channel = in_message.getChannel(), 
-				user = in_message.getUser();
+		String message = in_message.getMessage();
+		String channel = in_message.getChannel();
+		String user = in_message.getUser();
 		
-	    if(message.matches("^\\.help") || message.matches("^\\."))
-	    	irc.sendPrivmsg(channel, "SED: " +
-							"[<username>: ]s/<search>/<replacement>/ - e.g XeTK: s/.*/hello/ is used to replace the previous statement with hello :"
-							);
+		// help string
+	  if(message.matches("^\\.help") || message.matches("^\\."))
+	  	irc.sendPrivmsg(channel, "SED: " +
+			"[<username>: ]s/<search>/<replacement>/ - e.g XeTK: s/.*/hello/ is used to replace the previous statement with hello :"
+			);
 	    
-		if (messages.size() > 10)
+	  // get rid of old messages
+		if (messages.size() > MESSAGE_HISTORY)
 			messages.remove(0);
 
-	    Matcher m = Pattern.compile("(?:([\\s\\w]*):\\s)?s/([\\s\\w\\d\\$\\*\\.]*)/([\\s\\w\\d]*)(?:/)?",
-	    				Pattern.CASE_INSENSITIVE | Pattern.DOTALL)
-	    				.matcher(message);
+    // set up sed finding regex
+	  Matcher m = Pattern.compile("(?:([\\s\\w]*):\\s)?s/([\\s\\w\\d\\$\\*\\.]*)/([\\s\\w\\d]*)(?:/)?",
+	      				Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
 	    
-	    if (m.find())
-	    {
-	    	String tuser = "", replacement = "", source = "";
-	    	if (m.group(1) != null)
-	    		tuser = m.group(1);
+	  // it's sed time, baby
+    if (m.find())
+    {
+    	String targetUser = new String();
+    	String replacement = new String();
+    	String search = new String();
 
+    	if (m.group(1) != null)
+    		targetUser = m.group(1);
+    		search = m.group(2);
     		replacement = m.group(3);
-    		source = m.group(2);
-             
+
+        // search message history
 	    	for (int i = messages.size() -1; i >= 0; i--)
 	    	{
 	    		Message mmessage = messages.get(i);
 	    		
-    			m = Pattern.compile(source, 
+    			m = Pattern.compile(search, 
     					Pattern.CASE_INSENSITIVE | Pattern.DOTALL)
     					.matcher(mmessage.getMessage());
     			
     			if (m.find())
     			{
-    				String reply = "";
-    				if (!tuser.equalsIgnoreCase(tuser))
+    				String reply = new String();
+    				// self-sedding
+    				if (!targetUser.equalsIgnoreCase(targetUser))
     					 reply = user + " thought ";
     				
     				reply += "%s meant : %s"; 
     				irc.sendPrivmsg(channel, String.format(reply, 
     						mmessage.getUser(), 
-    						mmessage.getMessage().replaceAll(source, replacement)));
+    						mmessage.getMessage().replaceAll(search, replacement)));
     				break;
     			}
 	    	}
 
 	    }
-	    else 
+	    else // no dice, add message to history queue
 	    {
 		    	messages.add(in_message);
 	    }
