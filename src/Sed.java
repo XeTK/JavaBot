@@ -1,4 +1,7 @@
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,9 +14,9 @@ import core.utils.IRC;
 
 public class Sed implements PluginTemp
 {
-	private static final int MESSAGE_HISTORY = 10;
+	private static final int CACHE_SIZE = 10; // per user
 
-	private ArrayList<Message> messages = new ArrayList<Message>();
+	private Map<String, Queue<Message>> cache = new HashMap<String, Queue<Message>>();
 
 	public String name()
 	{
@@ -36,10 +39,6 @@ public class Sed implements PluginTemp
 					"SED: "
 							+ "[<username>: ]s/<search>/<replacement>/ - e.g XeTK: s/.*/hello/ is used to replace the previous statement with hello :");
 
-		// get rid of old messages
-		if (messages.size() > MESSAGE_HISTORY)
-			messages.remove(0);
-
 		// set up sed finding regex
 		Matcher m = Pattern
 				.compile(
@@ -59,11 +58,23 @@ public class Sed implements PluginTemp
 			search = m.group(2);
 			replacement = m.group(3);
 
-			// search message history
-			for (int i = messages.size() - 1; i >= 0; i--)
+			Queue<Message> userCache = new LinkedList<Message>();
+			if (targetUser.equals(new String()))
 			{
-				Message mmessage = messages.get(i);
+				// no target, use last message from sourceUser's cache
+				// (or do nothing)
+				userCache = getUserCache(user);
+			}
+			else
+			{
+				// target specified, run through the cache (most recent first)
+				// and either match and replace or do nothing
+				userCache = getUserCache(targetUser);
+			}
 
+			Message mmessage;
+			while ((mmessage = userCache.poll()) != null)
+			{
 				m = Pattern.compile(search,
 						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(
 						mmessage.getMessage());
@@ -85,11 +96,31 @@ public class Sed implements PluginTemp
 				}
 			}
 
-		} else
-		// no dice, add message to history queue
-		{
-			messages.add(in_message);
 		}
+		else // no dice, add message to history queue
+		{
+			addToCache(in_message);
+		}
+	}
+
+	private void addToCache(Message msg) {
+		String username = msg.getUser();
+		if (!cache.containsKey(username))
+			cache.put(username, new LinkedList<Message>());
+		cache.get(username).offer(msg);
+		if (cache.get(username).size() > CACHE_SIZE)
+			cache.get(username).poll();
+	}
+
+	private Queue<Message> getUserCache(String username) {
+		Queue<Message> userCache = new LinkedList<Message>();
+		if (cache.containsKey(username))
+			userCache.addAll(cache.get(username));
+		return userCache;
+	}
+
+	public void emptyCache() {
+		cache = new HashMap<String, Queue<Message>>();
 	}
 
 	@Override
