@@ -8,11 +8,6 @@ clean:
 	rm -r bin/**/*.class
 	echo CLEANED!!!
 
-compile:
-	echo Compiling source
-	find -name "*.java" > sources.txt
-	javac -cp "gson-2.2.4.jar:javax.mail.jar" -d bin/ -sourcepath src/ @sources.txt
-
 prep:
 	wget http://google-gson.googlecode.com/files/google-gson-2.2.4-release.zip
 	unzip google-gson-2.2.4-release.zip
