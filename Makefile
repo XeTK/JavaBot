@@ -29,12 +29,3 @@ prep:
 	cp run.sh bin/
 	chmod 777 bin/run.sh
 
-mac:
-	brew install curl
-	brew install wget
-	brew install vim
-	
-linux:
-	apt-get install curl
-	apt-get install wget
-	apt-get install vim
