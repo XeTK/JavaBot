@@ -5,8 +5,9 @@ Full of lemons, trousers and your mother's cooking.
 #Development Setup
 
 
--make prep #This retrives the dependancies from the internet and puts them in the correct place.
--make #This compiles and runs the project.
+-make prep | This retrives the dependancies from the internet and puts them in the correct place.
+
+-make | This compiles and runs the project.
 
 #Compile by hand
 
