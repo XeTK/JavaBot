@@ -17,6 +17,7 @@ compile:
 	find -name "*.java" > sources.txt
 	javac -cp "gson-2.2.4.jar:javax.mail.jar" -d bin/ -sourcepath src/ @sources.txt
 	cp -R *.jar bin/
+
 prep:
 	curl -O http://google-gson.googlecode.com/files/google-gson-2.2.4-release.zip
 	unzip google-gson-2.2.4-release.zip
