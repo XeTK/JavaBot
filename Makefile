@@ -14,11 +14,10 @@ compile:
 	javac -cp "gson-2.2.4.jar:javax.mail.jar" -d bin/ -sourcepath src/ @sources.txt
 
 prep:
-	curl -O http://google-gson.googlecode.com/files/google-gson-2.2.4-release.zip
+	wget http://google-gson.googlecode.com/files/google-gson-2.2.4-release.zip
 	unzip google-gson-2.2.4-release.zip
 	rm google-gson-2.2.4-release.zip
 	mv google-gson-2.2.4/gson-2.2.4.jar .
 	rm -R google-gson-2.2.4
 	wget http://java.net/projects/javamail/downloads/download/javax.mail.jar
 	mkdir bin/
-
