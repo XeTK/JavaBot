@@ -2,23 +2,25 @@
 
 Full of lemons, trousers and your mother's cooking.
 
-#Install
+#Development Setup
 
-Make Prep
 
-cd bin/
+-make prep #This retrives the dependancies from the internet and puts them in the correct place.
+-make #This compiles and runs the project.
 
-./run.sh
+#Compile by hand
 
-Then edit details
+-javac -cp "gson-2.2.4.jar:javax.mail.jar" -d bin/ -sourcepath src/ src/**/*.java
 
-./run.sh
+#Run by hand
+
+-java -cp .:bin/:gson-2.2.4.jar:javax.mail.jar core.Start
+
 
 #Make commands
 
 Make prep - Downloads depedancies and adds folders and scripts to make run
 Make clean - Cleans the dir of crap
-Make compile - Just compiles the code
 Make - Builds in current dir, will not load plugins this way
 
 #Coding standards
