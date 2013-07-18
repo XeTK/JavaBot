@@ -58,7 +58,8 @@ public class Sed implements PluginTemp
 			replacement = m.group(3);
 
 			Stack<Message> userCache = new Stack<Message>();
-			if (targetUser.equals(new String()))
+			boolean hasTarget = !targetUser.equals(new String());
+			if (!hasTarget)
 			{
 				// no target, use last message from sourceUser's cache
 				// (or do nothing)
@@ -82,7 +83,7 @@ public class Sed implements PluginTemp
 				if (m.find())
 				{
 					String reply = new String();
-					if (!targetUser.equalsIgnoreCase(targetUser))
+					if (hasTarget)
 						reply = user + " thought ";
 
 					reply += "%s meant : %s";
