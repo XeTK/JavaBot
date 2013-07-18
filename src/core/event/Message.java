@@ -30,7 +30,7 @@ public class Message
 		user = m.group(1).toLowerCase();
 		host = m.group(2); 
 		channel = m.group(3); 
-		message = m.group(4);
+		message = m.group(4).toLowerCase();
 		//Converts a channel message to a PM
 		if (channel.charAt(0) != '#')
 		{
