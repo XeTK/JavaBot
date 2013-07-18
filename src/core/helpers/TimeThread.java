@@ -34,8 +34,12 @@ public class TimeThread extends Thread
 		}
 	}
 	
-
-	public TimeThread(ArrayList<PluginTemp> plugins) throws Exception
+	/** 
+	 * This takes in the plugins for a specific channel and adds them to its own
+	 * separate time thread, this is to help with having channel isolation.
+	 * @param plugins this is the list of plugins tied to a specific channel.
+	 */
+	public TimeThread(ArrayList<PluginTemp> plugins)
 	{
 		this.plugins = plugins;
 	}

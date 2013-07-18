@@ -1,4 +1,4 @@
-package addons.responce;
+package addons.response;
 
 import java.util.ArrayList;
 /**
@@ -6,20 +6,20 @@ import java.util.ArrayList;
  * it encapsulates them so they can be later saved as a JSON object.
  * @author Tom Rosier(XeTK)
  */
-public class ResponceList 
+public class ResponseList 
 {
 	// Keep a list of responses
-	private ArrayList<Responce> responces = new ArrayList<Responce>();
+	private ArrayList<Response> responses = new ArrayList<Response>();
 	
 	// Add a Response
-	public void addResponce(Responce replies)
+	public void addResponse(Response replies)
 	{
-		responces.add(replies);
+		responses.add(replies);
 	}
 	
 	// Return the list of Responses
-	public ArrayList<Responce> getResponces()
+	public ArrayList<Response> getResponses()
 	{
-		return responces;
+		return responses;
 	}
 }

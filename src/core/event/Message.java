@@ -7,15 +7,15 @@ import core.helpers.Colour;
 /**
  * This is a IRC message object.
  * This holds all the information 
- * from an IRC Message sent
+ * from an IRC Message sent.
  * @author Tom Rosier (XeTK)
  */
 public class Message 
 {
-	// Hold the date that the message was sent
+	// Hold the date that the message was sent.
 	private Date date;
 	
-	// Global variables for the users
+	// Global variables for the users.
 	private String user, host, channel, message;
 	
 	private boolean privmsg = false;
@@ -28,14 +28,21 @@ public class Message
 	 */
 	public Message(Matcher m)
 	{
+		// Create a new Date instance for the time the message was sent.
 		date = new Date();
+		
+		// Get data from Regex groups.
 		user = m.group(1).toLowerCase();
 		host = m.group(2); 
 		channel = m.group(3); 
 		message = m.group(4);
-		message = message.replace("ACTION", Colour.colour("*" + user + "*", Colour.MAGENTA));
+		
+		// This removes the crappy ACTION and replaces it with the user's name.
+		message = message.replace("ACTION", Colour.colour("*" + user, Colour.MAGENTA));
+		// Remove issues from having upper case messages.
 		message = message.toLowerCase();
-		//Converts a channel message to a PM
+		
+		// Converts a channel message to a PM
 		if (channel.charAt(0) != '#')
 		{
 			channel = user;
