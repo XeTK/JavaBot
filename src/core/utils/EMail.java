@@ -10,7 +10,7 @@ public class EMail
 {
 	public static void sendEmail(String eMail_Address, String in_message, String topic) throws AddressException, MessagingException, IOException
 	{
-		Details details = Details.getIntance();
+		Details details = Details.getInstance();
 		
 		// Get system properties
 		Properties props = System.getProperties();
@@ -30,7 +30,7 @@ public class EMail
 						Details details = null;
 						try 
 						{
-							details = Details.getIntance();
+							details = Details.getInstance();
 						} 
 						catch (IOException e) {e.printStackTrace();}
 						return new PasswordAuthentication(details.getStmpUser(),

@@ -25,7 +25,7 @@ public class Core
 	private void connect() throws Exception
 	{
 		IRC irc = IRC.getInstance();
-		Details details = Details.getIntance();
+		Details details = Details.getInstance();
 		
 		irc.connectServer(details.getServer(), details.getPort());
 	
@@ -152,7 +152,7 @@ public class Core
 			}
 			catch (Exception ex)
 			{
-				String[] admins = Details.getIntance().getAdmins();
+				String[] admins = Details.getInstance().getAdmins();
 				for (int i = 0; i < admins.length;i++)
 				{
 					irc.sendPrivmsg(admins[i],

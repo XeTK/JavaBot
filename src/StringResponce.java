@@ -57,7 +57,7 @@ public class StringResponce implements PluginTemp
 	{
 		IRC irc = IRC.getInstance();
 		ArrayList<Responce> responces = rl.getResponces();
-		Details details = Details.getIntance();
+		Details details = Details.getInstance();
 		String botname = details.getNickName();
 
 		if (responces.size() > 0)

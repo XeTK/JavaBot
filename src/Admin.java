@@ -23,7 +23,7 @@ public class Admin implements PluginTemp
 	public void onMessage(Message in_message) throws Exception
 	{
 		IRC irc = IRC.getInstance();
-		Details details = Details.getIntance();
+		Details details = Details.getInstance();
 		
 		String message = in_message.getMessage(), 
 				user = in_message.getUser(), 
@@ -104,7 +104,7 @@ public class Admin implements PluginTemp
 	{
 		IRC irc = IRC.getInstance();
 
-		if (in_kick.getKicked().equals(Details.getIntance().getNickName()))
+		if (in_kick.getKicked().equals(Details.getInstance().getNickName()))
 		{
 			irc.sendServer("JOIN " + in_kick.getChannel()); 
 			irc.sendPrivmsg(in_kick.getChannel(), 

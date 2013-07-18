@@ -46,7 +46,7 @@ public class Reminder implements PluginTemp
 	{	
 		IRC irc = IRC.getInstance();
 		
-		String[] channels = Details.getIntance().getChannels();
+		String[] channels = Details.getInstance().getChannels();
 		
 		Reminders[] reminders = rl.getReminders(new Date());
 		

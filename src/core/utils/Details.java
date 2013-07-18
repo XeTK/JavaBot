@@ -29,7 +29,7 @@ public class Details
 	 * @return we get the original instance of the class back
 	 * @throws IOException this is if we have to load the JSON object
 	 */
-	public static Details getIntance() throws IOException
+	public static Details getInstance() throws IOException
 	{
 		if (new File(cfgFile).exists())
         {

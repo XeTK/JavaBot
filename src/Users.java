@@ -56,7 +56,7 @@ public class Users implements PluginTemp
     	}
     	else
     	{
-    		String botname = Details.getIntance().getNickName();
+    		String botname = Details.getInstance().getNickName();
     		if (!botname.equalsIgnoreCase(in_join.getUser()))
     		{
     			String reply = "Hello %s and welcome! Don't break things!";

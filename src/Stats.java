@@ -62,7 +62,7 @@ public class Stats implements PluginTemp
 		{
 			String hour = m.group(1), min = m.group(2), sec = m.group(3);			
 			
-			String[] channels = Details.getIntance().getChannels();
+			String[] channels = Details.getInstance().getChannels();
 			if (options.isHour_Stats())
 				if (min.equals("59")&&sec.equals("59"))
 					for (int i = 0; i < channels.length;i++)
