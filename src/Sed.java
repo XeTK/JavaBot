@@ -1,9 +1,8 @@
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
-import java.util.Queue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.Stack;
 
 import core.event.Join;
 import core.event.Kick;
@@ -16,7 +15,7 @@ public class Sed implements PluginTemp
 {
 	private static final int CACHE_SIZE = 10; // per user
 
-	private Map<String, Queue<Message>> cache = new HashMap<String, Queue<Message>>();
+	private Map<String, Stack<Message>> cache = new HashMap<String, Stack<Message>>();
 
 	public String name()
 	{
@@ -58,7 +57,7 @@ public class Sed implements PluginTemp
 			search = m.group(2);
 			replacement = m.group(3);
 
-			Queue<Message> userCache = new LinkedList<Message>();
+			Stack<Message> userCache = new Stack<Message>();
 			if (targetUser.equals(new String()))
 			{
 				// no target, use last message from sourceUser's cache
@@ -72,9 +71,10 @@ public class Sed implements PluginTemp
 				userCache = getUserCache(targetUser);
 			}
 
-			Message mmessage;
-			while ((mmessage = userCache.poll()) != null)
+			while (!userCache.empty())
 			{
+				Message mmessage = userCache.pop();
+
 				m = Pattern.compile(search,
 						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(
 						mmessage.getMessage());
@@ -82,7 +82,6 @@ public class Sed implements PluginTemp
 				if (m.find())
 				{
 					String reply = new String();
-					// self-sedding
 					if (!targetUser.equalsIgnoreCase(targetUser))
 						reply = user + " thought ";
 
@@ -106,21 +105,21 @@ public class Sed implements PluginTemp
 	private void addToCache(Message msg) {
 		String username = msg.getUser();
 		if (!cache.containsKey(username))
-			cache.put(username, new LinkedList<Message>());
-		cache.get(username).offer(msg);
+			cache.put(username, new Stack<Message>());
+		cache.get(username).push(msg);
 		if (cache.get(username).size() > CACHE_SIZE)
-			cache.get(username).poll();
+			cache.get(username).remove(0);
 	}
 
-	private Queue<Message> getUserCache(String username) {
-		Queue<Message> userCache = new LinkedList<Message>();
+	private Stack<Message> getUserCache(String username) {
+		Stack<Message> userCache = new Stack<Message>();
 		if (cache.containsKey(username))
 			userCache.addAll(cache.get(username));
 		return userCache;
 	}
 
 	public void emptyCache() {
-		cache = new HashMap<String, Queue<Message>>();
+		cache = new HashMap<String, Stack<Message>>();
 	}
 
 	@Override
