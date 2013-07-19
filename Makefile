@@ -16,4 +16,6 @@ prep:
 	rm -R google-gson-2.2.4
 	wget http://java.net/projects/javamail/downloads/download/javax.mail.jar
 	mkdir bin/
-	echo "Directory Preped"
+	cat Details.default > Details.json
+	nano Details.json
+	echo Now run make.
