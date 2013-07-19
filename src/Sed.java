@@ -9,11 +9,15 @@ import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
 import core.plugin.PluginTemp;
+import core.utils.Details;
 import core.utils.IRC;
 
 public class Sed implements PluginTemp
 {
 	private static final int CACHE_SIZE = 10; // per user
+
+	private Details details = Details.getInstance();
+	private IRC irc = IRC.getInstance();
 
 	private Map<String, Stack<Message>> cache = new HashMap<String, Stack<Message>>();
 
@@ -25,18 +29,27 @@ public class Sed implements PluginTemp
 	@Override
 	public void onMessage(Message in_message) throws Exception
 	{
-		IRC irc = IRC.getInstance();
-
 		String message = in_message.getMessage();
 		String channel = in_message.getChannel();
 		String user = in_message.getUser();
 
 		// help string
-		if (message.matches("^\\.help") || message.matches("^\\."))
-			irc.sendPrivmsg(
-					channel,
-					"SED: "
+		if (message.matches("^\\.help") || message.matches("^\\.")) {
+			irc.sendPrivmsg(channel,"SED: "
 							+ "[<username>: ]s/<search>/<replacement>/ - e.g XeTK: s/.*/hello/ is used to replace the previous statement with hello :");
+			return;
+		}
+
+		// debug commands
+		if (message.matches("^\\.seddumpcache") && details.isAdmin(user)) {
+			dumpCache(user, channel);
+			return;
+		}
+
+		if (message.matches("^\\.seddropcache") && details.isAdmin(user)) {
+			dropCache(user, channel);
+			return;
+		}
 
 		// set up sed finding regex
 		Matcher m = Pattern
@@ -119,8 +132,22 @@ public class Sed implements PluginTemp
 		return userCache;
 	}
 
-	public void emptyCache() {
+	private void dumpCache(String target, String channel) throws Exception {
+		irc.sendPrivmsg(target, "sed cache for " + channel);
+		for (String user : cache.keySet()) {
+			Stack<Message> userCache = getUserCache(user);
+
+			irc.sendPrivmsg(target, " ");
+			irc.sendPrivmsg(target, user + ": " + userCache.size() + "/" + CACHE_SIZE);
+			for (Message msg : userCache) {
+				irc.sendPrivmsg(target, "\"" + msg.getMessage() + "\"");
+			}
+		}
+	}
+
+	private void dropCache(String target, String channel) throws Exception {
 		cache = new HashMap<String, Stack<Message>>();
+		irc.sendPrivmsg(target, "dropped sed cache for " + channel);
 	}
 
 	@Override

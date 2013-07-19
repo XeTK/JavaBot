@@ -12,7 +12,7 @@ public class Details
 {
 	private static final String cfgFile = "Details.json";
 	
-	private static Details details;
+	private static Details details = null;
 	
 	private String server = "127.0.0.1";;
 	
@@ -29,20 +29,25 @@ public class Details
 	 * @return we get the original instance of the class back
 	 * @throws IOException this is if we have to load the JSON object
 	 */
-	public static Details getInstance() throws IOException
+	public static Details getInstance()
 	{
-		if (new File(cfgFile).exists())
-        {
-            details = (Details)JSON.loadGSON(cfgFile, Details.class);
-        }
-        else
-        {
-        	details = new Details();
-            JSON.saveGSON(cfgFile, details);
-            // We don't want the program to load with a unpopulated json file.
-            System.out.println("Populate Details.json before reexecuting the application!");
-            System.exit(0);
-        }
+		try {
+			if (new File(cfgFile).exists())
+			{
+				details = (Details)JSON.loadGSON(cfgFile, Details.class);
+			}
+			else
+			{
+				details = new Details();
+				JSON.saveGSON(cfgFile, details);
+				// We don't want the program to load with a unpopulated json file.
+				System.out.println("Populate Details.json before reexecuting the application!");
+				System.exit(1);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
 		return details;
 	}
 	

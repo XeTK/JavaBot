@@ -41,13 +41,8 @@ public class EMail
 					// Override the current password authentication.
 					protected PasswordAuthentication getPasswordAuthentication() 
 					{
-						// Get an instance of Details. To get are username and pass.
-						Details details = null;
-						try 
-						{
-							details = Details.getInstance();
-						} 
-						catch (IOException e) {e.printStackTrace();}
+						// Get an instance of Details. To get the username and pass.
+						Details details = Details.getInstance();
 						// Return the authenticated hash that is sent to the server.
 						return new PasswordAuthentication(details.getSmtpUser(),
 								details.getSmtpPassword());
