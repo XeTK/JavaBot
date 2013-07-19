@@ -18,8 +18,8 @@ public class Details
 	
 	private int port = 6667;
 	
-	private String botNickName = "JavaBot", stmpEmail = "Spunky@Spunkybot.co.uk",
-			stmpHost = "stmp.gmail.com", stmpUser = "spunky@gmail.com", stmpPassword = "Helloworld";
+	private String botNickName = "JavaBot", smtpEmail = "Spunky@Spunkybot.co.uk",
+			smtpHost = "smtp.gmail.com", smtpUser = "spunky@gmail.com", smtpPassword = "Helloworld";
 	
 	private String[] channels = {"#xetk"}, admins = {"xetk"}, 
 			startup = {"PRIVMSG zippy identify helloworld"};
@@ -102,26 +102,25 @@ public class Details
 	{
 		return botNickName;
 	}
-	
 
-	public String getStmpEmail() 
+	public String getSmtpEmail() 
 	{
-		return stmpEmail;
+		return smtpEmail;
 	}
 
-	public String getStmpHost() 
+	public String getSmtpHost() 
 	{
-		return stmpHost;
+		return smtpHost;
 	}
 
-	public String getStmpUser() 
+	public String getSmtpUser() 
 	{
-		return stmpUser;
+		return smtpUser;
 	}
 
-	public String getStmpPassword() 
+	public String getSmtpPassword() 
 	{
-		return stmpPassword;
+		return smtpPassword;
 	}
 
 	// Setters

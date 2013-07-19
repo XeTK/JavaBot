@@ -7,7 +7,6 @@ import core.event.Message;
 import core.event.Quit;
 import core.helpers.IRCException;
 import core.plugin.PluginTemp;
-import core.plugin.PluginsCore;
 import core.utils.Details;
 import core.utils.IRC;
 
