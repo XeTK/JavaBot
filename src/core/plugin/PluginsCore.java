@@ -25,7 +25,7 @@ public class PluginsCore
 		
 		// Create a file from the path of the directory where we keep the plugins
 		File dir = new File(plugin_dir);//System.getProperty("user.dir"));
-		
+		System.out.println(plugin_dir);	
 		// If the directory exists then it is infact a Directory then we can start loading plugins.
 		if (dir.exists() && dir.isDirectory()) 
 		{

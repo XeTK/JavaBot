@@ -24,6 +24,12 @@ if [ ! -d bin/ ]; then
 else
 	echo bin/ already exists.
 fi
+if [ ! -d logs/ ]; then
+	mkdir logs
+	echo logs/ directory created.
+else
+	echo logs/ directory already exists.
+fi
 if [ ! -f Details.json ]; then
 	cat Details.default > Details.json
 	echo Please now edit Details.json.
