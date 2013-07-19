@@ -17,12 +17,13 @@ public class StatUser
 		this.username = username;
 	}
 	
-	//Quick method to increment the count of the messages sent.
+	// Quick method to increment the count of the messages sent.
 	public void incMsgSent()
 	{
 		msgSent++;
 	}
 	
+	// Getters
 	public String getUsername()
 	{
 		return username;

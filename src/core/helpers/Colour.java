@@ -1,7 +1,12 @@
 package core.helpers;
-
+/**
+ * This enum exists to give IRC messages colour before they are sent.
+ * It also adds the additional formating to the line to stop the colour 'leaking'.
+ * @author Tom Rosier(XeTK)
+ */
 public enum Colour 
 {
+	// All the IRC colours that exist.
 	WHITE("00"),
 	BLACK("01"),
 	BLUE_DARK("02"),
@@ -19,23 +24,36 @@ public enum Colour
 	GRAY_DARK("14"),
 	GRAY_LIGHT("15");
 	
+	// Define the second value died to the names.
 	private String ident;
 	
+	// Create the getter for the colour.
 	private Colour(String ident)
 	{
 		this.ident = ident;
 	}
 	
-	public static String colour(String in_Text, Colour forground, Colour background)
+	/**
+	 * This method returns a coloured string that can be sent via IRC.
+	 * @param in_Text This is the text that we want to colour.
+	 * @param foreground this is the foreground colour we want the text to be.
+	 * @param background this is the background colour we want the text to be.
+	 * @return
+	 */
+	public static String colour(String in_Text, Colour foreground, Colour background)
 	{
-		String patch = "\u0003" + forground.ident;
+		// Set up the string with the foreground colour along with the extra data needed.
+		String patch = "\u0003" + foreground.ident;
 		
+		// If we are having a background colour then we patch that information on to.
 		if (background != null)
 			patch += "," + background.ident;
 		
+		// Finally we return the string with the colouring and the reset code at the end.
 		return (patch + in_Text + "\u000f");
 	}
 	
+	// This is the same constructor without the background colour which makes choosing easier.
 	public static String colour(String in_Text, Colour forground)
 	{
 		return colour(in_Text,forground,null);

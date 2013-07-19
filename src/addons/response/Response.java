@@ -1,4 +1,4 @@
-package addons.responce;
+package addons.response;
 
 import java.util.ArrayList;
 
@@ -8,11 +8,11 @@ import java.util.ArrayList;
  * that go with that Regex.
  * @author Tom Rosier(XeTK)
  */
-public class Responce 
+public class Response 
 {
-	// This is the data that is held for a responce to take place
+	// This is the data that is held for a response to take place
 	private String regex = "";
-	private ArrayList<String> responces = new ArrayList<String>();
+	private ArrayList<String> responses = new ArrayList<String>();
 	
 	// Getters
 	public String getRegex() 
@@ -20,9 +20,9 @@ public class Responce
 		return regex;
 	}
 	
-	public String[] getResponces() 
+	public String[] getResponses() 
 	{
-		return responces.toArray(new String[0]);
+		return responses.toArray(new String[0]);
 	}
 	
 	// Setters
@@ -31,9 +31,9 @@ public class Responce
 		this.regex = regex;
 	}
 	
-	public void addResponce(String responce) 
+	public void addResponce(String response) 
 	{
-		this.responces.add(responce);
+		this.responses.add(response);
 	}
 	
 }

@@ -5,9 +5,7 @@ import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
-import core.helpers.IRCException;
 import core.plugin.PluginTemp;
-import core.plugin.PluginsCore;
 import core.utils.Details;
 import core.utils.IRC;
 
@@ -23,7 +21,7 @@ public class Admin implements PluginTemp
 	public void onMessage(Message in_message) throws Exception
 	{
 		IRC irc = IRC.getInstance();
-		Details details = Details.getIntance();
+		Details details = Details.getInstance();
 		
 		String message = in_message.getMessage(), 
 				user = in_message.getUser(), 
@@ -43,6 +41,7 @@ public class Admin implements PluginTemp
 			else if (message.matches("^\\.quit"))
 			{
 				irc.sendServer("QUIT Goodbye All!");
+				System.exit(0);
 			}
 			else if(message.matches("^\\.nick [A-Za-z0-9#]+$"))
 			{
@@ -72,11 +71,6 @@ public class Admin implements PluginTemp
 				irc.sendPrivmsg(channel, 
 						"Plugins Loaded : " + pc.loadedPlugins());
 			}*/
-			else if(message.matches("^.exception"))
-			{
-				irc.sendPrivmsg(channel, "I like throwing exceptions");
-				throw new IRCException("Called by user");
-			}
 			else if(message.matches("^\\.help") || message.matches("^\\."))
 			{
 				irc.sendPrivmsg(channel, "ADMIN: " +
@@ -104,7 +98,7 @@ public class Admin implements PluginTemp
 	{
 		IRC irc = IRC.getInstance();
 
-		if (in_kick.getKicked().equals(Details.getIntance().getNickName()))
+		if (in_kick.getKicked().equals(Details.getInstance().getNickName()))
 		{
 			irc.sendServer("JOIN " + in_kick.getChannel()); 
 			irc.sendPrivmsg(in_kick.getChannel(), 

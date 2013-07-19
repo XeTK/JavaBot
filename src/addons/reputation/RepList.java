@@ -24,6 +24,8 @@ public class RepList
 			if (repList.get(i).getItem().equals(item))
 				return repList.get(i);
 		
+		// Couldn't find item so we create it.
+		
 		Reputation tRep = new Reputation(item, 0);
 		repList.add(tRep);
 		return tRep;

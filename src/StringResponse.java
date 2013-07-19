@@ -12,13 +12,13 @@ import core.plugin.PluginTemp;
 import core.utils.Details;
 import core.utils.IRC;
 import core.utils.JSON;
-import addons.responce.Responce;
-import addons.responce.ResponceList;
+import addons.response.Response;
+import addons.response.ResponseList;
 
-public class StringResponce implements PluginTemp 
+public class StringResponse implements PluginTemp 
 {
 	// Keep a farm of possible responses along with there regex's
-	private ResponceList rl = new ResponceList();
+	private ResponseList rl = new ResponseList();
 	private Random random = new Random();
 
 	/**
@@ -27,42 +27,42 @@ public class StringResponce implements PluginTemp
 	@Override
 	public String name() 
 	{
-		return "StringResponce";
+		return "StringResponse";
 	}
 
 	/**
-	 * On create we want to load any previously saved Responces back into the
+	 * On create we want to load any previously saved Responses back into the
 	 * system for them to be used again.
 	 */
 	@Override
 	public void onCreate() throws Exception 
 	{
-		String path = "responces.json";
+		String path = "responses.json";
 
 		/* 
 		 * If the file already exists then convert it back into a class 
 		 * Else we create a new file to stop us having a null pointer.
 		 */
 		if (new File(path).exists())
-			rl = (ResponceList) JSON.loadGSON(path, ResponceList.class);
+			rl = (ResponseList) JSON.loadGSON(path, ResponseList.class);
 		else
-			JSON.saveGSON(path, new ResponceList());
+			JSON.saveGSON(path, new ResponseList());
 
 		if (rl == null)
-			rl = new ResponceList();
+			rl = new ResponseList();
 	}
 
 	@Override
 	public void onMessage(Message in_message) throws Exception
 	{
 		IRC irc = IRC.getInstance();
-		ArrayList<Responce> responces = rl.getResponces();
-		Details details = Details.getIntance();
+		ArrayList<Response> responces = rl.getResponses();
+		Details details = Details.getInstance();
 		String botname = details.getNickName();
 
 		if (responces.size() > 0)
 		{
-			for (Responce resp : responces)
+			for (Response resp : responces)
 			{
 				String resp_regex = resp.getRegex();
 
@@ -72,7 +72,7 @@ public class StringResponce implements PluginTemp
 				if (in_message.getMessage().matches(resp_regex))
 				{
 					// grab array of actual valid responses for this input
-					String[] replies = resp.getResponces();
+					String[] replies = resp.getResponses();
 
 					int inx = random.nextInt(replies.length);
 					String reply = replies[inx];
@@ -93,9 +93,9 @@ public class StringResponce implements PluginTemp
 		{
 			/* 
 			 * Regex to check if the string is attached to this class and 
-			 * if we want to add a new responce,
-			 * .responce (Regex Here), [Responces]...
-			 * .responce .* ,helloworld, blah
+			 * if we want to add a new response,
+			 * .response (Regex Here), [Responses]...
+			 * .response .* ,helloworld, blah
 			 */
 			Matcher m = Pattern
 					.compile("^\\.responce[\\s](.*),([a-zA-Z0-9 ,]*)",
@@ -106,7 +106,7 @@ public class StringResponce implements PluginTemp
 			if (m.find()) 
 			{
 				// Instantiate a new response object.
-				Responce re = new Responce();
+				Response re = new Response();
 
 				// Set the regex for the response to the first group in the add regex.
 				re.setRegex(m.group(1));
@@ -119,7 +119,7 @@ public class StringResponce implements PluginTemp
 					re.addResponce(replies[j]);
 
 				// Add the new response to the farm of responses so that is kept.
-				rl.addResponce(re);
+				rl.addResponse(re);
 
 				// Resave the farm so we don't loose are new response/
 				JSON.saveGSON("responces.json", rl);

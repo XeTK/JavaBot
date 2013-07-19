@@ -154,7 +154,7 @@ public class Authenticate implements PluginTemp
 	public void onJoin(Join in_join) throws Exception 
 	{
 		IRC irc = IRC.getInstance();
-		if (!in_join.getUser().equals(Details.getIntance().getNickName().toLowerCase()))
+		if (!in_join.getUser().equals(Details.getInstance().getNickName().toLowerCase()))
 		{
 			User user = UserList.getInstance().getUser(in_join.getUser());
 			if (!auth_Users.contains(user))

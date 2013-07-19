@@ -18,8 +18,8 @@ public class Details
 	
 	private int port = 6667;
 	
-	private String botNickName = "JavaBot", stmpEmail = "Spunky@Spunkybot.co.uk",
-			stmpHost = "stmp.gmail.com", stmpUser = "spunky@gmail.com", stmpPassword = "Helloworld";
+	private String botNickName = "JavaBot", smtpEmail = "Spunky@Spunkybot.co.uk",
+			smtpHost = "smtp.gmail.com", smtpUser = "spunky@gmail.com", smtpPassword = "Helloworld";
 	
 	private String[] channels = {"#xetk"}, admins = {"xetk"}, 
 			startup = {"PRIVMSG zippy identify helloworld"};
@@ -29,7 +29,7 @@ public class Details
 	 * @return we get the original instance of the class back
 	 * @throws IOException this is if we have to load the JSON object
 	 */
-	public static Details getIntance() throws IOException
+	public static Details getInstance() throws IOException
 	{
 		if (new File(cfgFile).exists())
         {
@@ -39,6 +39,9 @@ public class Details
         {
         	details = new Details();
             JSON.saveGSON(cfgFile, details);
+            // We don't want the program to load with a unpopulated json file.
+            System.out.println("Populate Details.json before reexecuting the application!");
+            System.exit(0);
         }
 		return details;
 	}
@@ -102,26 +105,25 @@ public class Details
 	{
 		return botNickName;
 	}
-	
 
-	public String getStmpEmail() 
+	public String getSmtpEmail() 
 	{
-		return stmpEmail;
+		return smtpEmail;
 	}
 
-	public String getStmpHost() 
+	public String getSmtpHost() 
 	{
-		return stmpHost;
+		return smtpHost;
 	}
 
-	public String getStmpUser() 
+	public String getSmtpUser() 
 	{
-		return stmpUser;
+		return smtpUser;
 	}
 
-	public String getStmpPassword() 
+	public String getSmtpPassword() 
 	{
-		return stmpPassword;
+		return smtpPassword;
 	}
 
 	// Setters
