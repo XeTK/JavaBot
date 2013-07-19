@@ -11,51 +11,51 @@ Javabot uses a plugin based arcutecture to allow new functionality to be easily 
 
 #Setup
 
-To get all depedancies along with set up default json file, run this command
+`To get all depedancies along with set up default json file, run this command`
 
 -make prep
 
-To compile the project, run this
+`To compile the project, run this`
 
 -make compile
 
-To execute the project, run this
+`To execute the project, run this`
 
 -make run
 
 
 #Compile by hand
 
-Making sure that there is the relivant dependancies in the directory, also make sure that the bin/ directory exists.
+`Making sure that there is the relivant dependancies in the directory, also make sure that the bin/ directory exists.`
 
 -javac -cp "gson-2.2.4.jar:javax.mail.jar" -d bin/ -sourcepath src/ src/**/*.java
 
 
 #Run by hand
 
-Please make sure that the dependancies exist first and that the source has definatly been compiled.
+`Please make sure that the dependancies exist first and that the source has definatly been compiled.`
 
 -java -cp .:bin/:gson-2.2.4.jar:javax.mail.jar core.Start
 
 
 #Make commands
 
--Make prep - Downloads depedancies and prepares the application to make it executable.
+-Make prep - `Downloads depedancies and prepares the application to make it executable.`
 
--Make clean - Cleans the dir of crap.
+-Make clean - `Cleans the dir of crap.`
 
--Make compile - Compiles the code.
+-Make compile - `Compiles the code.`
 
--Make run - runs the compiled sourcecode.
+-Make run - `runs the compiled sourcecode.`
 
 #Coding standards
 
-Method names - methodName() 'Should use camal case notation'
+Method names - methodName() `Should use camal case notation`
 
-Variable names - variable_Name 'should have an underscore seperating each word with letters capatalised after first word'
+Variable names - variable_Name `should have an underscore seperating each word with letters capatalised after first word.`
 
-Class names - HelloWorld 'Should be Capitals for every first letter of a word but no underscores'
+Class names - HelloWorld `Should be Capitals for every first letter of a word but no underscores.`
 
-Comments - Javadoc should be used for detailing a method along with / Helloworld for detailing code.
+Comments - `Javadoc should be used for detailing a method along with / Helloworld for detailing code.`
 
-Plugins - All plugins should be written in the root directory of src/ and must use the PluginTemp interface, any additional classes must be put under package addon.*pluginname*.
+Plugins - `All plugins should be written in the root directory of src/ and must use the PluginTemp interface, any additional classes must be put under package addon.*pluginname*.`
