@@ -27,11 +27,7 @@ fi
 if [ ! -f Details.json ]; then
 	cat Details.default > Details.json
 	echo Please now edit Details.json.
-	if [ ! type vim >& /dev/null ]; then
-		vim Details.json
-	else
-		nano Details.json
-	fi
+	"${EDITOR:-vi}" Details.json
 else
 	echo Details already exists!
 fi
