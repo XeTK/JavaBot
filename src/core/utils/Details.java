@@ -39,6 +39,9 @@ public class Details
         {
         	details = new Details();
             JSON.saveGSON(cfgFile, details);
+            // We dont want the program to load with a unpopulated json file.
+            System.out.println("Populate Details.json before reexecuting the application!");
+            System.exit(0);
         }
 		return details;
 	}

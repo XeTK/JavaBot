@@ -37,6 +37,7 @@ public class Core
 		for (int i = 0;i < details.getStartup().length;i++)
 			irc.sendServer(details.getStartup()[i]);
 
+		channels = new ArrayList<Channel>();
 		for (int i = 0;i < details.getChannels().length;i++)
 		{	
 			String chan_name = details.getChannels()[i];
