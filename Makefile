@@ -1,7 +1,7 @@
-all:
-	echo "Compiling"
+compile:
 	javac -cp "gson-2.2.4.jar:javax.mail.jar" -d bin/ -sourcepath src/ src/**/*.java
-	echo "Running"
+
+run:
 	java -cp .:bin/:gson-2.2.4.jar:javax.mail.jar core.Start
 
 clean:
@@ -9,13 +9,4 @@ clean:
 	echo "CLEANED!!!"
 
 prep:
-	wget http://google-gson.googlecode.com/files/google-gson-2.2.4-release.zip
-	unzip google-gson-2.2.4-release.zip
-	rm google-gson-2.2.4-release.zip
-	mv google-gson-2.2.4/gson-2.2.4.jar .
-	rm -R google-gson-2.2.4
-	wget http://java.net/projects/javamail/downloads/download/javax.mail.jar
-	mkdir bin/
-	cat Details.default > Details.json
-	nano Details.json
-	echo Now run make.
+	./prep.sh
