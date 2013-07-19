@@ -50,9 +50,43 @@ Please make sure that the dependancies exist first and that the source has defin
 
 #Coding standards
 
-Method names - `methodName()` Should use camal case notation
+Bracketing - Should be drop line style, Similar to C++ standards.
+```
+class Hello
+{
+  public void helloWorld()
+  {
+    if (blah.equals("blah")
+    {
+      while (true)
+      {
+        try
+        {
+          switch(1)
+          {
+            case 1:
+              System.out.println("This is an Example");
+              break;
+            default:
+              break;
+          }
+        }
+        catch (ex exception)
+        {
+          System.err.println(ex.toString());
+        }
+      }
+    }
+    else
+    {
+      System.out.println("Blah was not equal to blah");
+    }
+  }
+}
+```
+Method names - `methodName()` Should use camal case notation.
 
-Variable names - `variable_Name` should have an underscore seperating each word with letters capatalised after first word.
+Variable names - `variableName` Should use camal case notation.
 
 Class names - HelloWorld `Should be Capitals for every first letter of a word but no underscores.
 
