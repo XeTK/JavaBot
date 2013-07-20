@@ -31,7 +31,8 @@ public class Details
 	 */
 	public static Details getInstance()
 	{
-		try {
+		try 
+		{
 			if (new File(cfgFile).exists())
 			{
 				details = (Details)JSON.loadGSON(cfgFile, Details.class);
@@ -44,7 +45,10 @@ public class Details
 				System.out.println("Populate Details.json before reexecuting the application!");
 				System.exit(1);
 			}
-		} catch (IOException e) {
+		} 
+		catch (IOException e) 
+		{
+			// If there was an problem while processing the JSON file.
 			e.printStackTrace();
 			System.exit(1);
 		}

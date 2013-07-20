@@ -48,6 +48,7 @@ public class StringResponse implements PluginTemp
 		else
 			JSON.saveGSON(path, new ResponseList());
 
+		// Double check if the object exists if it dosn't then we instantiate it to stop null pointers.
 		if (rl == null)
 			rl = new ResponseList();
 	}
@@ -57,9 +58,13 @@ public class StringResponse implements PluginTemp
 	{
 		IRC irc = IRC.getInstance();
 		ArrayList<Response> responces = rl.getResponses();
+		
+		// Get the information for the bot, so we can use the username.
 		Details details = Details.getInstance();
+		// Get the botname so we can replace it later on.
 		String botname = details.getNickName();
 
+		// Check if there is more than 0 responses, there's no point continuing otherwise.
 		if (responces.size() > 0)
 		{
 			for (Response resp : responces)
@@ -80,7 +85,7 @@ public class StringResponse implements PluginTemp
 					// fix up reply strings to include target usernames
 					reply = reply.replace("{0}", botname);
 					reply = reply.replace("{1}", in_message.getUser());
-
+					
 					irc.sendPrivmsg(in_message.getChannel(), reply);
 				}
 			}
@@ -121,10 +126,10 @@ public class StringResponse implements PluginTemp
 				// Add the new response to the farm of responses so that is kept.
 				rl.addResponse(re);
 
-				// Resave the farm so we don't loose are new response/
+				// Re save the farm so we don't loose are new response.
 				JSON.saveGSON("responces.json", rl);
 				
-				// Finaly Prompt the user that the response has been added.
+				// Finally Prompt the user that the response has been added.
 				irc.sendPrivmsg(in_message.getChannel(),
 						"Added new Responce");
 			}
