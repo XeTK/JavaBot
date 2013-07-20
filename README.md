@@ -90,6 +90,6 @@ Variable names - `variableName` Should use camal case notation.
 
 Class names - HelloWorld `Should be Capitals for every first letter of a word but no underscores.
 
-Comments - Javadoc should be used for detailing a method along with `/ Helloworld` for detailing code.
+Comments - Javadoc should be used for detailing a method along with `// Helloworld` for detailing code.
 
 Plugins - All plugins should be written in the root directory of `src/` and must use the PluginTemp interface, any additional classes must be put under package `addon.*pluginname*`.
