@@ -76,6 +76,11 @@ public class Admin implements PluginTemp
 				if (p.find())
 					irc.sendServer(p.group(1));
 			}
+			else if (message.matches("^\\.exception"))
+			{
+				irc.sendPrivmsg(channel, "Exception Thrown.");
+				throw new Exception();
+			}
 			/*else if (message.matches("^\\.loaded"))
 			{
 				irc.sendPrivmsg(channel,

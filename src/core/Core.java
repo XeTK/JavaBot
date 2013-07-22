@@ -1,6 +1,5 @@
 package core;
 
-import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -9,6 +8,7 @@ import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
+import core.helpers.IRCException;
 import core.utils.Details;
 import core.utils.IRC;
 /**
@@ -226,14 +226,7 @@ public class Core
 			}
 			catch (Exception ex)
 			{
-				// This sends any exceptions to the admins of the bot so they are aware if there is a problem.
-				String[] admins = Details.getInstance().getAdmins();
-				// Send the exception to all the admins that are registered within the details file.
-				for (int i = 0; i < admins.length;i++)
-				{
-					irc.sendPrivmsg(admins[i],
-							ex.toString() + ", " + Arrays.toString(ex.getStackTrace()));
-				}
+				throw new IRCException(ex);
 			}
 		}
 	}

@@ -6,6 +6,7 @@ import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
+import core.helpers.IRCException;
 import core.helpers.TimeThread;
 import core.plugin.PluginTemp;
 import core.plugin.PluginsCore;
@@ -45,50 +46,118 @@ public class Channel
 	/**
 	 * Handle the onMessage actions for each plugins under this method.
 	 * @param in_message this is the message object passed in from the core of the program.
-	 * @throws Exception if there was an error during the duration of the execution of a plugin.
 	 */
-	public void onMessage(Message in_message) throws Exception
+	public void onMessage(Message in_message)
 	{
 		// Double check that the message is actually for this class.
-		if (in_message.getChannel().equals(channel_name))
+		if (in_message.getChannel().equalsIgnoreCase(channel_name))
+		{
 			for (int i = 0;i< plugins.size();i++)
-				plugins.get(i).onMessage(in_message);
+			{
+				try
+				{
+					plugins.get(i).onMessage(in_message);
+				}
+				catch (Exception ex)
+				{
+					try 
+					{
+						throw new IRCException(ex);
+					} 
+					catch (IRCException e) 
+					{
+						e.printStackTrace();
+					}
+				}
+			}
+		}
 	}
 	
 	/**
 	 * Handle all the onJoin commands for each plugin that is loaded.
 	 * @param in_join this is the information object with the information about the user that has joined.
-	 * @throws Exception if there was a problem during execution of the plugin.
 	 */
-	public void onJoin(Join in_join) throws Exception
+	public void onJoin(Join in_join)
 	{
-		if (in_join.getChannel().equals(channel_name))
+		if (in_join.getChannel().equalsIgnoreCase(channel_name))
+		{
 			for (int i = 0;i< plugins.size();i++)
-				plugins.get(i).onJoin(in_join);
+			{
+				try
+				{
+					plugins.get(i).onJoin(in_join);
+				}
+				catch (Exception ex)
+				{
+					try 
+					{
+						throw new IRCException(ex);
+					} 
+					catch (IRCException e) 
+					{
+						e.printStackTrace();
+					}
+				}
+			}
+		}
 	}
 	
 	/**
 	 * For ever user that quits we need to call the onQuit method for all the plugins.
 	 * @param in_quit this is the information about the user that has quit.
-	 * @throws Exception if there was an error while the user was quitting.
 	 */
-	public void onQuit(Quit in_quit) throws Exception
+	public void onQuit(Quit in_quit)
 	{
-		if (in_quit.getChannel().equals(channel_name))
+		if (in_quit.getChannel().equalsIgnoreCase(channel_name))
+		{
 			for (int i = 0;i< plugins.size();i++)
-				plugins.get(i).onQuit(in_quit);
+			{
+				try
+				{
+					plugins.get(i).onQuit(in_quit);
+				}
+				catch (Exception ex)
+				{
+					try 
+					{
+						throw new IRCException(ex);
+					} 
+					catch (IRCException e) 
+					{
+						e.printStackTrace();
+					}
+				}
+			}
+		}
 	}
 	
 	/**
 	 * If a user is kicked then we call the onKick method within each plugin.
 	 * @param in_kick this is the information about the user that has been kicked.
-	 * @throws Exception if there was an error while dealing with kicking a user.
 	 */
-	public void onKick(Kick in_kick) throws Exception
+	public void onKick(Kick in_kick)
 	{
-		if (in_kick.getChannel().equals(channel_name))
+		if (in_kick.getChannel().equalsIgnoreCase(channel_name))
+		{
 			for (int i = 0;i< plugins.size();i++)
-				plugins.get(i).onKick(in_kick);
+			{
+				try
+				{
+					plugins.get(i).onKick(in_kick);
+				}
+				catch (Exception ex)
+				{
+					try 
+					{
+						throw new IRCException(ex);
+					} 
+					catch (IRCException e) 
+					{
+						e.printStackTrace();
+					}
+				}
+			}
+		}
 	}
 	
 	// Getters
