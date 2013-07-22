@@ -5,6 +5,7 @@ run:
 
 clean:
 	rm -rf bin
+	rm -rf sources.txt
 	echo "CLEANED!!!"
 
 prep:
