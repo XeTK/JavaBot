@@ -16,8 +16,9 @@ import addons.reputation.Reputation;
 
 public class Rep implements PluginTemp
 {
-	private RepList repList = new RepList();
 	private final String cfgFile = "Rep.json";
+	
+	private RepList repList = new RepList();
 	
 	@Override
 	public String name() 
@@ -38,7 +39,11 @@ public class Rep implements PluginTemp
 	@Override
 	public void onMessage(Message in_message) throws Exception
 	{
-		String  channel = in_message.getChannel(), message = in_message.getMessage();
+		String channel = in_message.getChannel();
+		String message = in_message.getMessage();
+		
+		//Message .Trim
+		
 		if (message.charAt(message.length() - 1 ) == ' ')
 			message = message.substring(0, message.length() -1);
 		
@@ -49,10 +54,11 @@ public class Rep implements PluginTemp
 					Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
 			if (r.find())
 			{
-				String item = r.group(1),
-						type = r.group(2),
-						ammount = r.group(3);
-				if (!in_message.getUser().equals(item.toLowerCase()))
+				String item = r.group(1);
+				String type = r.group(2);
+				String ammount = r.group(3);
+				
+				if (!in_message.getUser().equalsIgnoreCase(item));
 				{
 					if (!type.equals(""))
 					{

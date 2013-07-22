@@ -24,9 +24,9 @@ public class Quote implements PluginTemp
 	{
 		UserList luq = UserList.getInstance();
 		
-		String message = in_message.getMessage(), 
-				channel = in_message.getChannel(), 
-				user = in_message.getUser();
+		String message = in_message.getMessage(); 
+		String channel = in_message.getChannel(); 
+		String user = in_message.getUser();
 		
 		if (message.charAt(message.length() - 1 ) == ' ')
 			message = message.substring(0, message.length() -1);

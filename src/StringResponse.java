@@ -17,6 +17,8 @@ import addons.response.ResponseList;
 
 public class StringResponse implements PluginTemp 
 {
+	private final String responses_path = "responcses.json";
+	
 	// Keep a farm of possible responses along with there regex's
 	private ResponseList rl = new ResponseList();
 	private Random random = new Random();
@@ -37,16 +39,14 @@ public class StringResponse implements PluginTemp
 	@Override
 	public void onCreate() throws Exception 
 	{
-		String path = "responses.json";
-
 		/* 
 		 * If the file already exists then convert it back into a class 
 		 * Else we create a new file to stop us having a null pointer.
 		 */
-		if (new File(path).exists())
-			rl = (ResponseList) JSON.loadGSON(path, ResponseList.class);
+		if (new File(responses_path).exists())
+			rl = (ResponseList) JSON.loadGSON(responses_path, ResponseList.class);
 		else
-			JSON.saveGSON(path, new ResponseList());
+			JSON.saveGSON(responses_path, new ResponseList());
 
 		// Double check if the object exists if it dosn't then we instantiate it to stop null pointers.
 		if (rl == null)
@@ -127,7 +127,7 @@ public class StringResponse implements PluginTemp
 				rl.addResponse(re);
 
 				// Re save the farm so we don't loose are new response.
-				JSON.saveGSON("responces.json", rl);
+				JSON.saveGSON(responses_path, rl);
 				
 				// Finally Prompt the user that the response has been added.
 				irc.sendPrivmsg(in_message.getChannel(),

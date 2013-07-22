@@ -21,7 +21,7 @@ public class RepList
 	public Reputation getRep(String item)
 	{
 		for (int i = 0; i < repList.size();i++)
-			if (repList.get(i).getItem().equals(item))
+			if (repList.get(i).getItem().equalsIgnoreCase(item))
 				return repList.get(i);
 		
 		// Couldn't find item so we create it.

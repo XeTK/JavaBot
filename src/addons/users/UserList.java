@@ -46,7 +46,7 @@ public class UserList
 	public User getUser(String user)
 	{
 		for (int i = 0; i < users.size();i++)
-			if (users.get(i).getUser().equals(user))
+			if (users.get(i).getUser().equalsIgnoreCase(user))
 				return users.get(i);
 		return null;
 	}
@@ -59,10 +59,11 @@ public class UserList
 	 */
 	public void msgSent(Message in_msg)
 	{
-		String user = in_msg.getUser(),
-				host = in_msg.getHost();
+		String user = in_msg.getUser();
+		String host = in_msg.getHost();
 		
 		User usr = getUser(user);
+		
 		if (usr != null)
 			usr.incMsgSent(host);
 		else

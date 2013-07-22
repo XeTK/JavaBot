@@ -52,7 +52,7 @@ public class StatHour
 		for (int i = 0; i < users.size();i++)
 		{
 			// If the user we are incrementing over equals the user we want.
-			if (users.get(i).getUsername().equals(user))
+			if (users.get(i).getUsername().equalsIgnoreCase(user))
 			{
 				// Increment the messages that they have sent.
 				users.get(i).incMsgSent();

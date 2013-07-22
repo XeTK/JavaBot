@@ -7,7 +7,7 @@ package addons.stats;
  */
 public class StatOption
 {
-	// Global variables with a default value of fause to disable the options.
+	// Global variables with a default value of false to disable the options.
 	private boolean day_Stats = false, hour_Stats = false;
 
 	// Getters

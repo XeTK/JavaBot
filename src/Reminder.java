@@ -23,8 +23,9 @@ import addons.users.UserList;
 
 public class Reminder implements PluginTemp
 {
-	private RemindersList rl = new RemindersList();
 	private static final String cfgFile = "Reminders.json";
+	
+	private RemindersList rl = new RemindersList();
 	
 	@Override
 	public String name() 
@@ -61,9 +62,9 @@ public class Reminder implements PluginTemp
 		IRC irc = IRC.getInstance();
 		UserList ul = UserList.getInstance();
 		
-		String user = in_message.getUser(), 
-				channel = in_message.getChannel(), 
-				message = in_message.getMessage();
+		String user = in_message.getUser(); 
+		String channel = in_message.getChannel(); 
+		String message = in_message.getMessage();
 		    
 		if (message.matches("(\\.reminder)\\s([a-zA-Z0-9]*)\\s([a-zA-Z\\w\\d\\s]*)"))
 		{
@@ -85,7 +86,9 @@ public class Reminder implements PluginTemp
 		    
 		    if (m.find())
 		    {	
-		    	String date = m.group(1), reminder = m.group(3);
+		    	String date = m.group(1);
+		    	String reminder = m.group(3);
+		    	
 		    	Date eventtime;
 		    	
 		    	if (date.matches("([0-3][0-9]/[0-1][0-9]/20[1-9][0-9])"))

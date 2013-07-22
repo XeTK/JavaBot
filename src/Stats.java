@@ -21,9 +21,12 @@ import addons.users.UserList;
 
 public class Stats implements PluginTemp
 {
-
+	private final String opt_path = "stat_options.json";
+	private final String save_path = "logs/%s.json";
+	
 	private StatDay today;
 	private StatOption options;
+	
 	
 	@Override
 	public String name() 
@@ -36,12 +39,13 @@ public class Stats implements PluginTemp
 	{
 		String ti = new SimpleDateFormat("yyyyMMdd").format(new Date());
 		
-		String path = "logs/" + ti + ".json";
+		String path = String.format(save_path, ti);
+		
+		System.out.println(path);
 		
 		if (new File(path).exists())
 			today = (StatDay) JSON.loadGSON(path, StatDay.class);
-		
-		String opt_path = "stat_options.json";
+
 		
 		if (new File(opt_path).exists())
 			options = (StatOption) JSON.loadGSON(opt_path, StatOption.class);
@@ -60,9 +64,12 @@ public class Stats implements PluginTemp
 						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(ti);
 		if (m.find())
 		{
-			String hour = m.group(1), min = m.group(2), sec = m.group(3);			
+			String hour = m.group(1);
+			String min = m.group(2);
+			String sec = m.group(3);			
 			
 			String[] channels = Details.getInstance().getChannels();
+			
 			if (options.isHour_Stats())
 				if (min.equals("59")&&sec.equals("59"))
 					for (int i = 0; i < channels.length;i++)
@@ -81,7 +88,7 @@ public class Stats implements PluginTemp
 			
 			ti = new SimpleDateFormat("yyyyMMdd").format(new Date());
 			
-			String path = "logs/" + ti + ".json";
+			String path = String.format(save_path, ti);
 			
 			if (sec.equals("00"))
 					JSON.saveGSON(path, today);
@@ -92,9 +99,11 @@ public class Stats implements PluginTemp
 	@Override
 	public void onMessage(Message in_message) throws IRCException, IOException
 	{		
-		String message = in_message.getMessage(), 
-				channel = in_message.getChannel(), 
-				user = in_message.getUser();
+		String message = in_message.getMessage(); 
+		String channel = in_message.getChannel(); 
+		String user = in_message.getUser();
+		
+		//Message.Trim
 		
 		if (message.charAt(message.length() - 1 ) == ' ')
 			message = message.substring(0, message.length() -1);
@@ -130,7 +139,9 @@ public class Stats implements PluginTemp
 							Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
 			if (m.find())
 			{
-				String t1 = m.group(1), cm = m.group(2);
+				String t1 = m.group(1);
+				String cm = m.group(2);
+				
 				if (t1.equals("hour"))
 				{
 					if (cm.equals("msgsent"))
