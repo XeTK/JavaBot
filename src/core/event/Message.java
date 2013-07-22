@@ -37,9 +37,6 @@ public class Message
 		channel = m.group(3); 
 		message = m.group(4);
 		
-		// This removes the crappy ACTION and replaces it with the user's name.
-		message = message.replace("ACTION", Colour.colour("* " + user, Colour.MAGENTA));
-		
 		// Converts a channel message to a PM
 		if (channel.charAt(0) != '#')
 		{

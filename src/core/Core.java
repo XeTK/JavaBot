@@ -87,6 +87,7 @@ public class Core
 	{
 		// Get an instance of the IRC class so we can later carry out operations on it.
 		IRC irc = IRC.getInstance();
+		Details details = Details.getInstance();
 		
 		// Keep a rejoin count so we determine if its worth retrying to connect.
 		int rejoins = 0;
@@ -185,8 +186,10 @@ public class Core
 				if (m.find())
 				{
 					Join join = new Join(m);
-					for (int i = 0;i< channels.size();i++)
-						channels.get(i).onJoin(join);
+					// Check if the bot or not if it isn't then we continue
+					if (!join.getUser().equalsIgnoreCase(details.getNickName()))
+						for (int i = 0;i< channels.size();i++)
+							channels.get(i).onJoin(join);
 					continue;
 				}
 				

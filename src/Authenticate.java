@@ -15,7 +15,6 @@ import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
 import core.plugin.PluginTemp;
-import core.utils.Details;
 import core.utils.EMail;
 import core.utils.IRC;
 import addons.authentication.AuthenticatedUsers;
@@ -68,7 +67,7 @@ public class Authenticate implements PluginTemp
 								byte[] enHaPsw = user.getEncryptedPasswordHash();
 								
 								if (Arrays.equals(rawHaPwd, decrpytPasswordHash(enHaPsw))
-										&& user.getEmail().equals(email))
+										&& user.getEmail().equalsIgnoreCase(email))
 								{
 									irc.sendPrivmsg(in_message.getChannel(), "Authenticated");
 									auth_Users.add(user);
@@ -154,13 +153,10 @@ public class Authenticate implements PluginTemp
 	public void onJoin(Join in_join) throws Exception 
 	{
 		IRC irc = IRC.getInstance();
-		if (!in_join.getUser().equals(Details.getInstance().getNickName().toLowerCase()))
-		{
-			User user = UserList.getInstance().getUser(in_join.getUser());
-			if (!auth_Users.contains(user))
-				if (user.getEmail() != null&&!user.getEmail().isEmpty())
-					irc.sendPrivmsg(user.getUser(), "Please Login!");
-		}
+		User user = UserList.getInstance().getUser(in_join.getUser());
+		if (!auth_Users.contains(user))
+			if (user.getEmail() != null&&!user.getEmail().isEmpty())
+				irc.sendPrivmsg(user.getUser(), "Please Login!");
 	}
 
 	@Override
