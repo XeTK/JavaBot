@@ -16,6 +16,7 @@ import core.utils.IRC;
 public class Sed implements PluginTemp
 {
 	private static final int CACHE_SIZE = 10; // per user
+	private static final char ASCII_SOH = (char)1;
 
 	private Details details = Details.getInstance();
 	private IRC irc = IRC.getInstance();
@@ -33,8 +34,6 @@ public class Sed implements PluginTemp
 		String message = in_message.getMessage();
 		String channel = in_message.getChannel();
 		String user = in_message.getUser();
-		
-		message = message.replace("ACTION", Colour.colour("* " + user, Colour.MAGENTA));
 
 		// help string
 		if (message.matches("^\\.help") || message.matches("^\\.")) {
@@ -91,10 +90,13 @@ public class Sed implements PluginTemp
 			while (!userCache.empty())
 			{
 				Message mmessage = userCache.pop();
+				String text = mmessage.getMessage();
+
+				if (isActionMessage(text))
+					text = processActionMessage(text, mmessage.getUser());
 
 				m = Pattern.compile(search,
-						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(
-						mmessage.getMessage());
+						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(text);
 
 				if (m.find())
 				{
@@ -106,7 +108,7 @@ public class Sed implements PluginTemp
 					irc.sendPrivmsg(channel, String.format(
 							reply,
 							mmessage.getUser(),
-							mmessage.getMessage().replaceAll(search,
+							text.replaceAll(search,
 									replacement)));
 					break;
 				}
@@ -117,6 +119,24 @@ public class Sed implements PluginTemp
 		{
 			addToCache(in_message);
 		}
+	}
+
+	private boolean isActionMessage(String msg) {
+		return msg.startsWith(ASCII_SOH + "ACTION") &&
+					 msg.endsWith(Character.toString(ASCII_SOH));
+	}
+
+	private String processActionMessage(String msg, String user) {
+		if (!isActionMessage(msg))
+			return msg;
+
+		// remove special chars
+		msg = msg.substring(1);
+		msg = msg.substring(0, msg.length() - 1);
+
+		// format for output
+		msg = msg.replace("ACTION", Colour.colour("* " + user, Colour.MAGENTA));
+		return msg;
 	}
 
 	private void addToCache(Message msg) {
