@@ -32,15 +32,13 @@ public class Message
 		date = new Date();
 		
 		// Get data from Regex groups.
-		user = m.group(1).toLowerCase();
+		user = m.group(1);
 		host = m.group(2); 
 		channel = m.group(3); 
 		message = m.group(4);
 		
 		// This removes the crappy ACTION and replaces it with the user's name.
-		message = message.replace("ACTION", Colour.colour("*" + user, Colour.MAGENTA));
-		// Remove issues from having upper case messages.
-		message = message.toLowerCase();
+		message = message.replace("ACTION", Colour.colour("* " + user, Colour.MAGENTA));
 		
 		// Converts a channel message to a PM
 		if (channel.charAt(0) != '#')
