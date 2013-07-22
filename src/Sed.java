@@ -8,6 +8,7 @@ import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
+import core.helpers.Colour;
 import core.plugin.PluginTemp;
 import core.utils.Details;
 import core.utils.IRC;
@@ -32,6 +33,8 @@ public class Sed implements PluginTemp
 		String message = in_message.getMessage();
 		String channel = in_message.getChannel();
 		String user = in_message.getUser();
+		
+		message = message.replace("ACTION", Colour.colour("* " + user, Colour.MAGENTA));
 
 		// help string
 		if (message.matches("^\\.help") || message.matches("^\\.")) {
