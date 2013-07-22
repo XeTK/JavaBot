@@ -89,6 +89,9 @@ public class Core
 		IRC irc = IRC.getInstance();
 		Details details = Details.getInstance();
 		
+		// Keep a list of private messages.
+		ArrayList<PrivMsg> privmsgs = new ArrayList<PrivMsg>();
+		
 		// Keep a rejoin count so we determine if its worth retrying to connect.
 		int rejoins = 0;
 		
@@ -128,6 +131,7 @@ public class Core
 				if (m.find())
 				{
 					// Get the channel information from the string, so that we can compare it to the channels we have.
+					String user = m.group(1);
 					String channel = m.group(4);
 					// Double check that it is a channel we are looking at, otherwise we have a private message.
 					if (channel.charAt(0) == '#')
@@ -138,7 +142,7 @@ public class Core
 						for (int i = 0; i < channels.size();i++)
 						{
 							// If the channel we are looking for matches the channel the message came from.
-							if (channels.get(i).getChannel_name().equals(channel))
+							if (channels.get(i).getChannel_name().equalsIgnoreCase(channel))
 							{
 								// Trip are boolean value so we know we found it.
 								found = true;
@@ -152,8 +156,19 @@ public class Core
 					}
 					else
 					{
-						//TODO private messages need implementing properly.
-						System.out.println("Hello Privmsg");
+						// Same as with the channels just for private messages.
+						boolean found = false;
+						
+						for (int i = 0; i < privmsgs.size();i++)
+						{
+							if (privmsgs.get(i).getUser_name().equalsIgnoreCase(user))
+							{
+								found = true;
+								break;
+							}
+						}
+						if (!found)
+							privmsgs.add(new PrivMsg(user));
 					}
 							
 				}
@@ -174,8 +189,16 @@ public class Core
 				if (m.find())
 				{
 					Message message = new Message(m);
-					for (int i = 0;i< channels.size();i++)
-						channels.get(i).onMessage(message);
+					if (message.isPrivMsg())
+					{
+						for (int i = 0; i < privmsgs.size();i++)
+							privmsgs.get(i).onMessage(message);
+					}
+					else
+					{
+						for (int i = 0;i< channels.size();i++)
+							channels.get(i).onMessage(message);
+					}
 					continue;
 				}
 				
