@@ -1,7 +1,20 @@
 #!/bin/bash
-rm sources.txt
-echo Finding Files
 
+set -e # Fail if subcommands fail
+
+SOURCES_LIST="sources.txt"
+
+if [ -e $SOURCES_LIST ]
+then
+	rm $SOURCES_LIST
+fi
+
+if [ ! -d bin ]
+then
+	mkdir bin
+fi
+
+echo Finding Files
 # This block of code from:
 # http://stackoverflow.com/questions/1767384/ls-command-how-can-i-get-a-recursive-full-path-listing-one-line-per-file
 ls -R1 | while read l;
@@ -17,7 +30,8 @@ do
 			echo "$d/$l"
 			;;
 	esac
-done | grep -E "\.java$" > sources.txt
+done | grep -E "\.java$" > $SOURCES_LIST
 
-javac -cp "gson-2.2.4.jar:javax.mail.jar" -d bin/ -sourcepath src/ @sources.txt
+echo "List of files saved to $SOURCES_LIST"
+javac -cp "gson-2.2.4.jar:javax.mail.jar" -d bin/ -sourcepath src/ @${SOURCES_LIST}
 echo Javabot Compiled
