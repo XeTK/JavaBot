@@ -18,10 +18,10 @@ public class Kick
 	 */
 	public Kick(Matcher m) 
 	{
-		kicker = m.group(1).toLowerCase(); 
+		kicker = m.group(1);
 		host = m.group(2); 
 		channel = m.group(3);
-		kicked = m.group(4).toLowerCase();
+		kicked = m.group(4);
 		message = m.group(5);
 	}
 	

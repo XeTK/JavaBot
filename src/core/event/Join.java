@@ -18,7 +18,7 @@ public class Join
 	 */
 	public Join(Matcher m)
 	{
-		user = m.group(1).toLowerCase();
+		user = m.group(1);
 		host = m.group(2);
 		channel = m.group(3);
 	}
