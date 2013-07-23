@@ -121,7 +121,8 @@ public class Issue implements PluginTemp {
 			IssueResponse responseData =
 				(IssueResponse)parser.fromJson(response.toString(), IssueResponse.class);
 			irc.sendPrivmsg(message.getChannel(), message.getUser() + ": " +
-				"Issue #" + responseData.getNumber() + " created: " + responseData.getUrl());
+				"Issue #" + responseData.getNumber() +
+				" created: " + responseData.getHtmlUrl());
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

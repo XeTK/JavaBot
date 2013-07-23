@@ -30,8 +30,8 @@ public class IssueResponse {
 
 	}
 
-	public String getUrl() {
-		return url;
+	public String getHtmlUrl() {
+		return html_url;
 	}
 
 	public int getNumber() {
