@@ -16,7 +16,8 @@ import addons.reputation.Reputation;
 
 public class Rep implements PluginTemp
 {
-	private final String cfgFile = "Rep.json";
+	private final String cfgFile_loc = "Rep.json";
+	private String cfgFile = new String();
 	
 	private RepList repList = new RepList();
 	
@@ -29,6 +30,7 @@ public class Rep implements PluginTemp
 	@Override
 	public void onCreate(String savePath) throws Exception 
 	{
+		cfgFile = savePath + "/" + cfgFile_loc;
 		if (new File(cfgFile).exists())
 			repList = (RepList)JSON.loadGSON(cfgFile, RepList.class);
 		else

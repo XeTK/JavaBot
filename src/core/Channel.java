@@ -1,5 +1,6 @@
 package core;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import core.event.Join;
@@ -32,6 +33,12 @@ public class Channel
 	{
 		// Set our channel unique identifier.
 		this.channel_name = channelName;
+		
+		File plugin_dir = new File(channelName + "/");
+		if (!plugin_dir.exists())
+		{
+			plugin_dir.mkdirs();
+		}
 		
 		// Assign this channel with a fresh list of plugins that we can now manipulate.
 		this.plugins = PluginsCore.loadPlugins();

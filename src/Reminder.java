@@ -23,7 +23,8 @@ import addons.users.UserList;
 
 public class Reminder implements PluginTemp
 {
-	private static final String cfgFile = "Reminders.json";
+	private final String cfgFileLoc = "Reminders.json";
+	private String cfgFile = new String(); 
 	
 	private RemindersList rl = new RemindersList();
 	
@@ -36,6 +37,8 @@ public class Reminder implements PluginTemp
 	@Override
 	public void onCreate(String savePath) throws IRCException, IOException 
 	{
+		cfgFile = savePath + "/" + cfgFileLoc;
+		
 		if (new File(cfgFile).exists())
 			rl = (RemindersList)JSON.loadGSON(cfgFile, RemindersList.class);
 		else

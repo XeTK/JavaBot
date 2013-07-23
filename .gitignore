@@ -10,3 +10,4 @@ logs/*
 *.xml
 *.properties
 *.txt
+\#*

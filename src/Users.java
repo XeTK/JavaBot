@@ -17,7 +17,8 @@ import addons.users.UserList;
 public class Users implements PluginTemp
 {
 
-	private final String dbFile = "Users.json";
+	private final String dbFile_loc = "Users.json";
+	private String dbFile = new String();
 	
 	@Override
 	public String name() 
@@ -28,6 +29,7 @@ public class Users implements PluginTemp
 	@Override
 	public void onCreate(String savePath) throws Exception
 	{
+		dbFile = savePath + "/" + dbFile_loc;
 		if (new File(dbFile).exists())
 			UserList.setInstance((UserList)JSON.loadGSON(dbFile,UserList.class));
 		else

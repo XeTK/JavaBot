@@ -17,7 +17,8 @@ import addons.response.ResponseList;
 
 public class StringResponse implements PluginTemp 
 {
-	private final String responses_path = "responcses.json";
+	private final String responses_path_loc = "responcses.json";
+	private String responses_path = new String();
 	
 	// Keep a farm of possible responses along with there regex's
 	private ResponseList rl = new ResponseList();
@@ -39,6 +40,7 @@ public class StringResponse implements PluginTemp
 	@Override
 	public void onCreate(String savePath) throws Exception 
 	{
+		responses_path = savePath + "/" + responses_path_loc;
 		/* 
 		 * If the file already exists then convert it back into a class 
 		 * Else we create a new file to stop us having a null pointer.

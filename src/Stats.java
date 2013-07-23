@@ -22,7 +22,9 @@ import addons.users.UserList;
 public class Stats implements PluginTemp
 {
 	private final String opt_path = "stat_options.json";
-	private final String save_path = "logs/%s.json";
+	private final String log_path = "logs/%s.json";
+	
+	private String save_path = new String();
 	
 	private StatDay today;
 	private StatOption options;
@@ -37,6 +39,8 @@ public class Stats implements PluginTemp
 	@Override
 	public void onCreate(String savePath) throws Exception 
 	{
+		save_path = savePath + "/" + log_path;
+		
 		String ti = new SimpleDateFormat("yyyyMMdd").format(new Date());
 		
 		String path = String.format(save_path, ti);
