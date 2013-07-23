@@ -35,7 +35,7 @@ public class Stats implements PluginTemp
 	}
 	
 	@Override
-	public void onCreate() throws IRCException, IOException 
+	public void onCreate(String savePath) throws Exception 
 	{
 		String ti = new SimpleDateFormat("yyyyMMdd").format(new Date());
 		
@@ -54,7 +54,7 @@ public class Stats implements PluginTemp
 	}
 
 	@Override
-	public void onTime() throws IRCException, IOException
+	public void onTime() throws Exception
 	{
 		IRC irc = IRC.getInstance();
 		String ti = new SimpleDateFormat("HH:mm:ss").format(new Date());
@@ -182,14 +182,6 @@ public class Stats implements PluginTemp
 				}
 			}
 		}
-		else if(message.matches("^\\.help") || message.matches("^\\."))
-		{
-			irc.sendPrivmsg(channel, "STATS: " +
-					".lastonline *username* - check when a member was last active : " +
-					".msgsent *username* - check how many messages a user has sent globaly within the channel : " +
-					".stats (hour|day) (msgsent|joins|quits|kicks) - get stats for that given time frame : "
-					);
-		}
 	}
 
 	@Override
@@ -218,4 +210,17 @@ public class Stats implements PluginTemp
 		
 		today.incKicks();
 	}
+	@Override
+	public String getHelpString()
+	{
+		return "STATS: " +
+				".lastonline *username* - check when a member was last active : " +
+				".msgsent *username* - check how many messages a user has sent globaly within the channel : " +
+				".stats (hour|day) (msgsent|joins|quits|kicks) - get stats for that given time frame : ";
+	}
+    // Unused
+	@Override
+	public void rawInput(String in_str) throws Exception{}
+
+
 }

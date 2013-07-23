@@ -107,7 +107,7 @@ public class Imgur implements PluginTemp
 	}
 	
 	@Override
-	public void onCreate() throws Exception{}
+	public void onCreate(String savePath) throws Exception{}
 	@Override
 	public void onTime() throws Exception{}
 	@Override
@@ -116,4 +116,13 @@ public class Imgur implements PluginTemp
 	public void onQuit(Quit in_quit) throws Exception{}
 	@Override
 	public void onKick(Kick in_kick) throws Exception{}
+	@Override
+	public void rawInput(String in_str) throws Exception{}
+
+	@Override
+	public String getHelpString()
+	{
+		// TODO Auto-generated method stub
+		return "Imgur help String";
+	}
 }

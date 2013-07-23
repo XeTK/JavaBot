@@ -95,17 +95,6 @@ public class Admin implements PluginTemp
 				irc.sendPrivmsg(channel, 
 						"Plugins Loaded : " + pc.loadedPlugins());
 			}*/
-			else if(message.matches("^\\.help") || message.matches("^\\."))
-			{
-				irc.sendPrivmsg(channel, "ADMIN: " +
-						".join #* - Join Channel : " +
-						".quit - Kill Bot : " +
-						".nick ** - Change Bot's Nick : " +
-						".help - Show Help Text : " +
-						".loaded - Returns list of loaded plugins : " +
-						".reload - Reloads plugins from directory :"
-						);
-			}
 		}
 	}
 
@@ -115,13 +104,28 @@ public class Admin implements PluginTemp
 		IRC irc = IRC.getInstance();
 	    irc.sendServer("MODE " + in_join.getChannel() + " +v " + in_join.getUser());
 	}
-
+	
+	@Override
+	public String getHelpString()
+	{
+		// TODO Auto-generated method stub
+		return "ADMIN: " +
+						".join #* - Join Channel : " +
+						".quit - Kill Bot : " +
+						".nick ** - Change Bot's Nick : " +
+						".help - Show Help Text : " +
+						".loaded - Returns list of loaded plugins : " +
+						".reload - Reloads plugins from directory :";
+	}
+	
 	@Override
 	public void onKick(Kick in_kick) throws Exception {}
 	@Override
-	public void onCreate() throws Exception {}
+	public void onCreate(String savePath) throws Exception {}
 	@Override
 	public void onTime() throws Exception {}
 	@Override
 	public void onQuit(Quit in_quit) throws Exception {}
+	@Override
+	public void rawInput(String in_str) throws Exception{}	
 }

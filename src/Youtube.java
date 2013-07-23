@@ -85,9 +85,15 @@ public class Youtube implements PluginTemp
 		    in.close();
 		}
 	}
+	@Override
+	public String getHelpString()
+	{
+		// TODO Auto-generated method stub
+		return "YouTube help string here";
+	}
 	
 	@Override
-	public void onCreate() throws Exception{}
+	public void onCreate(String savePath) throws Exception{}
 	@Override
 	public void onTime() throws Exception{}
 	@Override
@@ -96,4 +102,6 @@ public class Youtube implements PluginTemp
 	public void onQuit(Quit in_quit) throws Exception{}
 	@Override
 	public void onKick(Kick in_kick) throws Exception{}
+	@Override
+	public void rawInput(String in_str) throws Exception{}
 }

@@ -13,10 +13,12 @@ import core.event.Quit;
 public interface PluginTemp
 {
 	public String name();
-	public void onCreate() throws Exception;
+	public void onCreate(String savePath) throws Exception;
 	public void onTime() throws Exception;
 	public void onMessage(Message in_message) throws Exception;
 	public void onJoin(Join in_join) throws Exception;
 	public void onQuit(Quit in_quit) throws Exception;
 	public void onKick(Kick in_kick) throws Exception;
+	public void rawInput(String in_str) throws Exception;
+	public String getHelpString();
 }

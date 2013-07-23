@@ -37,7 +37,7 @@ public class Channel
 		
 		// Call are on create methods for each plugin to set them up ready for use.
 		for (int i = 0;i < plugins.size();i++)
-			plugins.get(i).onCreate();
+			plugins.get(i).onCreate(channelName);
 		
 		// Create a new timed thread for are class, this will carry out actions on set times.
 		new TimeThread(plugins).start();

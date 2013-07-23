@@ -26,7 +26,7 @@ public class Users implements PluginTemp
 	}
 	
 	@Override
-	public void onCreate() throws Exception
+	public void onCreate(String savePath) throws Exception
 	{
 		if (new File(dbFile).exists())
 			UserList.setInstance((UserList)JSON.loadGSON(dbFile,UserList.class));
@@ -96,7 +96,16 @@ public class Users implements PluginTemp
     				in_kick.getKicked(), userOBJ.getKicks()));
     	}
 	}
+    
+	@Override
+	public String getHelpString()
+	{
+		// TODO Auto-generated method stub
+		return "Help string for users plugin";
+	}
 
 	@Override
 	public void onTime() throws Exception {}
+	@Override
+	public void rawInput(String in_str) throws Exception {}
 }

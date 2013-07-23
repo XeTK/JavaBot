@@ -37,7 +37,7 @@ public class StringResponse implements PluginTemp
 	 * system for them to be used again.
 	 */
 	@Override
-	public void onCreate() throws Exception 
+	public void onCreate(String savePath) throws Exception 
 	{
 		/* 
 		 * If the file already exists then convert it back into a class 
@@ -135,17 +135,27 @@ public class StringResponse implements PluginTemp
 			}
 		}
 	}
-
+	
+	@Override
+	public String getHelpString()
+	{
+		// TODO Auto-generated method stub
+		return "help string StringResponce plugin";
+	}
+	
 	// Unused.
 	@Override
 	public void onTime() throws Exception {}
-
 	@Override
 	public void onJoin(Join in_join) throws Exception {}
-
 	@Override
 	public void onQuit(Quit in_quit) throws Exception {}
-
 	@Override
 	public void onKick(Kick in_kick) throws Exception {}
+	@Override
+	public void rawInput(String in_str) throws Exception{}
+
+
+	
+	
 }

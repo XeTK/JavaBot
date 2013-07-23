@@ -34,7 +34,7 @@ public class Reminder implements PluginTemp
 	}
 	
 	@Override
-	public void onCreate() throws IRCException, IOException 
+	public void onCreate(String savePath) throws IRCException, IOException 
 	{
 		if (new File(cfgFile).exists())
 			rl = (RemindersList)JSON.loadGSON(cfgFile, RemindersList.class);
@@ -101,14 +101,6 @@ public class Reminder implements PluginTemp
 	    		irc.sendPrivmsg(channel, user + ": Reminder Added.");
 		    }
 		}
-		else if(message.matches("^\\.help") || message.matches("^\\."))
-	    {
-			irc.sendPrivmsg(channel, "REMINDER: " +
-							".reminder *username* *Message* - leave a message for another member : " +
-							".reminder 00:00 *Message* - Leave reminder for the channel to view later today : " +
-							".reminder 01/01/1970 00:00 *Message* Leave a reminder for the future on a different date : "
-							);
-	    }
 		else
 		{
 			User userOBJ = ul.getUser(user);
@@ -133,6 +125,15 @@ public class Reminder implements PluginTemp
 		}
 		JSON.saveGSON(cfgFile, rl);
 	}
+	
+	@Override
+	public String getHelpString()
+	{
+		return "REMINDER: " +
+				".reminder *username* *Message* - leave a message for another member : " +
+				".reminder 00:00 *Message* - Leave reminder for the channel to view later today : " +
+				".reminder 01/01/1970 00:00 *Message* Leave a reminder for the future on a different date : ";
+	}
 
 	@Override
 	public void onJoin(Join in_join) throws Exception {}
@@ -140,4 +141,6 @@ public class Reminder implements PluginTemp
 	public void onQuit(Quit in_quit) throws Exception {}
 	@Override
 	public void onKick(Kick in_kick) throws Exception {}
+	@Override
+	public void rawInput(String in_str) throws Exception{}
 }

@@ -27,7 +27,7 @@ public class Rep implements PluginTemp
 	}
 	
 	@Override
-	public void onCreate() throws Exception 
+	public void onCreate(String savePath) throws Exception 
 	{
 		if (new File(cfgFile).exists())
 			repList = (RepList)JSON.loadGSON(cfgFile, RepList.class);
@@ -101,17 +101,18 @@ public class Rep implements PluginTemp
 			if (t.length > 0||t[1] != null)
 				irc.sendPrivmsg(channel, t[1] + ": Rep = " + repList.getRep(t[1]).getRep() + "!");
 		}
-		else if(message.matches("^\\.help") || message.matches("^\\."))
-		{
-			irc.sendPrivmsg(channel, "REP: " +
-					".rep *Item* - view the reputation of a item : " +
-					"*Item*--/++ - increment or decrement the rep of a desired item / : " +
-					"*Item* +/- *Ammount - increment or decrement the rep of a set item by a set amount : "
-					);
-		}
 		JSON.saveGSON(cfgFile, repList);
 	}
-
+	
+	@Override
+	public String getHelpString()
+	{
+		return "REP: " +
+				".rep *Item* - view the reputation of a item : " +
+				"*Item*--/++ - increment or decrement the rep of a desired item / : " +
+				"*Item* +/- *Ammount - increment or decrement the rep of a set item by a set amount : ";
+	}
+	
 	@Override
 	public void onTime() throws Exception {}
 	@Override
@@ -120,5 +121,9 @@ public class Rep implements PluginTemp
 	public void onQuit(Quit in_quit) throws Exception {}
 	@Override
 	public void onKick(Kick in_kick) throws Exception {}
+	@Override
+	public void rawInput(String in_str) throws Exception{}
+
+
 }
 

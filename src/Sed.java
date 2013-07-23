@@ -171,29 +171,25 @@ public class Sed implements PluginTemp
 		cache = new HashMap<String, Stack<Message>>();
 		irc.sendPrivmsg(target, "dropped sed cache for " + channel);
 	}
-
+	
 	@Override
-	public void onCreate() throws Exception
+	public String getHelpString()
 	{
+		return "SED: "
+				+ "[<username>: ]s/<search>/<replacement>/ - e.g XeTK: s/.*/hello/ is used to replace the previous statement with hello :";
 	}
-
+	
 	@Override
-	public void onTime() throws Exception
-	{
-	}
-
+	public void onCreate(String savePath) throws Exception{}
 	@Override
-	public void onJoin(Join in_join) throws Exception
-	{
-	}
-
+	public void onTime() throws Exception{}
 	@Override
-	public void onQuit(Quit in_quit) throws Exception
-	{
-	}
-
+	public void onJoin(Join in_join) throws Exception{}
 	@Override
-	public void onKick(Kick in_kick) throws Exception
-	{
-	}
+	public void onQuit(Quit in_quit) throws Exception{}
+	@Override
+	public void onKick(Kick in_kick) throws Exception{}
+	@Override
+	public void rawInput(String in_str) throws Exception{}
+
 }

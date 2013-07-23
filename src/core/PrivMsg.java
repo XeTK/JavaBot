@@ -18,7 +18,7 @@ public class PrivMsg
 		this.user_name = user_name;
 		
 		// Assign this channel with a fresh list of plugins that we can now manipulate.
-		this.plugins = PluginsCore.loadPlugins();	
+		this.plugins = PluginsCore.loadPlugins();
 	}
 	
 	/**

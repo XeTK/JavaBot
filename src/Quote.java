@@ -80,15 +80,6 @@ public class Quote implements PluginTemp
 				irc.sendPrivmsg(channel, user + ": Quote Deleted.");
 			}
 		}
-		else if(message.matches("^\\.help") || message.matches("^\\."))
-		{
-			irc.sendPrivmsg(channel, "QUOTE: " +
-					".quotes *item* - returns all the quotes tied to this item : " +
-					".quote *item* - returns a random quote for that item : " +
-					".quoteadd *item* *message* - will add a new quote to the appropriate item : " +
-					".quotedel *message* - will remove the message from the libary of quotes : "
-					);
-		}
 	}
 
 	@Override
@@ -107,11 +98,23 @@ public class Quote implements PluginTemp
 	}
 
 	@Override
-	public void onCreate() throws Exception {}
+	public void onCreate(String savePath) throws Exception {}
 	@Override
 	public void onTime() throws Exception {}
 	@Override
 	public void onQuit(Quit in_quit) throws Exception {}
 	@Override
-	public void onKick(Kick in_kick) throws Exception {}	
+	public void onKick(Kick in_kick) throws Exception {}
+	@Override
+	public void rawInput(String in_str) throws Exception{}
+
+	@Override
+	public String getHelpString()
+	{
+		return "QUOTE: " +
+				".quotes *item* - returns all the quotes tied to this item : " +
+				".quote *item* - returns a random quote for that item : " +
+				".quoteadd *item* *message* - will add a new quote to the appropriate item : " +
+				".quotedel *message* - will remove the message from the libary of quotes : ";
+	}	
 }

@@ -155,7 +155,7 @@ public class Authenticate implements PluginTemp
 		IRC irc = IRC.getInstance();
 		User user = UserList.getInstance().getUser(in_join.getUser());
 		if (!auth_Users.contains(user))
-			if (user.getEmail() != null&&!user.getEmail().isEmpty())
+			if (!user.getEmail().isEmpty())
 				irc.sendPrivmsg(user.getUser(), "Please Login!");
 	}
 
@@ -219,5 +219,14 @@ public class Authenticate implements PluginTemp
 	@Override
 	public void onTime() throws Exception {}
 	@Override
-	public void onCreate() throws Exception {}
+	public void onCreate(String savePath) throws Exception {}
+	@Override
+	public void rawInput(String in_str) throws Exception {}
+
+	@Override
+	public String getHelpString()
+	{
+		// TODO Auto-generated method stub
+		return "Authentication help string";
+	}
 }
