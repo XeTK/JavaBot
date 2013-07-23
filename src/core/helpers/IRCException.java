@@ -33,7 +33,11 @@ public class IRCException extends Exception
 				irc.sendPrivmsg(admins[i],
 						super.toString() + ", " + Arrays.toString(super.getStackTrace()));
 			} 
-			catch (IRCException | IOException e) 
+			catch (IRCException e)
+			{
+				e.printStackTrace();
+			}
+			catch (IOException e)
 			{
 				e.printStackTrace();
 			}
@@ -56,7 +60,11 @@ public class IRCException extends Exception
 				irc.sendPrivmsg(admins[i],
 						ex.toString() + ", " + Arrays.toString(ex.getStackTrace()));
 			} 
-			catch (IRCException | IOException e) 
+			catch (IRCException e)
+			{
+				e.printStackTrace();
+			}
+			catch (IOException e)
 			{
 				e.printStackTrace();
 			}
