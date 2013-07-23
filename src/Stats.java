@@ -25,6 +25,7 @@ public class Stats implements PluginTemp
 	private final String log_path = "logs/%s.json";
 	
 	private String save_path = new String();
+	private String channel_name = new String();
 	
 	private StatDay today;
 	private StatOption options;
@@ -39,6 +40,7 @@ public class Stats implements PluginTemp
 	@Override
 	public void onCreate(String savePath) throws Exception 
 	{
+		channel_name = savePath;
 		save_path = savePath + "/" + log_path;
 		
 		String ti = new SimpleDateFormat("yyyyMMdd").format(new Date());
@@ -72,20 +74,16 @@ public class Stats implements PluginTemp
 			String min = m.group(2);
 			String sec = m.group(3);			
 			
-			String[] channels = Details.getInstance().getChannels();
-			
 			if (options.isHour_Stats())
 				if (min.equals("59")&&sec.equals("59"))
-					for (int i = 0; i < channels.length;i++)
-						if (today.getHour().getMsgSent() != 0)
-							irc.sendPrivmsg(channels[i], "Hourly Stats: Messages Sent : " + today.getHour().getMsgSent() + "| Users joined :" + today.getHour().getJoins() +"| Users left : " + today.getHour().getQuits() + "| Users kicked" + today.getHour().getKicks());
+					if (today.getHour().getMsgSent() != 0)
+						irc.sendPrivmsg(channel_name, "Hourly Stats: Messages Sent : " + today.getHour().getMsgSent() + "| Users joined :" + today.getHour().getJoins() +"| Users left : " + today.getHour().getQuits() + "| Users kicked" + today.getHour().getKicks());
 			
 			if (hour.equals("00")&&min.equals("00")&&sec.equals("00"))
 			{
 				if (options.isDay_Stats())
 					if (today.msgsSent() != 0)
-						for (int i = 0; i < channels.length; i++)
-							irc.sendPrivmsg(channels[i], "I has handled, " + today.msgsSent() + " Messages, " + today.joins() + "  Users Join, " + today.quits() + " User left and " + today.kicks() + " users kicked!");
+						irc.sendPrivmsg(channel_name, "I has handled, " + today.msgsSent() + " Messages, " + today.joins() + "  Users Join, " + today.quits() + " User left and " + today.kicks() + " users kicked!");
 
 				today = new StatDay();
 			}
