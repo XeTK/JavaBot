@@ -69,7 +69,7 @@ public class Reminder implements PluginTemp
 		String channel = in_message.getChannel(); 
 		String message = in_message.getMessage();
 		    
-		if (message.matches("(\\.reminder)\\s([a-zA-Z0-9]*)\\s([a-zA-Z\\w\\d\\s]*)"))
+		if (message.matches("(\\.remind)\\s([a-zA-Z0-9]*)\\s([a-zA-Z\\w\\d\\s]*)"))
 		{
 		    Matcher r = Pattern.compile("\\.reminder\\s([a-zA-Z0-9]*)\\s([a-zA-Z\\w\\d\\s]*)",
 		    				Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
