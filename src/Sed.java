@@ -54,26 +54,25 @@ public class Sed implements PluginTemp
 		}
 
 		// set up sed finding regex
-		Matcher m = Pattern
-				.compile(
-						"(?:([\\s\\w]*):\\s)?s/([\\s\\w\\d\\$\\*\\.]*)/([\\s\\w\\d]*)(?:/)?",
-						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(
-						message);
+		// (?:      starts a non-capture group
+		// ([\\w]+) captures the username
+		// )?       makes the group optional
+		// ([^/]+)  captures the search string
+		// ([^/]*)  captures the replacement
+		Pattern sedFinder = Pattern.compile("^(?:([\\w]+): )?s/([^/]+)/([^/]*)/?");
+		Matcher m = sedFinder.matcher(message);
 
 		// it's sed time, baby
 		if (m.find())
 		{
 			String targetUser = new String();
-			String replacement = new String();
-			String search = new String();
-
 			if (m.group(1) != null)
 				targetUser = m.group(1);
-			search = m.group(2);
-			replacement = m.group(3);
+			String search = m.group(2);
+			String replacement = m.group(3);
 
 			Stack<Message> userCache = new Stack<Message>();
-			boolean hasTarget = !targetUser.equals(new String());
+			boolean hasTarget = (!targetUser.equals(new String()) && !targetUser.equals(user));
 			if (!hasTarget)
 			{
 				// no target, use last message from sourceUser's cache
