@@ -50,6 +50,8 @@ Please make sure that the dependancies exist first and that the source has defin
 
 #Coding standards
 
+All code should comply to `Oracle JDK 1.6` specification and should compile under that.
+
 Bracketing - Should be drop line style, Similar to C++ standards.
 ```
 class Hello
