@@ -50,6 +50,7 @@ public class Channel
 	 */
 	public void onMessage(Message in_message)
 	{
+		IRC irc = IRC.getInstance();
 		// Double check that the message is actually for this class.
 		if (in_message.getChannel().equalsIgnoreCase(channel_name))
 		{
@@ -57,14 +58,16 @@ public class Channel
 			{
 				try
 				{
+					// If we are not asking for the help string then continue as per normal
 					if (!in_message.getMessage().matches("^\\.help"))
 					{
 						plugins.get(i).onMessage(in_message);
 					}
 					else
 					{
+						// Get the help string for the plugin we are working on
 						String helpString = plugins.get(i).getHelpString();
-						IRC irc = IRC.getInstance();
+						// Send the help string to the user that asled for it.
 						irc.sendPrivmsg(in_message.getUser(), helpString);
 					}
 				}
@@ -165,6 +168,33 @@ public class Channel
 					{
 						e.printStackTrace();
 					}
+				}
+			}
+		}
+	}
+	/**
+	 * This handles any other possible outcomes a user wants to deal with with 
+	 * plugins, this sends the raw server strings to the plugin to be manipulated
+	 * if need be.
+	 * @param in_str this is the raw input data from the server.
+	 */
+	public void onRaw(String in_str)
+	{
+		for (int i = 0;i< plugins.size();i++)
+		{
+			try
+			{
+				plugins.get(i).rawInput(in_str);
+			}
+			catch (Exception ex)
+			{
+				try 
+				{
+					throw new IRCException(ex);
+				} 
+				catch (IRCException e) 
+				{
+					e.printStackTrace();
 				}
 			}
 		}

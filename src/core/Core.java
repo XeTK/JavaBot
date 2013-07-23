@@ -173,6 +173,10 @@ public class Core
 							
 				}
 					
+				// This supplys every plugin to have access to have the raw data from the server.
+				for (int i = 0; i < channels.size();i++)
+					channels.get(i).onRaw(output);
+				
 				// Process Invites
 				m = Pattern.compile(":([\\w\\d]*)!(?:~)?([\\w\\d@\\-.]*) INVITE ([\\w\\d]*) :(#[\\w\\d]*)",
 						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(output);
