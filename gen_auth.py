@@ -2,6 +2,7 @@
 
 import argparse
 import base64
+import getpass
 import json
 import shlex
 from subprocess import Popen, PIPE
@@ -16,11 +17,15 @@ def gen_auth(args):
 	parser.add_argument("--password", help="Your github password")
 	args = parser.parse_args(args)
 
-	if args.username is None or args.password is None:
-		print "Username and password must be supplied"
-		sys.exit(1)
+	username = args.username
+	password = args.password
 
-	basic_auth = base64.b64encode(args.username + ":" + args.password)
+	if username is None:
+		username = raw_input("GitHub username: ")
+	if password is None:
+		password = getpass.getpass("GitHub password: ")
+
+	basic_auth = base64.b64encode(username + ":" + password)
 	cmd = "curl -H 'Content-Type: application/x-www-form-urlencoded' -H 'Authorization: Basic " + basic_auth + "' -d '{\"client_id\": \"c93be78ae017864c5821\", \"client_secret\": \"b3fac62129c509911ebfc02b44d4669ebfcb8804\", \"scopes\": [\"public_repo\"]}' -X POST https://api.github.com/authorizations"
 	args = shlex.split(cmd)
 	proc = Popen(args, stdout=PIPE, stdin=PIPE, stderr=PIPE)
