@@ -173,6 +173,16 @@ public class Core
 							
 				}
 					
+				// Process Invites
+				m = Pattern.compile(":([\\w\\d]*)!(?:~)?([\\w\\d@\\-.]*) INVITE ([\\w\\d]*) :(#[\\w\\d]*)",
+						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(output);
+				
+				if (m.find())
+				{
+					irc.sendServer("JOIN " + m.group(4));
+					continue;
+				}
+				
 				/*
 				 * For the next few methods, the process is the same, it is triggering the valid
 				 * onCommand method for the output given by the IRC server, it loops through and 

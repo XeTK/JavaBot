@@ -108,7 +108,6 @@ public class Admin implements PluginTemp
 			}
 		}
 	}
-	
 
 	@Override
 	public void onJoin(Join in_join) throws Exception
@@ -118,18 +117,7 @@ public class Admin implements PluginTemp
 	}
 
 	@Override
-	public void onKick(Kick in_kick) throws Exception 
-	{
-		IRC irc = IRC.getInstance();
-
-		if (in_kick.getKicked().equals(Details.getInstance().getNickName()))
-		{
-			irc.sendServer("JOIN " + in_kick.getChannel()); 
-			irc.sendPrivmsg(in_kick.getChannel(), 
-					"Dont kick me!! " + in_kick.getKicked() + "... bad person!");
-		}
-	}
-	
+	public void onKick(Kick in_kick) throws Exception {}
 	@Override
 	public void onCreate() throws Exception {}
 	@Override
