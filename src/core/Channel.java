@@ -10,6 +10,7 @@ import core.helpers.IRCException;
 import core.helpers.TimeThread;
 import core.plugin.PluginTemp;
 import core.plugin.PluginsCore;
+import core.utils.IRC;
 /**
  * This holds all the plugins tied to a specific channel, along with the methods
  * to run the plugins, this is to encapsulate channels and ensure that data cannot
@@ -56,7 +57,16 @@ public class Channel
 			{
 				try
 				{
-					plugins.get(i).onMessage(in_message);
+					if (!in_message.getMessage().matches("^\\.help"))
+					{
+						plugins.get(i).onMessage(in_message);
+					}
+					else
+					{
+						String helpString = plugins.get(i).getHelpString();
+						IRC irc = IRC.getInstance();
+						irc.sendPrivmsg(in_message.getUser(), helpString);
+					}
 				}
 				catch (Exception ex)
 				{
