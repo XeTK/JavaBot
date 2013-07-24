@@ -13,183 +13,281 @@ import core.plugin.Plugin;
 import core.utils.Details;
 import core.utils.IRC;
 
-public class Sed implements Plugin
-{
-	private static final int CACHE_SIZE = 10; // per user
-	private static final char ASCII_SOH = (char)1;
+/**
+ * Sed plugin.
+ *
+ * Handles messages of the form:
+ * s/<search>/<replacement>/
+ * s/<search>/<replacement>
+ * <username>: s/<search>/<replacement>/
+ * <username>: s/<search>/<replacement>
+ */
+public class Sed implements Plugin {
 
-	private Details details = Details.getInstance();
-	private IRC irc = IRC.getInstance();
+  /**
+   * The max number of Message objects stored per user.
+   */
+  private static final int CACHE_SIZE = 10;
+  /**
+   * The ASCII SOH character.
+   */
+  private static final char ASCII_SOH = (char) 1;
 
-	private Map<String, Stack<Message>> cache = new HashMap<String, Stack<Message>>();
+  /**
+   * The first group of the sed regex.
+   */
+  private static final int SED_USERNAME_GROUP = 1;
+  /**
+   * The second group of the sed regex.
+   */
+  private static final int SED_SEARCH_GROUP = 2;
+  /**
+   * The third group of the sed regex.
+   */
+  private static final int SED_REPLACEMENT_GROUP = 3;
 
-	public String name()
-	{
-		return "Sed";
-	}
+  /**
+   * Details instance.
+   */
+  private Details details = Details.getInstance();
+  /**
+   * IRC instance.
+   */
+  private IRC irc = IRC.getInstance();
 
-	@Override
-	public void onMessage(Message in_message) throws Exception
-	{
-		String message = in_message.getMessage();
-		String channel = in_message.getChannel();
-		String user = in_message.getUser();
+  /**
+   * Stores Messages objects per-user.
+   */
+  private Map<String, Stack<Message>> cache =
+    new HashMap<String, Stack<Message>>();
 
-		// help string
-		if (message.matches("^\\.help") || message.matches("^\\.")) {
-			irc.sendPrivmsg(channel,"SED: "
-							+ "[<username>: ]s/<search>/<replacement>/ - e.g XeTK: s/.*/hello/ is used to replace the previous statement with hello :");
-			return;
-		}
+  @Override
+  public final String name() {
+    return "Sed";
+  }
 
-		// debug commands
-		if (message.matches("^\\.seddumpcache") && details.isAdmin(user)) {
-			dumpCache(user, channel);
-			return;
-		}
+  @Override
+  public final void onMessage(final Message messageObj) throws Exception {
+    String message = messageObj.getMessage();
+    String channel = messageObj.getChannel();
+    String user = messageObj.getUser();
 
-		if (message.matches("^\\.seddropcache") && details.isAdmin(user)) {
-			dropCache(user, channel);
-			return;
-		}
+    // debug commands
+    if (message.matches("^\\.seddumpcache")
+        && details.isAdmin(user)) {
+      dumpCache(user, channel);
+      return;
+    }
 
-		// set up sed finding regex
-		// (?:      starts a non-capture group
-		// ([\\w]+) captures the username
-		// )?       makes the group optional
-		// ([^/]+)  captures the search string
-		// ([^/]*)  captures the replacement
-		Pattern sedFinder = Pattern.compile("^(?:([\\w]+): )?s/([^/]+)/([^/]*)/?");
-		Matcher m = sedFinder.matcher(message);
+    if (message.matches("^\\.seddropcache")
+        && details.isAdmin(user)) {
+      dropCache(user, channel);
+      return;
+    }
 
-		// it's sed time, baby
-		if (m.find())
-		{
-			String targetUser = new String();
-			if (m.group(1) != null)
-				targetUser = m.group(1);
-			String search = m.group(2);
-			String replacement = m.group(3);
+    // set up sed finding regex
+    // (?:      starts a non-capture group
+    // ([\\w]+) captures the username
+    // )?       makes the group optional
+    // ([^/]+)  captures the search string
+    // ([^/]*)  captures the replacement
+    Pattern sedFinder = Pattern.compile(
+        "^(?:([\\w]+): )?s/([^/]+)/([^/]*)/?");
+    Matcher m = sedFinder.matcher(message);
 
-			Stack<Message> userCache = new Stack<Message>();
-			boolean hasTarget = (!targetUser.equals(new String()) && !targetUser.equals(user));
-			if (!hasTarget)
-			{
-				// no target, use last message from sourceUser's cache
-				// (or do nothing)
-				userCache = getUserCache(user);
-			}
-			else
-			{
-				// target specified, run through the cache (most recent first)
-				// and either match and replace or do nothing
-				userCache = getUserCache(targetUser);
-			}
+    // it's sed time, baby
+    if (m.find()) {
+      String targetUser = new String();
+      if (m.group(SED_USERNAME_GROUP) != null) {
+        targetUser = m.group(SED_USERNAME_GROUP);
+      }
+      String search = m.group(SED_SEARCH_GROUP);
+      String replacement = m.group(SED_REPLACEMENT_GROUP);
 
-			while (!userCache.empty())
-			{
-				Message mmessage = userCache.pop();
-				String text = mmessage.getMessage();
+      Stack<Message> userCache = new Stack<Message>();
+      boolean hasTarget = (
+          !targetUser.equals(new String())
+          && !targetUser.equals(user));
+      if (!hasTarget) {
+        // no target, use last message from
+        // sourceUser's cache (or do nothing)
+        userCache = getUserCache(user);
+      } else {
+        // target specified, run through the cache
+        // (most recent first) and either match and
+        // replace or do nothing
+        userCache = getUserCache(targetUser);
+      }
 
-				if (isActionMessage(text))
-					text = processActionMessage(text, mmessage.getUser());
+      while (!userCache.empty()) {
+        Message mmessage = userCache.pop();
+        String text = mmessage.getMessage();
 
-				m = Pattern.compile(search,
-						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(text);
+        if (isActionMessage(text)) {
+          text = processActionMessage(
+            text, mmessage.getUser());
+        }
 
-				if (m.find())
-				{
-					String reply = new String();
-					if (hasTarget)
-						reply = user + " thought ";
+        m = Pattern.compile(
+            search,
+            Pattern.CASE_INSENSITIVE
+            | Pattern.DOTALL)
+            .matcher(text);
 
-					reply += "%s meant : %s";
-					irc.sendPrivmsg(channel, String.format(
-							reply,
-							mmessage.getUser(),
-							text.replaceAll(search,
-									replacement)));
-					break;
-				}
-			}
+        if (m.find()) {
+          String reply = new String();
+          if (hasTarget) {
+            reply = user + " thought ";
+          }
 
-		}
-		else // no dice, add message to history queue
-		{
-			addToCache(in_message);
-		}
-	}
+          reply += "%s meant : %s";
+          text = text.replaceAll(
+              search, replacement);
+          irc.sendPrivmsg(channel, String.format(
+              reply,
+              mmessage.getUser(),
+              text));
+          break;
+        }
+      }
 
-	private boolean isActionMessage(String msg) {
-		return msg.startsWith(ASCII_SOH + "ACTION") &&
-					 msg.endsWith(Character.toString(ASCII_SOH));
-	}
+    } else {
+    // no dice, add message to history queue
+      addToCache(messageObj);
+    }
+  }
 
-	private String processActionMessage(String msg, String user) {
-		if (!isActionMessage(msg))
-			return msg;
+  /**
+   * Identifies ACTION messages.
+   * @param msg The message string
+   * @return true if msg is an ACTION message
+   */
+  private boolean isActionMessage(final String msg) {
+    return msg.startsWith(ASCII_SOH + "ACTION")
+      && msg.endsWith(Character.toString(ASCII_SOH));
+  }
 
-		// remove special chars
-		msg = msg.substring(1);
-		msg = msg.substring(0, msg.length() - 1);
+  /**
+   * Converts an ACTION message into a friendlier form.
+   * @param msg The message string
+   * @param user The speaker
+   * @return The modified message string
+   */
+  private String processActionMessage(
+      final String msg, final String user) {
+    if (!isActionMessage(msg)) {
+      return msg;
+    }
 
-		// format for output
-		msg = msg.replace("ACTION", Colour.colour("* " + user, Colour.MAGENTA));
-		return msg;
-	}
+    // remove special chars
+    String newMsg = msg.substring(1);
+    newMsg = newMsg.substring(0, newMsg.length() - 1);
 
-	private void addToCache(Message msg) {
-		String username = msg.getUser();
-		if (!cache.containsKey(username))
-			cache.put(username, new Stack<Message>());
-		cache.get(username).push(msg);
-		if (cache.get(username).size() > CACHE_SIZE)
-			cache.get(username).remove(0);
-	}
+    // format for output
+    newMsg = newMsg.replace("ACTION",
+        Colour.colour("* " + user, Colour.MAGENTA));
+    return newMsg;
+  }
 
-	private Stack<Message> getUserCache(String username) {
-		Stack<Message> userCache = new Stack<Message>();
-		if (cache.containsKey(username))
-			userCache.addAll(cache.get(username));
-		return userCache;
-	}
+  /**
+   * Adds a message object to the cache.
+   * @param msg The message object
+   */
+  private void addToCache(final Message msg) {
+    String username = msg.getUser();
+    if (!cache.containsKey(username)) {
+      cache.put(username, new Stack<Message>());
+    }
+    cache.get(username).push(msg);
+    if (cache.get(username).size() > CACHE_SIZE) {
+      cache.get(username).remove(0);
+    }
+  }
 
-	private void dumpCache(String target, String channel) throws Exception {
-		irc.sendPrivmsg(target, "sed cache for " + channel);
-		for (String user : cache.keySet()) {
-			Stack<Message> userCache = getUserCache(user);
+  /**
+   * Stack of messages from a single user.
+   * @param username The name of the user
+   * @return The user's cache
+   */
+  private Stack<Message> getUserCache(final String username) {
+    Stack<Message> userCache = new Stack<Message>();
+    if (cache.containsKey(username)) {
+      userCache.addAll(cache.get(username));
+    }
+    return userCache;
+  }
 
-			irc.sendPrivmsg(target, " ");
-			irc.sendPrivmsg(target, user + ": " + userCache.size() + "/" + CACHE_SIZE);
-			for (Message msg : userCache) {
-				irc.sendPrivmsg(target, "\"" + msg.getMessage() + "\"");
-			}
-		}
-	}
+  /**
+   * Dumps entire cache into query window.
+   * @param target The username of the requester
+   * @param channel The channel originating the request
+   * @throws Exception Inherited badness from core
+   */
+  private void dumpCache(final String target, final String channel)
+    throws Exception {
+    irc.sendPrivmsg(target, "sed cache for " + channel);
+    for (String user : cache.keySet()) {
+      Stack<Message> userCache = getUserCache(user);
 
-	private void dropCache(String target, String channel) throws Exception {
-		cache = new HashMap<String, Stack<Message>>();
-		irc.sendPrivmsg(target, "dropped sed cache for " + channel);
-	}
-	
-	@Override
-	public String getHelpString()
-	{
-		return "SED: "
-				+ "[<username>: ]s/<search>/<replacement>/ - e.g XeTK: s/.*/hello/ is used to replace the previous statement with hello :";
-	}
-	
-	@Override
-	public void onCreate(String savePath) throws Exception{}
-	@Override
-	public void onTime() throws Exception{}
-	@Override
-	public void onJoin(Join in_join) throws Exception{}
-	@Override
-	public void onQuit(Quit in_quit) throws Exception{}
-	@Override
-	public void onKick(Kick in_kick) throws Exception{}
-	@Override
-	public void rawInput(String in_str) throws Exception{}
+      irc.sendPrivmsg(target, " ");
+      irc.sendPrivmsg(target,
+          user + ": "
+          + userCache.size() + "/" + CACHE_SIZE);
+      for (Message msg : userCache) {
+        irc.sendPrivmsg(target,
+            "\"" + msg.getMessage() + "\"");
+      }
+    }
+  }
+
+  /**
+   * Drops the entire sed cache and reinstantiates cache.
+   * @param target The username of the requester
+   * @param channel The channel originating the request
+   * @throws Exception Inherited badness from core
+   */
+  private void dropCache(final String target, final String channel)
+    throws Exception {
+    cache = new HashMap<String, Stack<Message>>();
+    irc.sendPrivmsg(target, "dropped sed cache for " + channel);
+  }
+
+  @Override
+  public final String getHelpString() {
+    return "SED: "
+        + "[<username>: ]s/<search>/<replacement>/ - "
+        + "e.g XeTK: s/.*/hello/ is used to "
+        + "replace the previous statement with hello :";
+  }
+
+  @Override
+  public void onCreate(final String create) throws Exception {
+
+  }
+
+  @Override
+  public void onTime() throws Exception {
+
+  }
+
+  @Override
+  public void onJoin(final Join join) throws Exception {
+
+  }
+
+  @Override
+  public void onQuit(final Quit quit) throws Exception {
+
+  }
+
+  @Override
+  public void onKick(final Kick kick) throws Exception {
+
+  }
+
+  @Override
+  public void rawInput(final String rawInput) throws Exception {
+
+  }
 
 }
