@@ -108,7 +108,7 @@ public class StringResponse implements Plugin
 				 * .response .* ,helloworld, blah
 				 */
 				Matcher m = Pattern
-						.compile("^\\.response[\\s](.*),([a-zA-Z0-9 ,]*)",
+						.compile(".response\\s(.*)//(.*)",
 								Pattern.CASE_INSENSITIVE | Pattern.DOTALL)
 						.matcher(in_message.getMessage());
 	
@@ -121,8 +121,9 @@ public class StringResponse implements Plugin
 					// Set the regex for the response to the first group in the add regex.
 					re.setRegex(m.group(1));
 	
+					System.out.println(m.group(2));
 					// Split the Responses on a ,
-					String[] replies = m.group(2).split(",");
+					String[] replies = m.group(2).split("[/]");
 	
 					// For each new response add it to the array of responses.
 					for (int j = 0; j < replies.length; j++)
@@ -146,7 +147,7 @@ public class StringResponse implements Plugin
 	public String getHelpString()
 	{
 		// TODO Auto-generated method stub
-		return "help string StringResponce plugin";
+		return ".response <regex here>//<text here>/{0} <bot name>/{1} <channel user>";
 	}
 	
 	// Unused.
