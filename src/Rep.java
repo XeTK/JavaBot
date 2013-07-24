@@ -41,69 +41,72 @@ public class Rep implements Plugin
 	@Override
 	public void onMessage(Message in_message) throws Exception
 	{
-		String channel = in_message.getChannel();
-		String message = in_message.getMessage();
-		
-		//Message .Trim
-		
-		if (message.charAt(message.length() - 1 ) == ' ')
-			message = message.substring(0, message.length() -1);
-		
-		IRC irc = IRC.getInstance();
-		if (message.matches("(^[a-zA-Z0-9]*)[\\s\\+-]([-\\+])[\\=\\s]*([\\d]*)"))
+		if (!in_message.isPrivMsg())
 		{
-			Matcher r = Pattern.compile("(^[a-zA-Z0-9]*)[\\s\\+-]([-\\+])[\\=\\s]*([\\d]*)",
-					Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
-			if (r.find())
+			String channel = in_message.getChannel();
+			String message = in_message.getMessage();
+			
+			//Message .Trim
+			
+			if (message.charAt(message.length() - 1 ) == ' ')
+				message = message.substring(0, message.length() -1);
+			
+			IRC irc = IRC.getInstance();
+			if (message.matches("(^[a-zA-Z0-9]*)[\\s\\+-]([-\\+])[\\=\\s]*([\\d]*)"))
 			{
-				String item = r.group(1);
-				String type = r.group(2);
-				String ammount = r.group(3);
-				
-				if (!in_message.getUser().equalsIgnoreCase(item));
+				Matcher r = Pattern.compile("(^[a-zA-Z0-9]*)[\\s\\+-]([-\\+])[\\=\\s]*([\\d]*)",
+						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
+				if (r.find())
 				{
-					if (!type.equals(""))
-					{
-						int iAmmount = 0;
+					String item = r.group(1);
+					String type = r.group(2);
+					String ammount = r.group(3);
 					
-						if (type.equals("++"))
+					if (!in_message.getUser().equalsIgnoreCase(item));
+					{
+						if (!type.equals(""))
 						{
-							iAmmount = 1;
-						}
-						else if(type.equals("--"))
-						{
-							iAmmount = -1;
-						}
-						else
-						{
-							type = type.trim();
-							ammount = ammount.trim();
-							if (type.equals("+"))
-								iAmmount = Integer.valueOf(ammount);
-							else	
-								iAmmount = Integer.valueOf(type + ammount);
-						}
-						if (iAmmount > 100||iAmmount < -100)
-						{
-							irc.sendPrivmsg(channel, "You cant do that its to much rep...");
-						}
-						else
-						{
-							Reputation tRep = repList.getRep(item);
-							tRep.modRep(iAmmount);
-							irc.sendPrivmsg(channel, item + ": Rep = " + tRep.getRep() + "!");
+							int iAmmount = 0;
+						
+							if (type.equals("++"))
+							{
+								iAmmount = 1;
+							}
+							else if(type.equals("--"))
+							{
+								iAmmount = -1;
+							}
+							else
+							{
+								type = type.trim();
+								ammount = ammount.trim();
+								if (type.equals("+"))
+									iAmmount = Integer.valueOf(ammount);
+								else	
+									iAmmount = Integer.valueOf(type + ammount);
+							}
+							if (iAmmount > 100||iAmmount < -100)
+							{
+								irc.sendPrivmsg(channel, "You cant do that its to much rep...");
+							}
+							else
+							{
+								Reputation tRep = repList.getRep(item);
+								tRep.modRep(iAmmount);
+								irc.sendPrivmsg(channel, item + ": Rep = " + tRep.getRep() + "!");
+							}
 						}
 					}
 				}
 			}
+			else if (message.matches("\\.rep [A-Za-z0-9#]+$"))
+			{
+				String[] t = message.split(" ");
+				if (t.length > 0||t[1] != null)
+					irc.sendPrivmsg(channel, t[1] + ": Rep = " + repList.getRep(t[1]).getRep() + "!");
+			}
+			JSON.saveGSON(cfgFile, repList);
 		}
-		else if (message.matches("\\.rep [A-Za-z0-9#]+$"))
-		{
-			String[] t = message.split(" ");
-			if (t.length > 0||t[1] != null)
-				irc.sendPrivmsg(channel, t[1] + ": Rep = " + repList.getRep(t[1]).getRep() + "!");
-		}
-		JSON.saveGSON(cfgFile, repList);
 	}
 	
 	@Override

@@ -62,71 +62,74 @@ public class Reminder implements Plugin
 	@Override
 	public void onMessage(Message in_message) throws Exception
 	{
-		IRC irc = IRC.getInstance();
-		UserList ul = UserList.getInstance();
-		
-		String user = in_message.getUser(); 
-		String channel = in_message.getChannel(); 
-		String message = in_message.getMessage();
-		    
-		if (message.matches("(\\.remind)\\s([a-zA-Z0-9]*)\\s([a-zA-Z\\w\\d\\s]*)"))
+		if (!in_message.isPrivMsg())
 		{
-		    Matcher r = Pattern.compile("\\.remind\\s([a-zA-Z0-9]*)\\s([a-zA-Z\\w\\d\\s]*)",
-		    				Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
-		    if (r.find())
-		    {
-		    	ul.addReminder(r.group(1),  
-		    			r.group(1) + ": " + user + " Said to you earlier " + r.group(2));
-		    	
-		    	irc.sendPrivmsg(channel, 
-		    			user + ": I will remind " + r.group(1) + " next time they are here.");
-		    }
-		}
-		else if(message.matches("^\\.reminder ([\\d//:]*) ([\\d:]*).*"))
-		{
-		    Matcher m = Pattern.compile("^\\.reminder ([\\d//:]*) ([\\d:]*)(.*)",
-		    				Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
-		    
-		    if (m.find())
-		    {	
-		    	String date = m.group(1);
-		    	String reminder = m.group(3);
-		    	
-		    	Date eventtime;
-		    	
-		    	if (date.matches("([0-3][0-9]/[0-1][0-9]/20[1-9][0-9])"))
-		    		date += " " + m.group(2);	
-		    	else
-		    		date = new SimpleDateFormat("dd/MM/yyyy").format(new Date()) + " " + m.group(1);
-		    	
-		    	eventtime = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ENGLISH).parse(date);
-	    		rl.addReminder(reminder, eventtime);
-	    		irc.sendPrivmsg(channel, user + ": Reminder Added.");
-		    }
-		}
-		else
-		{
-			User userOBJ = ul.getUser(user);
-			if (userOBJ != null)
+			IRC irc = IRC.getInstance();
+			UserList ul = UserList.getInstance();
+			
+			String user = in_message.getUser(); 
+			String channel = in_message.getChannel(); 
+			String message = in_message.getMessage();
+			    
+			if (message.matches("(\\.remind)\\s([a-zA-Z0-9]*)\\s([a-zA-Z\\w\\d\\s]*)"))
 			{
-				if (userOBJ.isDirty())
+			    Matcher r = Pattern.compile("\\.remind\\s([a-zA-Z0-9]*)\\s([a-zA-Z\\w\\d\\s]*)",
+			    				Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
+			    if (r.find())
+			    {
+			    	ul.addReminder(r.group(1),  
+			    			r.group(1) + ": " + user + " Said to you earlier " + r.group(2));
+			    	
+			    	irc.sendPrivmsg(channel, 
+			    			user + ": I will remind " + r.group(1) + " next time they are here.");
+			    }
+			}
+			else if(message.matches("^\\.reminder ([\\d//:]*) ([\\d:]*).*"))
+			{
+			    Matcher m = Pattern.compile("^\\.reminder ([\\d//:]*) ([\\d:]*)(.*)",
+			    				Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
+			    
+			    if (m.find())
+			    {	
+			    	String date = m.group(1);
+			    	String reminder = m.group(3);
+			    	
+			    	Date eventtime;
+			    	
+			    	if (date.matches("([0-3][0-9]/[0-1][0-9]/20[1-9][0-9])"))
+			    		date += " " + m.group(2);	
+			    	else
+			    		date = new SimpleDateFormat("dd/MM/yyyy").format(new Date()) + " " + m.group(1);
+			    	
+			    	eventtime = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ENGLISH).parse(date);
+		    		rl.addReminder(reminder, eventtime);
+		    		irc.sendPrivmsg(channel, user + ": Reminder Added.");
+			    }
+			}
+			else
+			{
+				User userOBJ = ul.getUser(user);
+				if (userOBJ != null)
 				{
-					String[] reminders = userOBJ.getReminders();
-					if (reminders.length > 0)
+					if (userOBJ.isDirty())
 					{
-						for (int i = 0; i < reminders.length;i++)
+						String[] reminders = userOBJ.getReminders();
+						if (reminders.length > 0)
 						{
-							irc.sendPrivmsg(channel, reminders[i]);
+							for (int i = 0; i < reminders.length;i++)
+							{
+								irc.sendPrivmsg(channel, reminders[i]);
+							}
 						}
-					}
-					else
-					{
-						irc.sendPrivmsg(channel, user + ": Your host has changed...");
+						else
+						{
+							irc.sendPrivmsg(channel, user + ": Your host has changed...");
+						}
 					}
 				}
 			}
+			JSON.saveGSON(cfgFile, rl);
 		}
-		JSON.saveGSON(cfgFile, rl);
 	}
 	
 	@Override

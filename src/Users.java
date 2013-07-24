@@ -39,8 +39,11 @@ public class Users implements Plugin
 	@Override
 	public void onMessage(Message in_message) throws IRCException, IOException
 	{
-		JSON.saveGSON(dbFile, UserList.getInstance());
-		UserList.getInstance().msgSent(in_message);
+		if (!in_message.isPrivMsg())
+		{
+			JSON.saveGSON(dbFile, UserList.getInstance());
+			UserList.getInstance().msgSent(in_message);
+		}
 	}
 
 	@Override

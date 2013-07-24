@@ -22,62 +22,65 @@ public class Quote implements Plugin
 	@Override
 	public void onMessage(Message in_message) throws Exception
 	{
-		UserList luq = UserList.getInstance();
-		
-		String message = in_message.getMessage(); 
-		String channel = in_message.getChannel(); 
-		String user = in_message.getUser();
-		
-		if (message.charAt(message.length() - 1 ) == ' ')
-			message = message.substring(0, message.length() -1);
-
-		IRC irc = IRC.getInstance();
-		if (message.matches("(\\.quoteadd)\\s([a-zA-Z0-9]*)\\s([a-zA-Z\\w\\d\\s]*)"))
+		if (!in_message.isPrivMsg())
 		{
-			Matcher r = Pattern.compile("(\\.quoteadd)\\s([a-zA-Z0-9]*)\\s([a-zA-Z\\w\\d\\s]*)",
-							Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
-			if (r.find())
+			UserList luq = UserList.getInstance();
+			
+			String message = in_message.getMessage(); 
+			String channel = in_message.getChannel(); 
+			String user = in_message.getUser();
+			
+			if (message.charAt(message.length() - 1 ) == ' ')
+				message = message.substring(0, message.length() -1);
+	
+			IRC irc = IRC.getInstance();
+			if (message.matches("(\\.quoteadd)\\s([a-zA-Z0-9]*)\\s([a-zA-Z\\w\\d\\s]*)"))
 			{
-				luq.addQuote(r.group(2),r.group(3));
-				irc.sendPrivmsg(channel, user + ": Quote Added.");
-			}
-		}
-		else if (message.matches("\\.quotes [A-Za-z0-9#]+$"))
-		{
-			String[] t = message.split(" ");
-			if (t.length > 0||t[1] != null)
-			{
-				if (luq.getUser(t[1]) != null)
+				Matcher r = Pattern.compile("(\\.quoteadd)\\s([a-zA-Z0-9]*)\\s([a-zA-Z\\w\\d\\s]*)",
+								Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
+				if (r.find())
 				{
-					String[] quotes = luq.getQuotes(t[1]);
-					if (quotes.length > 0)
-						for (int i = 0; i < quotes.length;i++)
-							irc.sendPrivmsg(channel, quotes[i]);
+					luq.addQuote(r.group(2),r.group(3));
+					irc.sendPrivmsg(channel, user + ": Quote Added.");
 				}
 			}
-		}
-		else if (message.matches("\\.quote [A-Za-z0-9#]+$"))
-		{
-			String[] t = message.split(" ");
-			if (t.length > 0||t[1] != null)
+			else if (message.matches("\\.quotes [A-Za-z0-9#]+$"))
 			{
-				if (luq.getUser(t[1]) != null)
+				String[] t = message.split(" ");
+				if (t.length > 0||t[1] != null)
 				{
-					String[] quotes = luq.getQuotes(t[1]);
-					if (quotes.length > 0)
-						irc.sendPrivmsg(channel, 
-								t[1] + ": "+ quotes[new Random().nextInt(quotes.length)]);
+					if (luq.getUser(t[1]) != null)
+					{
+						String[] quotes = luq.getQuotes(t[1]);
+						if (quotes.length > 0)
+							for (int i = 0; i < quotes.length;i++)
+								irc.sendPrivmsg(channel, quotes[i]);
+					}
 				}
 			}
-		}
-		else if (message.matches("\\.quotedel ([a-zA-Z\\w\\d\\s]*)"))
-		{
-			Matcher r = Pattern.compile("\\.quotedel ([a-zA-Z\\w\\d\\s]*)",
-							Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
-			if (r.find())
+			else if (message.matches("\\.quote [A-Za-z0-9#]+$"))
 			{
-				luq.removeQuote(r.group(1));
-				irc.sendPrivmsg(channel, user + ": Quote Deleted.");
+				String[] t = message.split(" ");
+				if (t.length > 0||t[1] != null)
+				{
+					if (luq.getUser(t[1]) != null)
+					{
+						String[] quotes = luq.getQuotes(t[1]);
+						if (quotes.length > 0)
+							irc.sendPrivmsg(channel, 
+									t[1] + ": "+ quotes[new Random().nextInt(quotes.length)]);
+					}
+				}
+			}
+			else if (message.matches("\\.quotedel ([a-zA-Z\\w\\d\\s]*)"))
+			{
+				Matcher r = Pattern.compile("\\.quotedel ([a-zA-Z\\w\\d\\s]*)",
+								Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
+				if (r.find())
+				{
+					luq.removeQuote(r.group(1));
+					irc.sendPrivmsg(channel, user + ": Quote Deleted.");
+				}
 			}
 		}
 	}
