@@ -85,7 +85,7 @@ public class Issue implements PluginTemp {
 		String issueTitle = message.getMessage().substring(5);
 		String issueBody = "This message was generated automatically by " +
 											 message.getUser() + " in " + message.getChannel() +
-											 ". Once confirmed, please remove `unconfirmed` tag.";
+											 ". Once confirmed, please remove `unconfirmed` tag. :octocat:";
 		String jsonContent = "{\"title\":\"" + issueTitle + "\"" +
 												 ",\"body\":\"" + issueBody + "\"" +
 												 ",\"labels\":[\"bug\", \"unconfirmed\"]}";
