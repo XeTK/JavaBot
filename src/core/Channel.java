@@ -2,6 +2,8 @@ package core;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import core.event.Join;
 import core.event.Kick;
@@ -11,6 +13,7 @@ import core.helpers.IRCException;
 import core.helpers.TimeThread;
 import core.plugin.Plugin;
 import core.plugin.PluginCore;
+import core.utils.Details;
 import core.utils.IRC;
 /**
  * This holds all the plugins tied to a specific channel, along with the methods
@@ -20,8 +23,12 @@ import core.utils.IRC;
  */
 public class Channel
 {
+	
+	private String path = "servers/%s/%s/";
+	
 	// Keep the channel name & plugins save so they can be accessed later.
 	private String channel_name;
+	private String server_name;
 	private ArrayList<Plugin> plugins;
 	
 	/**
@@ -30,11 +37,25 @@ public class Channel
 	 * @throws Exception if there was an error then we need to throw an exception.
 	 */
 	public Channel(String channelName) throws Exception
-	{
+	{		
 		// Set our channel unique identifier.
 		this.channel_name = channelName;
 		
-		File plugin_dir = new File(channelName + "/");
+		String server = Details.getInstance().getServer();
+	
+		Matcher m = Pattern.compile("(?:[\\w\\d]*\\.)?([\\w\\d]*)\\..*",
+				Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(server);
+		
+		if (m.matches())
+			this.server_name = m.group(1);
+		
+		// Strip special charectors 
+		String cl_channel = channel_name.replace("#", "");
+		
+		path = String.format(path, server_name, cl_channel);
+		
+		File plugin_dir = new File(path);
+		
 		if (!plugin_dir.exists())
 		{
 			plugin_dir.mkdirs();
@@ -45,7 +66,7 @@ public class Channel
 		
 		// Call onCreate for each plugin to set them up ready for use.
 		for (int i = 0;i < plugins.size();i++)
-			plugins.get(i).onCreate(channelName);
+			plugins.get(i).onCreate(this);
 		
 		// Create a new TimeThread for our class, this will carry out actions on set times.
 		new TimeThread(plugins).start();
@@ -212,4 +233,13 @@ public class Channel
 	{
 		return channel_name;
 	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public String getServer_name() {
+		return server_name;
+	}
+	
 }

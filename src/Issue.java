@@ -11,6 +11,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import com.google.gson.Gson;
 
+import core.Channel;
 import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
@@ -138,7 +139,7 @@ public class Issue implements Plugin {
 	}
 
 	@Override
-	public void onCreate(String create) {
+	public void onCreate(Channel in_channel) {
 
 	}
 

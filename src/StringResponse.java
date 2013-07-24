@@ -4,6 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Random;
 
+import core.Channel;
 import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
@@ -38,9 +39,9 @@ public class StringResponse implements Plugin
 	 * system for them to be used again.
 	 */
 	@Override
-	public void onCreate(String savePath) throws Exception 
+	public void onCreate(Channel in_channel) throws Exception 
 	{
-		responses_path = savePath + "/" + responses_path_loc;
+		responses_path = in_channel.getPath() + responses_path_loc;
 		/* 
 		 * If the file already exists then convert it back into a class 
 		 * Else we create a new file to stop us having a null pointer.

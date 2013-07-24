@@ -11,4 +11,4 @@ logs/*
 *.xml
 *.properties
 *.txt
-\#*
+servers/*

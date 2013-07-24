@@ -4,6 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Stack;
 
+import core.Channel;
 import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
@@ -261,7 +262,7 @@ public class Sed implements Plugin {
   }
 
   @Override
-  public void onCreate(final String create) throws Exception {
+  public void onCreate(final Channel in_channel) throws Exception {
 
   }
 

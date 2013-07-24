@@ -54,7 +54,10 @@ public class JSON
 	
 		// Check if the file exists and the path is there else create it.
 		if (!filePath.exists())
+		{
+			filePath.getParentFile().mkdirs();
 			filePath.createNewFile();
+		}
 		else
 			filePath.delete();
 		
@@ -68,6 +71,6 @@ public class JSON
 		writer.close();
 		
 		// Print out that we have saved the object.
-		System.out.println("\u001B[33mJSON Saved: " + in_Path);
+		System.out.println("\u001B[33mJSON Saved: ./" + in_Path);
 	}
 }

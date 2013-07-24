@@ -10,6 +10,7 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+import core.Channel;
 import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
@@ -218,7 +219,7 @@ public class Authenticate implements Plugin
 	@Override
 	public void onTime() throws Exception {}
 	@Override
-	public void onCreate(String savePath) throws Exception {}
+	public void onCreate(Channel in_channel) throws Exception {}
 	@Override
 	public void rawInput(String in_str) throws Exception {}
 

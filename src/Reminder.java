@@ -6,6 +6,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import core.Channel;
 import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
@@ -34,9 +35,9 @@ public class Reminder implements Plugin
 	}
 	
 	@Override
-	public void onCreate(String savePath) throws IRCException, IOException 
+	public void onCreate(Channel in_channel) throws IRCException, IOException 
 	{
-		cfgFile = savePath + "/" + cfgFileLoc;
+		cfgFile = in_channel.getPath() + cfgFileLoc;
 		
 		if (new File(cfgFile).exists())
 			rl = (RemindersList)JSON.loadGSON(cfgFile, RemindersList.class);

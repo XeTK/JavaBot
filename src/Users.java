@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.IOException;
 
+import core.Channel;
 import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
@@ -26,9 +27,9 @@ public class Users implements Plugin
 	}
 	
 	@Override
-	public void onCreate(String savePath) throws Exception
+	public void onCreate(Channel in_channel) throws Exception
 	{
-		dbFile = savePath + "/" + dbFile_loc;
+		dbFile = in_channel.getPath() + dbFile_loc;
 		if (new File(dbFile).exists())
 			UserList.setInstance((UserList)JSON.loadGSON(dbFile,UserList.class));
 		else

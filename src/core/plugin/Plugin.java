@@ -1,5 +1,6 @@
 package core.plugin;
 
+import core.Channel;
 import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
@@ -13,7 +14,7 @@ public interface Plugin
 {
 
 	public String name();
-	public void onCreate(String savePath) throws Exception;
+	public void onCreate(Channel in_channel) throws Exception;
 	public void onTime() throws Exception;
 
 	/**

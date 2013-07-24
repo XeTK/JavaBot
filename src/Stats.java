@@ -5,13 +5,13 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import core.Channel;
 import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
 import core.helpers.IRCException;
 import core.plugin.Plugin;
-import core.utils.Details;
 import core.utils.IRC;
 import core.utils.JSON;
 import addons.stats.StatDay;
@@ -20,10 +20,11 @@ import addons.users.UserList;
 
 public class Stats implements Plugin
 {
-	private final String opt_path = "stat_options.json";
+	private final String popt_path = "options/stat_options.json";
 	private final String log_path = "logs/%s.json";
 	
 	private String save_path = new String();
+	private String opt_path = new String();
 	private String channel_name = new String();
 	
 	private StatDay today;
@@ -37,20 +38,19 @@ public class Stats implements Plugin
 	}
 	
 	@Override
-	public void onCreate(String savePath) throws Exception 
+	public void onCreate(Channel in_channel) throws Exception 
 	{
-		channel_name = savePath;
-		save_path = savePath + "/" + log_path;
+		channel_name = in_channel.getChannel_name();
+		save_path = in_channel.getPath() + log_path;
 		
 		String ti = new SimpleDateFormat("yyyyMMdd").format(new Date());
 		
 		String path = String.format(save_path, ti);
-		
-		System.out.println(path);
-		
+
 		if (new File(path).exists())
 			today = (StatDay) JSON.loadGSON(path, StatDay.class);
 
+		opt_path = in_channel.getPath() + popt_path;
 		
 		if (new File(opt_path).exists())
 			options = (StatOption) JSON.loadGSON(opt_path, StatOption.class);

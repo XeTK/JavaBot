@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import core.Channel;
 import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
@@ -92,7 +93,7 @@ public class Youtube implements Plugin
 	}
 	
 	@Override
-	public void onCreate(String savePath) throws Exception{}
+	public void onCreate(Channel in_channel) throws Exception{}
 	@Override
 	public void onTime() throws Exception{}
 	@Override

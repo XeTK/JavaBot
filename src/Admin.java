@@ -2,6 +2,7 @@ import java.lang.management.ManagementFactory;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import core.Channel;
 import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
@@ -117,7 +118,7 @@ public class Admin implements Plugin
 	@Override
 	public void onKick(Kick in_kick) throws Exception {}
 	@Override
-	public void onCreate(String savePath) throws Exception {}
+	public void onCreate(Channel in_channel) throws Exception {}
 	@Override
 	public void onTime() throws Exception {}
 	@Override

@@ -3,6 +3,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
+import core.Channel;
 import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
@@ -27,9 +28,9 @@ public class Rep implements Plugin
 	}
 	
 	@Override
-	public void onCreate(String savePath) throws Exception 
+	public void onCreate(Channel in_channel) throws Exception 
 	{
-		cfgFile = savePath + "/" + cfgFile_loc;
+		cfgFile = in_channel.getPath() + cfgFile_loc;
 		if (new File(cfgFile).exists())
 			repList = (RepList)JSON.loadGSON(cfgFile, RepList.class);
 		else
