@@ -2,8 +2,6 @@ package core.event;
 
 import java.util.Date;
 import java.util.regex.Matcher;
-
-import core.utils.Colour;
 /**
  * This is a IRC message object.
  * This holds all the information 
