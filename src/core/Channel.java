@@ -241,5 +241,9 @@ public class Channel
 	public String getServer_name() {
 		return server_name;
 	}
+
+	public ArrayList<Plugin> getPlugins() {
+		return plugins;
+	}
 	
 }

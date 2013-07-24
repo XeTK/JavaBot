@@ -8,6 +8,7 @@ import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
 import core.plugin.Plugin;
+import core.plugin.PluginCore;
 import core.utils.Details;
 import core.utils.IRC;
 
@@ -23,6 +24,7 @@ import core.utils.IRC;
  */
 public class Admin implements Plugin
 {
+	private Channel uchannel;
 	/**
 	 * Get the name of the plugin so it can be presented to the end user.
 	 */
@@ -32,6 +34,11 @@ public class Admin implements Plugin
 		return "Admin";
 	}
 	
+	@Override
+	public void onCreate(Channel in_channel) throws Exception 
+	{
+		this.uchannel = in_channel;
+	}
 	/**
 	 * Process the new message and check if it is bound to a specific admin command.
 	 */
@@ -93,6 +100,13 @@ public class Admin implements Plugin
 			    String[]Ids = pid.split("@"); 
 			    Runtime.getRuntime().exec(new String[] { "/bin/bash", "-c", "./git.sh " + Ids[0]});
 			}
+			else if (message.matches("^\\.loaded"))
+			{
+				String loaded = PluginCore.loadedPlugins(uchannel.getPlugins());
+				String loadedString = "Plugins Loaded, %s";
+				loadedString = String.format(loadedString, loaded);
+				irc.sendPrivmsg(channel, loadedString);
+			}
 		}
 	}
 
@@ -117,8 +131,6 @@ public class Admin implements Plugin
 	} 
 	@Override
 	public void onKick(Kick in_kick) throws Exception {}
-	@Override
-	public void onCreate(Channel in_channel) throws Exception {}
 	@Override
 	public void onTime() throws Exception {}
 	@Override
