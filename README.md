@@ -27,16 +27,14 @@ To execute the project, run this
 `make run`
 
 
-##Compile by hand
-
-Make sure that the relevant dependancies are in the directory.
-
-`javac -cp "gson-2.2.4.jar:javax.mail.jar" -d bin/ -sourcepath src/ src/**/*.java`
-
-
-##Run by hand
+##Run without makefile
 
 Make sure that the dependancies exist first and that the source has been compiled.
+
+Dependancies needed, 
+
+`Google GSON libary`
+`javax mail libary`
 
 `java -cp .:bin/:gson-2.2.4.jar:javax.mail.jar core.Start`
 
@@ -65,5 +63,5 @@ and inputting your GitHub username and password when prompted.
 All code should conform to [Oracle's code conventions](http://www.oracle.com/technetwork/java/javase/documentation/codeconvtoc-136057.html)
 and should compile for Java6 and above.
 
-Plugins - All plugins should be placed in `src/` and must use the PluginTemp interface, any additional classes must
+Plugins - All plugins should be placed in `src/` and must use the Plugin interface, any additional classes must
 be put under package `addon.*pluginname*`.
