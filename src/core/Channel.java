@@ -43,11 +43,11 @@ public class Channel
 		// Assign this channel with a fresh list of plugins that we can now manipulate.
 		this.plugins = PluginCore.loadPlugins();
 		
-		// Call are on create methods for each plugin to set them up ready for use.
+		// Call onCreate for each plugin to set them up ready for use.
 		for (int i = 0;i < plugins.size();i++)
 			plugins.get(i).onCreate(channelName);
 		
-		// Create a new timed thread for are class, this will carry out actions on set times.
+		// Create a new TimeThread for our class, this will carry out actions on set times.
 		new TimeThread(plugins).start();
 	}
 	
