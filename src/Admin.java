@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.lang.management.ManagementFactory;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -84,20 +87,13 @@ public class Admin implements Plugin
 				irc.sendPrivmsg(channel, "Exception Thrown.");
 				throw new Exception();
 			}
-			/*else if (message.matches("^\\.loaded"))
-			{
-				irc.sendPrivmsg(channel,
-						"Plugins Loaded : " + pc.loadedPlugins());
-			}
 			else if(message.matches("^\\.reload"))
 			{
-				irc.sendPrivmsg(channel, "Reloading plugins");
-				
-				pc.reloadPlugins();
-				
-				irc.sendPrivmsg(channel, 
-						"Plugins Loaded : " + pc.loadedPlugins());
-			}*/
+				irc.sendPrivmsg(channel, "Reloading from git");
+			    String pid = ManagementFactory.getRuntimeMXBean().getName();  
+			    String[]Ids = pid.split("@"); 
+			    Runtime.getRuntime().exec(new String[] { "/bin/bash", "-c", "./git.sh " + Ids[0]});
+			}
 		}
 	}
 
@@ -119,8 +115,7 @@ public class Admin implements Plugin
 						".help - Show Help Text : " +
 						".loaded - Returns list of loaded plugins : " +
 						".reload - Reloads plugins from directory :";
-	}
-	
+	} 
 	@Override
 	public void onKick(Kick in_kick) throws Exception {}
 	@Override
@@ -131,4 +126,5 @@ public class Admin implements Plugin
 	public void onQuit(Quit in_quit) throws Exception {}
 	@Override
 	public void rawInput(String in_str) throws Exception{}	
+	
 }
