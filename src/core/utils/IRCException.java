@@ -1,10 +1,8 @@
-package core.helpers;
+package core.utils;
 
 import java.io.IOException;
 import java.util.Arrays;
 
-import core.utils.Details;
-import core.utils.IRC;
 
 /**
  * Special exception class for when there is a issue within IRC related classes

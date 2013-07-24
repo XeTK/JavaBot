@@ -9,12 +9,12 @@ import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
-import core.helpers.IRCException;
-import core.helpers.TimeThread;
 import core.plugin.Plugin;
 import core.plugin.PluginCore;
 import core.utils.Details;
 import core.utils.IRC;
+import core.utils.IRCException;
+import core.utils.TimeThread;
 /**
  * This holds all the plugins tied to a specific channel, along with the methods
  * to run the plugins, this is to encapsulate channels and ensure that data cannot

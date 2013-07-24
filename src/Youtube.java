@@ -9,8 +9,8 @@ import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
-import core.helpers.Colour;
 import core.plugin.Plugin;
+import core.utils.Colour;
 import core.utils.IRC;
 
 public class Youtube implements Plugin

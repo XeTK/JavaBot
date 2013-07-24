@@ -16,10 +16,10 @@ import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
-import core.helpers.IRCException;
 import core.plugin.Plugin;
 import core.utils.Details;
 import core.utils.IRC;
+import core.utils.IRCException;
 
 /**
  * Allows admin users to create a new bug on github's issue tracker.

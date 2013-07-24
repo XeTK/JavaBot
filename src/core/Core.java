@@ -8,9 +8,9 @@ import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
-import core.helpers.IRCException;
 import core.utils.Details;
 import core.utils.IRC;
+import core.utils.IRCException;
 /**
  * This is the core execution point of the program, this handles all messages &
  * passing them to the plugins, it also handles the connection process of getting,

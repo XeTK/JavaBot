@@ -1,4 +1,4 @@
-package core.helpers;
+package core.utils;
 /**
  * This enum exists to give IRC messages colour before they are sent.
  * It also adds the additional formating to the line to stop the colour 'leaking'.

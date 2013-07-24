@@ -7,7 +7,6 @@ import java.net.UnknownHostException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
-import core.helpers.IRCException;
 
 /**
  * This class handles all interaction with the IRC client and remote server

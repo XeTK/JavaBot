@@ -3,9 +3,9 @@ package core;
 import java.util.ArrayList;
 
 import core.event.Message;
-import core.helpers.IRCException;
 import core.plugin.Plugin;
 import core.plugin.PluginCore;
+import core.utils.IRCException;
 
 public class PrivMsg 
 {
