@@ -84,9 +84,9 @@ public class Issue implements Plugin {
 
 	private void createIssue(Message message) throws IssueException {
 		String issueTitle = message.getMessage().substring(5);
-		String issueBody = "This message was generated automatically by " +
+		String issueBody = ":octocat: This message was generated automatically by " +
 											 message.getUser() + " in " + message.getChannel() +
-											 ". Once confirmed, please remove `unconfirmed` tag. :octocat:";
+											 ". Once confirmed, please remove `unconfirmed` tag.";
 		String jsonContent = "{\"title\":\"" + issueTitle + "\"" +
 												 ",\"body\":\"" + issueBody + "\"" +
 												 ",\"labels\":[\"bug\", \"unconfirmed\"]}";
