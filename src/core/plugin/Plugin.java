@@ -18,7 +18,7 @@ public interface Plugin
 	public void onTime() throws Exception;
 
 	/**
-	 * Called in response to incomming PRIVMSG
+	 * Called in response to incoming PRIVMSG
 	 */
 	public void onMessage(Message in_message) throws Exception;
 
