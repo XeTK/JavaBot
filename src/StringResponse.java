@@ -137,7 +137,7 @@ public class StringResponse implements Plugin
 					
 					// Finally Prompt the user that the response has been added.
 					irc.sendPrivmsg(in_message.getChannel(),
-							"Added new Responce");
+							"Added new Response");
 				}
 			}
 		}
