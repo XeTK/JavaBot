@@ -156,7 +156,7 @@ public class Authenticate implements Plugin
 		User user = UserList.getInstance().getUser(in_join.getUser());
 		if (user != null)
 			if (!auth_Users.contains(user))
-				if (!user.getEmail().isEmpty())
+				if (user.getEmail() != null&&!user.getEmail().isEmpty())
 					irc.sendPrivmsg(user.getUser(), "Please Login!");
 	}
 
