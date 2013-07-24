@@ -70,7 +70,7 @@ public class Reminder implements Plugin
 		    
 		if (message.matches("(\\.remind)\\s([a-zA-Z0-9]*)\\s([a-zA-Z\\w\\d\\s]*)"))
 		{
-		    Matcher r = Pattern.compile("\\.reminder\\s([a-zA-Z0-9]*)\\s([a-zA-Z\\w\\d\\s]*)",
+		    Matcher r = Pattern.compile("\\.remind\\s([a-zA-Z0-9]*)\\s([a-zA-Z\\w\\d\\s]*)",
 		    				Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
 		    if (r.find())
 		    {
