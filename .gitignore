@@ -1,4 +1,5 @@
 auth_token
+audit.log
 .classpath
 .project
 .settings/
