@@ -10,11 +10,13 @@ import core.utils.Details;
 import core.utils.IRC;
 
 /**
- * This is a plugin, to help with management of the irc bot its self, it
- * handles tasks like joining channel's, hot nickname change, 
- * killing the execution of the bot, it will also allow direct manipulation by
- * a admin to send messages to the IRC server, it can also reload plugins.
- * It can also deal with voicing members on join along with handling the bot being kicked.
+ * Handles admin tasks
+ * - joining channels
+ * - bot nick change
+ * - start/stop bot
+ * - send raw data to server
+ * - reload plugins
+ * - mode changes
  * @author Tom Rosier(XeTK)
  */
 public class Admin implements Plugin
@@ -25,7 +27,7 @@ public class Admin implements Plugin
 	@Override
 	public String name() 
 	{
-		return "Adminstration";
+		return "Admin";
 	}
 	
 	/**
