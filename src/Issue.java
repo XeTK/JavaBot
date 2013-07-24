@@ -82,7 +82,8 @@ public class Issue implements Plugin {
     return "ISSUE: .bug <one_line_bug_report>";
   }
 
-  private void createIssue(Message message) throws IssueException {
+  // TODO fix Exceptions
+  private void createIssue(Message message) throws Exception {
     // Should remove ".bug " from the start of the message
     String issueTitle = message.getMessage().substring(5);
     if (issueTitle.length() <= 0) {
