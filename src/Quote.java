@@ -6,12 +6,11 @@ import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
-import core.plugin.PluginTemp;
+import core.plugin.Plugin;
 import core.utils.IRC;
 import addons.users.UserList;
 
-
-public class Quote implements PluginTemp
+public class Quote implements Plugin
 {
 	@Override
 	public String name() 

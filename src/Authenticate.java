@@ -14,15 +14,14 @@ import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
-import core.plugin.PluginTemp;
+import core.plugin.Plugin;
 import core.utils.EMail;
 import core.utils.IRC;
 import addons.authentication.AuthenticatedUsers;
 import addons.users.User;
 import addons.users.UserList;
 
-
-public class Authenticate implements PluginTemp
+public class Authenticate implements Plugin
 {
 	private final String key_Path = "key.txt";
 	

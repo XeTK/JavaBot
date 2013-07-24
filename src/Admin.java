@@ -5,9 +5,10 @@ import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
-import core.plugin.PluginTemp;
+import core.plugin.Plugin;
 import core.utils.Details;
 import core.utils.IRC;
+
 /**
  * This is a plugin, to help with management of the irc bot its self, it
  * handles tasks like joining channel's, hot nickname change, 
@@ -16,7 +17,7 @@ import core.utils.IRC;
  * It can also deal with voicing members on join along with handling the bot being kicked.
  * @author Tom Rosier(XeTK)
  */
-public class Admin implements PluginTemp
+public class Admin implements Plugin
 {
 	/**
 	 * Get the name of the plugin so it can be presented to the end user.

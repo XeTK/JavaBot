@@ -9,11 +9,11 @@ import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
 import core.helpers.Colour;
-import core.plugin.PluginTemp;
+import core.plugin.Plugin;
 import core.utils.Details;
 import core.utils.IRC;
 
-public class Sed implements PluginTemp
+public class Sed implements Plugin
 {
 	private static final int CACHE_SIZE = 10; // per user
 	private static final char ASCII_SOH = (char)1;

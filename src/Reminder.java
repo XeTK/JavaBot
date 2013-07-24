@@ -11,7 +11,7 @@ import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
 import core.helpers.IRCException;
-import core.plugin.PluginTemp;
+import core.plugin.Plugin;
 import core.utils.Details;
 import core.utils.IRC;
 import core.utils.JSON;
@@ -20,8 +20,7 @@ import addons.reminders.RemindersList;
 import addons.users.User;
 import addons.users.UserList;
 
-
-public class Reminder implements PluginTemp
+public class Reminder implements Plugin
 {
 	private final String cfgFileLoc = "Reminders.json";
 	private String cfgFile = new String(); 

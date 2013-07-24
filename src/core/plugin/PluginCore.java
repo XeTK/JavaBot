@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * It returns an ArrayList of the plugins that can be loaded and used by each channel.
  * @author Tom Rosier(XeTK)
  */
-public class PluginsCore 
+public class PluginCore
 {
 	/**
 	 * This returns a ArrayList of plugins that can then be used by channels. 
@@ -15,13 +15,13 @@ public class PluginsCore
 	 * @return's a list of plugins that then can be used by the each IRC channel.
 	 * @throws Exception if there is a problem loading plugins then we throw an exception.
 	 */
-	public static ArrayList<PluginTemp> loadPlugins() throws Exception
+	public static ArrayList<Plugin> loadPlugins() throws Exception
 	{
 		// This is the location of the plugins. This is where the classes are deployed from usualy.
-		final String plugin_dir = PluginsCore.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+		final String plugin_dir = PluginCore.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 		
 		// We keep a list of the plugins that we have loaded.
-		ArrayList<PluginTemp> pluginsglob = new ArrayList<PluginTemp>();
+		ArrayList<Plugin> pluginsglob = new ArrayList<Plugin>();
 		
 		// Create a file from the path of the directory where we keep the plugins
 		File dir = new File(plugin_dir);//System.getProperty("user.dir"));
@@ -39,7 +39,7 @@ public class PluginsCore
 				/* Pass the file to the Plugin loader which checks if the file is acceptable, 
 				 * then passes it back to us if it has loaded correctly.
 				 */
-				PluginTemp pf = (PluginTemp) new PluginLoader().loadClassOBJ(file);
+				Plugin pf = (Plugin) new PluginLoader().loadClassOBJ(file);
 				// If the plugin was loaded correctly then it is finaly added to the list and is returned to the channel.
 				if (pf != null)
 					pluginsglob.add(pf);
@@ -55,7 +55,7 @@ public class PluginsCore
 	 * @param pluginsglob this is the list of plugins we want to get the names for.
 	 * @return's a string containing the plugins that have been loaded.
 	 */
-	public static String loadedPlugins(ArrayList<PluginTemp> pluginsglob)
+	public static String loadedPlugins(ArrayList<Plugin> pluginsglob)
 	{
 		String lp = new String();
 		// Loops through the plugins and gets the name of the plugins. and add it to the string.

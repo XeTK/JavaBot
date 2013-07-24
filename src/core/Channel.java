@@ -9,8 +9,8 @@ import core.event.Message;
 import core.event.Quit;
 import core.helpers.IRCException;
 import core.helpers.TimeThread;
-import core.plugin.PluginTemp;
-import core.plugin.PluginsCore;
+import core.plugin.Plugin;
+import core.plugin.PluginCore;
 import core.utils.IRC;
 /**
  * This holds all the plugins tied to a specific channel, along with the methods
@@ -22,7 +22,7 @@ public class Channel
 {
 	// Keep the channel name & plugins save so they can be accessed later.
 	private String channel_name;
-	private ArrayList<PluginTemp> plugins;
+	private ArrayList<Plugin> plugins;
 	
 	/**
 	 * Set the class up on creation, as we don't want to change theses details later.
@@ -41,7 +41,7 @@ public class Channel
 		}
 		
 		// Assign this channel with a fresh list of plugins that we can now manipulate.
-		this.plugins = PluginsCore.loadPlugins();
+		this.plugins = PluginCore.loadPlugins();
 		
 		// Call are on create methods for each plugin to set them up ready for use.
 		for (int i = 0;i < plugins.size();i++)

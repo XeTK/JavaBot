@@ -8,11 +8,10 @@ import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
-import core.plugin.PluginTemp;
+import core.plugin.Plugin;
 import core.utils.IRC;
 
-//Refactor
-public class Imgur implements PluginTemp
+public class Imgur implements Plugin
 {
 
 	@Override

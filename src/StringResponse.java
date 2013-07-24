@@ -8,14 +8,14 @@ import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
-import core.plugin.PluginTemp;
+import core.plugin.Plugin;
 import core.utils.Details;
 import core.utils.IRC;
 import core.utils.JSON;
 import addons.response.Response;
 import addons.response.ResponseList;
 
-public class StringResponse implements PluginTemp 
+public class StringResponse implements Plugin
 {
 	private final String responses_path_loc = "responcses.json";
 	private String responses_path = new String();

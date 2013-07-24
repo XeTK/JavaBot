@@ -4,21 +4,21 @@ import java.util.ArrayList;
 
 import core.event.Message;
 import core.helpers.IRCException;
-import core.plugin.PluginTemp;
-import core.plugin.PluginsCore;
+import core.plugin.Plugin;
+import core.plugin.PluginCore;
 
 public class PrivMsg 
 {
 	private String user_name;
 
-	private ArrayList<PluginTemp> plugins;
+	private ArrayList<Plugin> plugins;
 	
 	public PrivMsg(String user_name) throws Exception
 	{
 		this.user_name = user_name;
 		
 		// Assign this channel with a fresh list of plugins that we can now manipulate.
-		this.plugins = PluginsCore.loadPlugins();
+		this.plugins = PluginCore.loadPlugins();
 	}
 	
 	/**

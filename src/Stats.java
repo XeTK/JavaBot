@@ -10,7 +10,7 @@ import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
 import core.helpers.IRCException;
-import core.plugin.PluginTemp;
+import core.plugin.Plugin;
 import core.utils.Details;
 import core.utils.IRC;
 import core.utils.JSON;
@@ -18,8 +18,7 @@ import addons.stats.StatDay;
 import addons.stats.StatOption;
 import addons.users.UserList;
 
-
-public class Stats implements PluginTemp
+public class Stats implements Plugin
 {
 	private final String opt_path = "stat_options.json";
 	private final String log_path = "logs/%s.json";

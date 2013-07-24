@@ -2,7 +2,7 @@ package core.helpers;
 
 import java.util.ArrayList;
 
-import core.plugin.PluginTemp;
+import core.plugin.Plugin;
 
 /**
  * Thread to run the timed events as we can't just leave it in the main loop
@@ -12,7 +12,7 @@ import core.plugin.PluginTemp;
 public class TimeThread extends Thread
 {
 	//Keep a link to the plugins stored within Start.java
-	private ArrayList<PluginTemp> plugins;
+	private ArrayList<Plugin> plugins;
 	
 	/**
 	 * Deploy are timed events on are separate thread.
@@ -39,7 +39,7 @@ public class TimeThread extends Thread
 	 * separate time thread, this is to help with having channel isolation.
 	 * @param plugins this is the list of plugins tied to a specific channel.
 	 */
-	public TimeThread(ArrayList<PluginTemp> plugins)
+	public TimeThread(ArrayList<Plugin> plugins)
 	{
 		this.plugins = plugins;
 	}

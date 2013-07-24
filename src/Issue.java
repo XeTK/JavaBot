@@ -16,7 +16,7 @@ import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
 import core.helpers.IRCException;
-import core.plugin.PluginTemp;
+import core.plugin.Plugin;
 import core.utils.Details;
 import core.utils.IRC;
 
@@ -24,7 +24,7 @@ import core.utils.IRC;
  * Allows admin users to create a new bug on github's issue tracker.
  * @author Tom Leaman (tom@tomleaman.co.uk)
  */
-public class Issue implements PluginTemp {
+public class Issue implements Plugin {
 
 	private static final String AUTH_TOKEN_FILE = "auth_token";
 	private static final String GITHUB_URL = "https://api.github.com";

@@ -7,14 +7,13 @@ import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
-import core.plugin.PluginTemp;
+import core.plugin.Plugin;
 import core.utils.IRC;
 import core.utils.JSON;
 import addons.reputation.RepList;
 import addons.reputation.Reputation;
 
-
-public class Rep implements PluginTemp
+public class Rep implements Plugin
 {
 	private final String cfgFile_loc = "Rep.json";
 	private String cfgFile = new String();
