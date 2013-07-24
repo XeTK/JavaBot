@@ -77,6 +77,7 @@ be put under package `addon.*pluginname*`.
 |~|.nick||X|X|
 |~|.exception||X|X|
 |~|.reload||X|X|
+|~|.cmd||X|X|
 |~|.loaded|X|||
 |Authentication|
 |~|login||X||
