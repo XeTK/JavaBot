@@ -74,13 +74,13 @@ public class Sed implements Plugin {
     String user = messageObj.getUser();
 
     // debug commands
-    if (message.matches("^\\.seddumpcache")
+    if (message.equals(".seddumpcache")
         && details.isAdmin(user)) {
       dumpCache(user, channel);
       return;
     }
 
-    if (message.matches("^\\.seddropcache")
+    if (message.equals(".seddropcache")
         && details.isAdmin(user)) {
       dropCache(user, channel);
       return;
