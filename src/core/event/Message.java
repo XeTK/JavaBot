@@ -35,12 +35,10 @@ public class Message
 		channel = m.group(3); 
 		message = m.group(4);
 		
-		// Converts a channel message to a PM
-		if (channel.charAt(0) != '#')
-		{
-			channel = user;
-			privmsg = true;
-		}
+		if (!channel.startsWith("#")
+		    && !channel.startsWith("&")) {
+		  privmsg = true;
+    }
 	}
 	
 	// Getters
