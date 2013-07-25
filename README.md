@@ -66,12 +66,12 @@ and should compile for Java6 and above.
 Plugins - All plugins should be placed in `src/` and must use the Plugin interface, any additional classes must
 be put under package `addon.*pluginname*`.
 
-#Plugin avalability
+#Available commands
 
 |Plugin|Command|Channel|Query|Needs Admin|
 |:----:|:-----:|:-----:|:---:|:---------:|
 |Admin|
-|~|.Join||X|X|
+|~|.join||X|X|
 |~|.part||X|X|
 |~|.quit||X|X|
 |~|.nick||X|X|
@@ -80,12 +80,12 @@ be put under package `addon.*pluginname*`.
 |~|.cmd||X|X|
 |~|.loaded|X|||
 |Authentication|
-|~|login||X||
-|~|register||X||
-|~|logout||X||
-|~|recover||X||
+|~|.login||X||
+|~|.register||X||
+|~|.logout||X||
+|~|.recover||X||
 |Imgur|
-|~|URL|X|X||
+|~|\<URL\>|X|X||
 |Issue|
 |~|.bug|X|X|X|
 |Quote|
@@ -97,18 +97,11 @@ be put under package `addon.*pluginname*`.
 |~|.remind|X|||
 |~|.reminder|X|||
 |Rep|
-|~|*++|X||||
-|~|*--|X||||
-|~|* + 1|X|||
-|~|* - 1|X|||
-|~|* += 1|X|||
-|~|* -= 1|X|||
+|~|\<username\>[ ]\<modifier\> [\<value\>]|X|||
 |~|.rep|X|||
 |Sed|
-|~|s/<search>/<replacement>/|X|X||
-|~|s/<search>/<replacement>|X|X||
-|~|<username>: s/<search>/<replacement|X|X||
-|~|<username>: s/<search>/<replacement>|X|X||
+|~|s/\<search\>/\<replacement\>/|X|X||
+|~|\<username\>: s/\<search\>/\<replacement\>/|X|X||
 |~|.seddropcache||X|X|
 |~|.seddumpcache||X|X|
 |Stats|
@@ -119,4 +112,4 @@ be put under package `addon.*pluginname*`.
 |~|.response|X||X|
 |Users|
 |YouTube|
-|~|URL|X|X||
+|~|\<URL\>|X|X||
