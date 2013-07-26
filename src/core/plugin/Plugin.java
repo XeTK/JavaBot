@@ -7,7 +7,7 @@ import core.event.Message;
 import core.event.Quit;
 
 /**
- * This is the interface that all the plugins inherit from.
+ * This is the abstract class that all the plugins extend from.
  * @author Tom Rosier (XeTK)
  */
 public abstract class Plugin
@@ -16,6 +16,7 @@ public abstract class Plugin
 	{
 		return this.getClass().getName();
 	}
+	
 	public void onCreate(Channel in_channel) throws Exception{}
 	public void onTime() throws Exception {}
 
@@ -32,7 +33,7 @@ public abstract class Plugin
 	/**
 	 * The string displayed by .help message
 	 */
-	public  String getHelpString()
+	public String getHelpString()
 	{
 		return this.getClass().getName() + " Help String";
 	}
