@@ -142,7 +142,7 @@ public class Sed implements Plugin {
             reply = user + " thought ";
           }
 
-          reply += "%s meant : %s";
+          reply += "%s meant: %s";
           text = text.replaceAll(
               search, replacement);
           irc.sendPrivmsg(channel, String.format(
