@@ -109,6 +109,8 @@ public class Issue implements Plugin {
       conn.getOutputStream().write(jsonContent.getBytes("UTF-8"));
 
       int responseCode = conn.getResponseCode();
+      // FIXME This exception cannot be raised from within this class
+      // I think the custom class loader is doing odd things!
       if (responseCode >= 400) {
         throw new IssueException(
             "Failed to create issue (" + responseCode + ").");
