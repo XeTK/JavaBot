@@ -26,7 +26,7 @@ import core.utils.IRCException;
  * Allows admin users to create a new bug on github's issue tracker.
  * @author Tom Leaman (tom@tomleaman.co.uk)
  */
-public class Issue implements Plugin {
+public class Issue extends Plugin {
 
   private static final String AUTH_TOKEN_FILE = "auth_token";
   private static final String GITHUB_URL = "https://api.github.com";
@@ -69,7 +69,6 @@ public class Issue implements Plugin {
     return line;
   }
 
-  @Override
   public void onMessage(Message message) throws Exception {
     if (!loaded)
       return;
@@ -78,7 +77,6 @@ public class Issue implements Plugin {
       createIssue(message);
   }
 
-  @Override
   public String getHelpString() {
     return "ISSUE: .bug <one_line_bug_report>";
   }
@@ -142,42 +140,6 @@ public class Issue implements Plugin {
     }
   }
 
-  @Override
-  public void rawInput(String input) {
-
-  }
-
-  @Override
-  public void onCreate(Channel in_channel) {
-
-  }
-
-  @Override
-  public void onTime() throws Exception {
-
-  }
-
-  @Override
-  public void onJoin(Join join) throws Exception {
-
-  }
-
-  @Override
-  public void onQuit(Quit quit) throws Exception {
-
-  }
-
-  @Override
-  public void onKick(Kick kick) throws Exception {
-
-  }
-
-  @Override
-  public String name() {
-    return this.toString();
-  }
-
-  @Override
   public String toString() {
     return "Issue";
   }
@@ -187,7 +149,6 @@ public class Issue implements Plugin {
     public IssueException(String msg) {
       super(msg);
     }
-
   }
 
 }

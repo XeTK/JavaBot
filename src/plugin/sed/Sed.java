@@ -24,7 +24,7 @@ import core.utils.IRC;
  * <username>: s/<search>/<replacement>/
  * <username>: s/<search>/<replacement>
  */
-public class Sed implements Plugin {
+public class Sed extends Plugin {
 
   /**
    * The max number of Message objects stored per user.
@@ -63,12 +63,10 @@ public class Sed implements Plugin {
   private Map<String, Stack<Message>> cache =
     new HashMap<String, Stack<Message>>();
 
-  @Override
   public final String name() {
     return "Sed";
   }
 
-  @Override
   public final void onMessage(final Message messageObj) throws Exception {
     String message = messageObj.getMessage();
     String channel = messageObj.getChannel();
@@ -254,42 +252,11 @@ public class Sed implements Plugin {
     irc.sendPrivmsg(target, "dropped sed cache for " + channel);
   }
 
-  @Override
   public final String getHelpString() {
     return "SED: "
         + "[<username>: ]s/<search>/<replacement>/ - "
         + "e.g XeTK: s/.*/hello/ is used to "
         + "replace the previous statement with hello :";
-  }
-
-  @Override
-  public void onCreate(final Channel in_channel) throws Exception {
-
-  }
-
-  @Override
-  public void onTime() throws Exception {
-
-  }
-
-  @Override
-  public void onJoin(final Join join) throws Exception {
-
-  }
-
-  @Override
-  public void onQuit(final Quit quit) throws Exception {
-
-  }
-
-  @Override
-  public void onKick(final Kick kick) throws Exception {
-
-  }
-
-  @Override
-  public void rawInput(final String rawInput) throws Exception {
-
   }
 
 }

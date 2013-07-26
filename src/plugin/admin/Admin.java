@@ -23,27 +23,26 @@ import core.utils.IRC;
  * - mode changes
  * @author Tom Rosier(XeTK)
  */
-public class Admin implements Plugin
+public class Admin extends Plugin
 {
 	private Channel uchannel;
 	/**
 	 * Get the name of the plugin so it can be presented to the end user.
 	 */
-	@Override
+	
 	public String name() 
 	{
 		return "Admin";
 	}
 	
-	@Override
 	public void onCreate(Channel in_channel) throws Exception 
 	{
 		this.uchannel = in_channel;
 	}
+	
 	/**
 	 * Process the new message and check if it is bound to a specific admin command.
 	 */
-	@Override
 	public void onMessage(Message in_message) throws Exception
 	{			
 		
@@ -123,14 +122,12 @@ public class Admin implements Plugin
 		}
 	}
 
-	@Override
 	public void onJoin(Join in_join) throws Exception
 	{
 		IRC irc = IRC.getInstance();
 	    irc.sendServer("MODE " + in_join.getChannel() + " +v " + in_join.getUser());
 	}
-	
-	@Override
+
 	public String getHelpString()
 	{
 		// TODO Auto-generated method stub
@@ -142,13 +139,4 @@ public class Admin implements Plugin
 						".loaded - Returns list of loaded plugins : " +
 						".reload - Reloads plugins from directory :";
 	} 
-	@Override
-	public void onKick(Kick in_kick) throws Exception {}
-	@Override
-	public void onTime() throws Exception {}
-	@Override
-	public void onQuit(Quit in_quit) throws Exception {}
-	@Override
-	public void rawInput(String in_str) throws Exception{}	
-	
 }

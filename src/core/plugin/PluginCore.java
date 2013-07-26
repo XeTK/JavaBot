@@ -58,10 +58,13 @@ public class PluginCore
 					/* Pass the file to the Plugin loader which checks if the file is acceptable, 
 					 * then passes it back to us if it has loaded correctly.
 					 */
-					Plugin pf = (Plugin) new PluginLoader().loadClassOBJ(file);
-					// If the plugin was loaded correctly then it is finaly added to the list and is returned to the channel.
-					if (pf != null)
-						inPtr.add(pf);
+					Object pf = new PluginLoader().loadClassOBJ(file,Plugin.class);
+					if (pf instanceof Plugin)
+					{
+						// If the plugin was loaded correctly then it is finaly added to the list and is returned to the channel.
+						if (pf != null)
+							inPtr.add((Plugin)pf);
+					}
 				} 
 				catch (Exception e) 
 				{
