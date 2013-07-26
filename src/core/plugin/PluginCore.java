@@ -17,8 +17,8 @@ public class PluginCore
 	 */
 	public static ArrayList<Plugin> loadPlugins() throws Exception
 	{
-		// This is the location of the plugins. This is where the classes are deployed from usualy.
-		final String plugin_dir = PluginCore.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+		// This is the location of the plugins. This is where the classes are deployed from usually.
+		final String plugin_dir = PluginCore.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "plugin/";
 		
 		// We keep a list of the plugins that we have loaded.
 		ArrayList<Plugin> pluginsglob = new ArrayList<Plugin>();
@@ -27,26 +27,49 @@ public class PluginCore
 		File dir = new File(plugin_dir);//System.getProperty("user.dir"));
 		System.out.println(plugin_dir);	
 		// If the directory exists then it is infact a Directory then we can start loading plugins.
+		
 		if (dir.exists() && dir.isDirectory()) 
-		{
-			// List all the files in the directory for us to find classes to load.
-			String[] fi = dir.list();
-			for (int i=0; i<fi.length; i++) 
-			{
-				// Create a file of the file we have found in the Directory, so we can more easily load it if it is a class.
-				File file = new File(plugin_dir + fi[i]);
-				
-				/* Pass the file to the Plugin loader which checks if the file is acceptable, 
-				 * then passes it back to us if it has loaded correctly.
-				 */
-				Plugin pf = (Plugin) new PluginLoader().loadClassOBJ(file);
-				// If the plugin was loaded correctly then it is finaly added to the list and is returned to the channel.
-				if (pf != null)
-					pluginsglob.add(pf);
-			}
-		}
+			findPlugins(pluginsglob, dir.listFiles());
+		
 		// Finally we return the list of plugins to the class that can then use them.
 		return pluginsglob;
+	}
+	
+	/**]
+	 * This method recursively loads plugin classes.
+	 * @param inPtr this is the pointer for the arraylist we want to add things to.
+	 * @param files this is the list of files that we to manipulate. 
+	 */
+	private static void findPlugins(ArrayList<Plugin> inPtr, File[] files)
+	{
+		// Loop through the files we are handed.
+		for (File file : files)
+		{
+			// If the file we are acctualy working on is a dir, then we pass that dir into this function again
+			if (file.isDirectory())
+			{
+				findPlugins(inPtr,file.listFiles());
+			}
+			else
+			{
+				// Else we try and load the file using the plugin loader
+				try 
+				{
+					/* Pass the file to the Plugin loader which checks if the file is acceptable, 
+					 * then passes it back to us if it has loaded correctly.
+					 */
+					Plugin pf = (Plugin) new PluginLoader().loadClassOBJ(file);
+					// If the plugin was loaded correctly then it is finaly added to the list and is returned to the channel.
+					if (pf != null)
+						inPtr.add(pf);
+				} 
+				catch (Exception e) 
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 	
 	/**
