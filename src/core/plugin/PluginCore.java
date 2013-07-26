@@ -45,7 +45,7 @@ public class PluginCore
 		// Loop through the files we are handed.
 		for (File file : files)
 		{
-			// If the file we are acctualy working on is a dir, then we pass that dir into this function again
+			// If the file we are actually working on is a dir, then we pass that dir into this function again
 			if (file.isDirectory())
 			{
 				findPlugins(inPtr,file.listFiles());

@@ -35,11 +35,10 @@ public class Message
 		channel = m.group(3); 
 		message = m.group(4);
 		
-		if (!channel.startsWith("#") &&
-		    !channel.startsWith("&")) {
+		if (!channel.startsWith("#") && !channel.startsWith("&")) {
 		  privmsg = true;
 		  channel = user;
-    }
+		}
 	}
 	
 	// Getters
