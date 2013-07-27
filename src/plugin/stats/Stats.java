@@ -1,4 +1,5 @@
 package plugin.stats;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -17,249 +18,217 @@ import core.utils.IRC;
 import core.utils.IRCException;
 import core.utils.JSON;
 
-public class Stats extends Plugin
-{
-	private final String popt_path = "options/Stat_options.json";
-	private final String log_path = "logs/%s.json";
-	
-	private final String stat_msg = "Handled %s Messages, %s users joined, "
+public class Stats extends Plugin {
+	private final String OPTION_PATH = "options/Stat_options.json";
+	private final String LOG_PATH = "logs/%s.json";
+
+	private final String STAT_MSG = "Handled %s Messages, %s users joined, "
 			+ "%s users quit, %s users kicked in the last %s!";
-	
-	private final String stat_hour = "%s in last hour: %s";
-	private final String stat_day = "%s today: %s";
-	private final String msg_lastonline = "%s was last online %s";
-	private final String msg_msgsent = "%s has sent %s messages";
-	
+
+	private final String STAT_HOUR = "%s in last hour: %s";
+	private final String STAT_DAY = "%s today: %s";
+	private final String MSG_LASTONLINE = "%s was last online %s";
+	private final String MSG_MSGSSENT = "%s has sent %s messages";
+
 	// Regex's
-	private final String rgx_stat = "\\.stats\\s(hour|day)\\s(msgsent|joins|quits|kicks)";
-	private final String rgx_time = "([0-2][0-9]):([0-5][0-9]):([0-5][0-9])";
-	private final String rgx_msgsent = "\\.msgsent\\s([\\w\\d]*)";
-	private final String rgx_lastonline = "\\.lastonline\\s([\\w\\d]*)";
-	
-	private final Pattern dot_stat = Pattern.compile(rgx_stat, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-	private final Pattern ptn_stat = Pattern.compile(rgx_time, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-	private final Pattern dot_msgsent = Pattern.compile(rgx_msgsent, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-	private final Pattern dot_lastonline = Pattern.compile(rgx_lastonline, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+	private final String RGX_STAT = "\\.stats\\s(hour|day)\\s(msgsent|joins|quits|kicks)";
+	private final String RGX_TIME = "([0-2][0-9]):([0-5][0-9]):([0-5][0-9])";
+	private final String RGX_MSGSENT = "\\.msgsent\\s([\\w\\d]*)";
+	private final String RGX_LASTONLINE = "\\.lastonline\\s([\\w\\d]*)";
+
+	private final Pattern DOT_STAT = Pattern.compile(RGX_STAT,
+			Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+	private final Pattern PTN_TIME = Pattern.compile(RGX_TIME,
+			Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+	private final Pattern DOT_MSGSENT = Pattern.compile(RGX_MSGSENT,
+			Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+	private final Pattern DOT_LASTONLINE = Pattern.compile(RGX_LASTONLINE,
+			Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 	private final IRC irc = IRC.getInstance();
-	
-	private String save_path = new String();
-	private String opt_path = new String();
-	private String channel_name = new String();
-	
-	private StatDay today;
-	private StatOption options;
-	
-	public void onCreate(Channel in_channel) throws Exception 
-	{
-		channel_name = in_channel.getChannel_name();
-		save_path = in_channel.getPath() + log_path;
-		
-		String ti = new SimpleDateFormat("yyyyMMdd").format(new Date());
-		
-		String path = String.format(save_path, ti);
+
+	private String savePath_ = new String();
+	private String optPath_ = new String();
+	private String channelName_ = new String();
+
+	private StatDay today_;
+	private StatOption options_;
+
+	public void onCreate(Channel inChannel) throws Exception {
+		channelName_ = inChannel.getChannelName();
+		savePath_ = inChannel.getPath() + LOG_PATH;
+
+		String time = new SimpleDateFormat("yyyyMMdd").format(new Date());
+
+		String path = String.format(savePath_, time);
 
 		if (new File(path).exists())
-			today = (StatDay) JSON.loadGSON(path, StatDay.class);
+			today_ = (StatDay) JSON.load(path, StatDay.class);
 
-		opt_path = in_channel.getPath() + popt_path;
-		
-		if (new File(opt_path).exists())
-			options = (StatOption) JSON.loadGSON(opt_path, StatOption.class);
+		optPath_ = inChannel.getPath() + OPTION_PATH;
+
+		if (new File(optPath_).exists())
+			options_ = (StatOption) JSON.load(optPath_, StatOption.class);
 		else
-			JSON.saveGSON(opt_path, new StatOption());
+			JSON.save(optPath_, new StatOption());
 	}
 
-	public void onTime() throws Exception
-	{
-		String ti = new SimpleDateFormat("HH:mm:ss").format(new Date());
-		
-		Matcher m = ptn_stat.matcher(ti);
-		if (m.find())
-		{
+	public void onTime() throws Exception {
+		String time = new SimpleDateFormat("HH:mm:ss").format(new Date());
+
+		Matcher m = PTN_TIME.matcher(time);
+		if (m.find()) {
 			String hour = m.group(1);
 			String min = m.group(2);
-			String sec = m.group(3);			
-			
-			if (options.isHour_Stats()&&
-					min.equals("59")&&sec.equals("59")&&
-					today.getHour().getMsgSent() != 0)
-			{
-				StatHour thour = today.getHour();
-				
-				String msg = String.format(stat_msg, 
-						thour.getMsgSent(),
-						thour.getJoins(),
-						thour.getQuits(),
-						thour.getKicks(),
-						"hour"
-						);
-				
-				irc.sendActionMsg(channel_name, msg);
+			String sec = m.group(3);
+
+			if (options_.isHourStats() && min.equals("59") && sec.equals("59")
+					&& today_.getHour().getMsgSent() != 0) {
+				StatHour tempHour = today_.getHour();
+
+				String msg = String.format(STAT_MSG, 
+						tempHour.getMsgSent(),
+						tempHour.getJoins(), 
+						tempHour.getQuits(), 
+						tempHour.getKicks(),
+						"hour");
+
+				irc.sendActionMsg(channelName_, msg);
 			}
-			
-			if (hour.equals("00")&&min.equals("00")&&sec.equals("00"))
-			{
-				if (options.isDay_Stats()&&today.msgsSent() != 0)
-				{
-					String msg = String.format(stat_msg,
-							today.msgsSent(),
-							today.joins(),
-							today.quits(),
-							today.kicks(),
-							"day"
-							);
-					
-					irc.sendActionMsg(channel_name, msg);
+
+			if (hour.equals("00") && min.equals("00") && sec.equals("00")) {
+				if (options_.isDayStats() && today_.msgsSent() != 0) {
+					String msg = String.format(STAT_MSG, 
+							today_.msgsSent(),
+							today_.joins(),
+							today_.quits(), 
+							today_.kicks(), 
+							"day");
+
+					irc.sendActionMsg(channelName_, msg);
 				}
-				today = new StatDay();
+				today_ = new StatDay();
 			}
-			
-			ti = new SimpleDateFormat("yyyyMMdd").format(new Date());
-			
-			String path = String.format(save_path, ti);
-			
+
+			time = new SimpleDateFormat("yyyyMMdd").format(new Date());
+
+			String path = String.format(savePath_, time);
+
 			if (sec.equals("00"))
-					JSON.saveGSON(path, today);
-			
+				JSON.save(path, today_);
+
 		}
 	}
 
-	public void onMessage(Message in_message) throws IRCException, IOException
-	{		
-		if (!in_message.isPrivMsg())
-		{
-			String message = in_message.getMessage(); 
-			String channel = in_message.getChannel(); 
-			String user = in_message.getUser();
-			
-			//Message.Trim
-			
-			if (message.charAt(message.length() - 1 ) == ' ')
-				message = message.substring(0, message.length() -1);
-			
-			UserList ul = UserList.getInstance();
-			
-			if (today == null)
-				today = new StatDay();
-			
-			today.incMsgSent(user);
-			
+	public void onMessage(Message inMessage) throws IRCException, IOException {
+		if (!inMessage.isPrivMsg()) {
+			String message = inMessage.getMessage();
+			String channel = inMessage.getChannel();
+			String user = inMessage.getUser();
+
+			// Message.Trim
+
+			if (message.charAt(message.length() - 1) == ' ')
+				message = message.substring(0, message.length() - 1);
+
+			UserList uuserList = UserList.getInstance();
+
+			if (today_ == null)
+				today_ = new StatDay();
+
+			today_.incMsgSent(user);
+
 			Matcher m;
-			
-			m = dot_msgsent.matcher(message);
-			if (m.matches())
-			{
-				String tuser = m.group(1);
-				long msgsent = ul.getUser(tuser).getMsgSent();
-				String msg = String.format(msg_msgsent, tuser, msgsent);
+
+			m = DOT_MSGSENT.matcher(message);
+			if (m.matches()) {
+				String tempUser = m.group(1);
+				long msgSent = uuserList.getUser(tempUser).getMsgSent();
+				String msg = String.format(MSG_MSGSSENT, tempUser, msgSent);
 				irc.sendPrivmsg(channel, msg);
 			}
 
-			m = dot_lastonline.matcher(message);
-			if (m.matches())
-			{
-				String tuser = m.group(1);
-				Date lastonline = ul.getUser(tuser).getLastOnline();
+			m = DOT_LASTONLINE.matcher(message);
+			if (m.matches()) {
+				String tempUser = m.group(1);
+				Date lastOnline = uuserList.getUser(tempUser).getLastOnline();
 				String format = "HH:mm dd:MM:yyyy";
-				String date = new SimpleDateFormat(format).format(lastonline);
-				String msg = String.format(msg_lastonline, tuser, date);
+				String date = new SimpleDateFormat(format).format(lastOnline);
+				String msg = String.format(MSG_LASTONLINE, tempUser, date);
 				irc.sendPrivmsg(channel, msg);
 			}
 
-			m = dot_stat.matcher(message);
-			if (m.find())
-			{
-				String t1 = m.group(1);
-				String cm = m.group(2);
-				
+			m = DOT_STAT.matcher(message);
+			if (m.find()) {
+				String duration = m.group(1);
+				String cmd = m.group(2);
+
 				String msg = new String();
 				String type = new String();
 				int count = 0;
-				
-				if (t1.equals("hour"))
-				{
-					StatHour hour = today.getHour();
-					
-					if (cm.equals("msgsent"))
-					{
+
+				if (duration.equals("hour")) {
+					StatHour hour = today_.getHour();
+
+					if (cmd.equals("msgsent")) {
 						type = "Messages";
 						count = hour.getMsgSent();
-					}
-					else if (cm.equals("joins"))
-					{
+					} else if (cmd.equals("joins")) {
 						type = "Joins";
 						count = hour.getJoins();
-					}
-					else if (cm.equals("quits"))
-					{
+					} else if (cmd.equals("quits")) {
 						type = "Quits";
 						count = hour.getQuits();
-					}
-					else if (cm.equals("kicks"))
-					{
+					} else if (cmd.equals("kicks")) {
 						type = "Kicks";
 						count = hour.getKicks();
 					}
-					msg = String.format(stat_hour, type,count);
-				}
-				else if (t1.equals("day"))
-				{
-					if (cm.equals("msgsent"))
-					{
+					msg = String.format(STAT_HOUR, type, count);
+				} else if (duration.equals("day")) {
+					if (cmd.equals("msgsent")) {
 						type = "Messages";
-						count = today.msgsSent();
-					}
-					else if (cm.equals("joins"))
-					{
+						count = today_.msgsSent();
+					} else if (cmd.equals("joins")) {
 						type = "Joins";
-						count = today.joins();
-					}
-					else if (cm.equals("quits"))
-					{
+						count = today_.joins();
+					} else if (cmd.equals("quits")) {
 						type = "Quits";
-						count = today.quits();
-					}
-					else if (cm.equals("kicks"))
-					{
+						count = today_.quits();
+					} else if (cmd.equals("kicks")) {
 						type = "Kicks";
-						count = today.kicks();
+						count = today_.kicks();
 					}
-					msg = String.format(stat_day, type, count);
+					msg = String.format(STAT_DAY, type, count);
 				}
 				irc.sendPrivmsg(channel, msg);
 			}
 		}
 	}
 
-	public void onJoin(Join in_join) throws IRCException, IOException
-	{
-		if (today == null)
-			today = new StatDay();
-		
-		today.incJoins();
-	}
-	
-	public void onQuit(Quit in_quit) throws IRCException, IOException
-	{
-		if (today == null)
-			today = new StatDay();
-		
-		today.incQuits();
-	}
-	
-    public void onKick(Kick in_kick) throws IRCException, IOException 
-	{
-		if (today == null)
-			today = new StatDay();
-		
-		today.incKicks();
+	public void onJoin(Join inJoin) throws IRCException, IOException {
+		if (today_ == null)
+			today_ = new StatDay();
+
+		today_.incJoins();
 	}
 
-	public String getHelpString()
-	{
-		return "STATS: \n" +
-				".lastonline <username> - check when a member was last active : \n" +
-				".msgsent <username> - check how many messages a user has sent globaly within the channel : \n" +
-				".stats (hour|day) (msgsent|joins|quits|kicks) - get stats for that given time frame : ";
+	public void onQuit(Quit inQuit) throws IRCException, IOException {
+		if (today_ == null)
+			today_ = new StatDay();
+
+		today_.incQuits();
+	}
+
+	public void onKick(Kick inKick) throws IRCException, IOException {
+		if (today_ == null)
+			today_ = new StatDay();
+
+		today_.incKicks();
+	}
+
+	public String getHelpString() {
+		return "STATS: \n"
+				+ ".lastonline <username> - check when a member was last active : \n"
+				+ ".msgsent <username> - check how many messages a user has sent globaly within the channel : \n"
+				+ ".stats (hour|day) (msgsent|joins|quits|kicks) - get stats for that given time frame : ";
 	}
 }

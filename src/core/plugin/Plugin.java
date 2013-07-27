@@ -8,27 +8,30 @@ import core.event.Quit;
 
 /**
  * This is the abstract class that all the plugins extend from.
+ * 
  * @author Tom Rosier (XeTK)
  */
-public abstract class Plugin
-{
-	public String name()
-	{
+public abstract class Plugin {
+	public String name() {
 		return this.getClass().getSimpleName();
 	}
-	
-	public void onCreate(Channel in_channel) throws Exception{}
+
+	public void onCreate(Channel inChannel) throws Exception {}
+
 	public void onTime() throws Exception {}
 
 	/**
 	 * Called in response to incoming PRIVMSG
 	 */
-	public void onMessage(Message in_message) throws Exception {}
+	public void onMessage(Message inMessage) throws Exception {}
 
-	public void onJoin(Join in_join) throws Exception {}
-	public void onQuit(Quit in_quit) throws Exception {}
-	public void onKick(Kick in_kick) throws Exception {}
-	public void rawInput(String in_str) throws Exception{}
+	public void onJoin(Join inJoin) throws Exception {}
+
+	public void onQuit(Quit inQuit) throws Exception {}
+
+	public void onKick(Kick inKick) throws Exception {}
+
+	public void rawInput(String inStr) throws Exception {}
 
 	/**
 	 * The string displayed by .help message

@@ -1,18 +1,18 @@
 {
-	"server": "127.0.0.1",
-	"port": 6667,
-	"botNickName": "JavaBot",
-	"smtpEmail": "Spunky@Spunkybot.co.uk",
-	"smtpHost": "smtp.gmail.com",
-	"smtpUser": "spunky@gmail.com",
-	"smtpPassword": "Helloworld",
-	"channels": [
+	"server_": "127.0.0.1",
+	"port_": 6667,
+	"botNickName_": "JavaBot",
+	"smtpEmail_": "Spunky@Spunkybot.co.uk",
+	"smtpHost_": "smtp.gmail.com",
+	"smtpUser_": "spunky@gmail.com",
+	"smtpPassword_": "Helloworld",
+	"channels_": [
 		"#xetk"
 	],
-	"admins": [
+	"admins_": [
 		"xetk"
 	],
-	"startup": [
+	"startup_": [
 		"PRIVMSG zippy identify helloworld"
 	]
 }

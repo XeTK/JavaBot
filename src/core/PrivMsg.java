@@ -7,45 +7,37 @@ import core.plugin.Plugin;
 import core.plugin.PluginCore;
 import core.utils.IRCException;
 
-public class PrivMsg 
-{
-	private String user_name;
+public class PrivMsg {
+	private String userName_;
 
-	private ArrayList<Plugin> plugins;
-	
-	public PrivMsg(String user_name) throws Exception
-	{
-		this.user_name = user_name;
-		
-		// Assign this channel with a fresh list of plugins that we can now manipulate.
-		this.plugins = PluginCore.loadPlugins();
+	private ArrayList<Plugin> plugins_;
+
+	public PrivMsg(String userName) throws Exception {
+		this.userName_ = userName;
+
+		// Assign this channel with a fresh list of plugins that we can now
+		// manipulate.
+		this.plugins_ = PluginCore.loadPlugins();
 	}
-	
+
 	/**
 	 * Handle the onMessage actions for each plugins under this method.
-	 * @param in_message this is the message object passed in from the core of the program.
+	 * 
+	 * @param inMessage
+	 *            this is the message object passed in from the core of the
+	 *            program.
 	 */
-	public void onMessage(Message in_message)
-	{
-		if (in_message.isPrivMsg())
-		{
+	public void onMessage(Message inMessage) {
+		if (inMessage.isPrivMsg()) {
 			// Double check that the message is actually for this class.
-			if (in_message.getChannel().equalsIgnoreCase(user_name))
-			{
-				for (int i = 0;i< plugins.size();i++)
-				{
-					try
-					{
-						plugins.get(i).onMessage(in_message);
-					}
-					catch (Exception ex)
-					{
-						try 
-						{
+			if (inMessage.getChannel().equalsIgnoreCase(userName_)) {
+				for (int i = 0; i < plugins_.size(); i++) {
+					try {
+						plugins_.get(i).onMessage(inMessage);
+					} catch (Exception ex) {
+						try {
 							throw new IRCException(ex);
-						} 
-						catch (IRCException e) 
-						{
+						} catch (IRCException e) {
 							e.printStackTrace();
 						}
 					}
@@ -53,9 +45,8 @@ public class PrivMsg
 			}
 		}
 	}
-	
-	public String getUser_name() 
-	{
-		return user_name;
+
+	public String getUserName() {
+		return userName_;
 	}
 }
