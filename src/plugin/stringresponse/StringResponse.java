@@ -15,6 +15,13 @@ import core.utils.JSON;
 public class StringResponse extends Plugin
 {
 	private final String responses_path_loc = "Response.json";
+	
+	private final String new_response = "Added new Response";
+	
+	private final String rgx_response = ".response\\s(.*)//(.*)";
+	
+	private final Pattern dot_response = Pattern.compile(rgx_response, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+	
 	private String responses_path = new String();
 	
 	// Keep a farm of possible responses along with there regex's
@@ -33,7 +40,7 @@ public class StringResponse extends Plugin
 		 * Else we create a new file to stop us having a null pointer.
 		 */
 		if (new File(responses_path).exists())
-			rl = (ResponseList) JSON.loadGSON(responses_path, ResponseList.class);
+			rl = (ResponseList)JSON.loadGSON(responses_path, ResponseList.class);
 		else
 			JSON.saveGSON(responses_path, new ResponseList());
 
@@ -100,10 +107,7 @@ public class StringResponse extends Plugin
 				 * .response (Regex Here), [Responses]...
 				 * .response .* ,helloworld, blah
 				 */
-				Matcher m = Pattern
-						.compile(".response\\s(.*)//(.*)",
-								Pattern.CASE_INSENSITIVE | Pattern.DOTALL)
-						.matcher(in_message.getMessage());
+				Matcher m = dot_response.matcher(in_message.getMessage());
 	
 				// If the message matches the regex.
 				if (m.find()) 
@@ -129,8 +133,7 @@ public class StringResponse extends Plugin
 					JSON.saveGSON(responses_path, rl);
 					
 					// Finally Prompt the user that the response has been added.
-					irc.sendPrivmsg(in_message.getChannel(),
-							"Added new Response");
+					irc.sendPrivmsg(in_message.getChannel(), new_response);
 				}
 			}
 		}
@@ -138,7 +141,7 @@ public class StringResponse extends Plugin
 	
 	public String getHelpString()
 	{
-		// TODO Auto-generated method stub
-		return ".response <regex here>//<text here>/{0} <bot name>/{1} <channel user>";
+		return "RESPONSE: \n" +
+					".response <regex here>//<text here>/{0} <bot name>/{1} <channel user>";
 	}
 }
