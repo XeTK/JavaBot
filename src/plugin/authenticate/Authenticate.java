@@ -22,20 +22,18 @@ import core.plugin.Plugin;
 import core.utils.EMail;
 import core.utils.IRC;
 
-public class Authenticate implements Plugin
+public class Authenticate extends Plugin
 {
 	private final String key_Path = "key.txt";
 	
 	private AuthenticatedUsers auth_Users = AuthenticatedUsers.getInstance();
 	
 	
-	@Override
 	public String name() 
 	{
 		return "Authentication";
 	}
 
-	@Override
 	public void onMessage(Message in_message) throws Exception 
 	{
 		IRC irc = IRC.getInstance();
@@ -149,7 +147,6 @@ public class Authenticate implements Plugin
 		}
 	}
 
-	@Override
 	public void onJoin(Join in_join) throws Exception 
 	{
 		IRC irc = IRC.getInstance();
@@ -160,7 +157,6 @@ public class Authenticate implements Plugin
 					irc.sendPrivmsg(user.getUser(), "Please Login!");
 	}
 
-	@Override
 	public void onQuit(Quit in_quit) throws Exception
 	{
 		User user = UserList.getInstance().getUser(in_quit.getUser());
@@ -216,15 +212,7 @@ public class Authenticate implements Plugin
 		
 		return line.getBytes();
 	}
-	
-	@Override
-	public void onTime() throws Exception {}
-	@Override
-	public void onCreate(Channel in_channel) throws Exception {}
-	@Override
-	public void rawInput(String in_str) throws Exception {}
 
-	@Override
 	public String getHelpString()
 	{
 		// TODO Auto-generated method stub

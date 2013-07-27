@@ -12,20 +12,23 @@ import core.plugin.Plugin;
 import core.utils.IRC;
 import core.utils.JSON;
 
-public class Rep implements Plugin
+public class Rep extends Plugin
 {
 	private final String cfgFile_loc = "Rep.json";
 	private String cfgFile = new String();
 	
 	private RepList repList = new RepList();
 	
-	@Override
+	public Rep()
+	{
+		
+	}
+	
 	public String name() 
 	{
 		return "Reputation";
 	}
 	
-	@Override
 	public void onCreate(Channel in_channel) throws Exception 
 	{
 		cfgFile = in_channel.getPath() + cfgFile_loc;
@@ -36,7 +39,6 @@ public class Rep implements Plugin
 			
 	}
 
-	@Override
 	public void onMessage(Message in_message) throws Exception
 	{
 		if (!in_message.isPrivMsg())
@@ -107,7 +109,6 @@ public class Rep implements Plugin
 		}
 	}
 	
-	@Override
 	public String getHelpString()
 	{
 		return "REP: " +
@@ -115,18 +116,6 @@ public class Rep implements Plugin
 				"*Item*--/++ - increment or decrement the rep of a desired item / : " +
 				"*Item* +/- *Ammount - increment or decrement the rep of a set item by a set amount : ";
 	}
-	
-	@Override
-	public void onTime() throws Exception {}
-	@Override
-	public void onJoin(Join in_join) throws Exception {}
-	@Override
-	public void onQuit(Quit in_quit) throws Exception {}
-	@Override
-	public void onKick(Kick in_kick) throws Exception {}
-	@Override
-	public void rawInput(String in_str) throws Exception{}
-
 
 }
 

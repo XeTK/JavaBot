@@ -12,15 +12,13 @@ import core.event.Quit;
 import core.plugin.Plugin;
 import core.utils.IRC;
 
-public class Quote implements Plugin
+public class Quote extends Plugin
 {
-	@Override
 	public String name() 
 	{
 		return "Quotation";
 	}
 	
-	@Override
 	public void onMessage(Message in_message) throws Exception
 	{
 		if (!in_message.isPrivMsg())
@@ -86,7 +84,6 @@ public class Quote implements Plugin
 		}
 	}
 
-	@Override
 	public void onJoin(Join in_join) throws Exception
 	{
 		IRC irc = IRC.getInstance();
@@ -101,18 +98,6 @@ public class Quote implements Plugin
 		}
 	}
 
-	@Override
-	public void onCreate(Channel in_channel) throws Exception {}
-	@Override
-	public void onTime() throws Exception {}
-	@Override
-	public void onQuit(Quit in_quit) throws Exception {}
-	@Override
-	public void onKick(Kick in_kick) throws Exception {}
-	@Override
-	public void rawInput(String in_str) throws Exception{}
-
-	@Override
 	public String getHelpString()
 	{
 		return "QUOTE: " +

@@ -13,19 +13,17 @@ import core.utils.IRC;
 import core.utils.IRCException;
 import core.utils.JSON;
 
-public class Users implements Plugin
+public class Users extends Plugin
 {
 
 	private final String dbFile_loc = "Users.json";
 	private String dbFile = new String();
 	
-	@Override
 	public String name() 
 	{
 		return "Users";
 	}
 	
-	@Override
 	public void onCreate(Channel in_channel) throws Exception
 	{
 		dbFile = in_channel.getPath() + dbFile_loc;
@@ -35,7 +33,6 @@ public class Users implements Plugin
 			JSON.saveGSON(dbFile, UserList.getInstance());
 	}
 
-	@Override
 	public void onMessage(Message in_message) throws IRCException, IOException
 	{
 		if (!in_message.isPrivMsg())
@@ -45,7 +42,6 @@ public class Users implements Plugin
 		}
 	}
 
-	@Override
 	public void onJoin(Join in_join) throws Exception
 	{
 		JSON.saveGSON(dbFile, UserList.getInstance());
@@ -70,7 +66,6 @@ public class Users implements Plugin
     	}
 	}
 
-	@Override
 	public void onQuit(Quit in_quit) throws Exception
 	{
 		IRC irc = IRC.getInstance();
@@ -86,7 +81,6 @@ public class Users implements Plugin
     	}
 	}
 
-    @Override
     public void onKick(Kick in_kick) throws Exception 
 	{
     	IRC irc = IRC.getInstance();
@@ -101,15 +95,9 @@ public class Users implements Plugin
     	}
 	}
     
-	@Override
 	public String getHelpString()
 	{
 		// TODO Auto-generated method stub
 		return "Help string for users plugin";
 	}
-
-	@Override
-	public void onTime() throws Exception {}
-	@Override
-	public void rawInput(String in_str) throws Exception {}
 }

@@ -20,20 +20,18 @@ import core.utils.IRC;
 import core.utils.IRCException;
 import core.utils.JSON;
 
-public class Reminder implements Plugin
+public class Reminder extends Plugin
 {
 	private final String cfgFileLoc = "Reminders.json";
 	private String cfgFile = new String(); 
 	
 	private RemindersList rl = new RemindersList();
 	
-	@Override
 	public String name() 
 	{
 		return "Reminder";
 	}
 	
-	@Override
 	public void onCreate(Channel in_channel) throws IRCException, IOException 
 	{
 		cfgFile = in_channel.getPath() + cfgFileLoc;
@@ -44,7 +42,6 @@ public class Reminder implements Plugin
 			JSON.saveGSON(cfgFile, rl);
 	}
 
-	@Override
 	public void onTime() throws Exception
 	{	
 		IRC irc = IRC.getInstance();
@@ -58,7 +55,6 @@ public class Reminder implements Plugin
 				irc.sendPrivmsg(channels[j], reminders[i].getReminder());
 	}
 
-	@Override
 	public void onMessage(Message in_message) throws Exception
 	{
 		if (!in_message.isPrivMsg())
@@ -131,7 +127,6 @@ public class Reminder implements Plugin
 		}
 	}
 	
-	@Override
 	public String getHelpString()
 	{
 		return "REMINDER: " +
@@ -140,12 +135,4 @@ public class Reminder implements Plugin
 				".reminder 01/01/1970 00:00 *Message* Leave a reminder for the future on a different date : ";
 	}
 
-	@Override
-	public void onJoin(Join in_join) throws Exception {}
-	@Override
-	public void onQuit(Quit in_quit) throws Exception {}
-	@Override
-	public void onKick(Kick in_kick) throws Exception {}
-	@Override
-	public void rawInput(String in_str) throws Exception{}
 }

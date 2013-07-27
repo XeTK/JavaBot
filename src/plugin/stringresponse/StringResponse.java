@@ -6,16 +6,13 @@ import java.util.regex.Pattern;
 import java.util.Random;
 
 import core.Channel;
-import core.event.Join;
-import core.event.Kick;
 import core.event.Message;
-import core.event.Quit;
 import core.plugin.Plugin;
 import core.utils.Details;
 import core.utils.IRC;
 import core.utils.JSON;
 
-public class StringResponse implements Plugin
+public class StringResponse extends Plugin
 {
 	private final String responses_path_loc = "Response.json";
 	private String responses_path = new String();
@@ -37,7 +34,6 @@ public class StringResponse implements Plugin
 	 * On create we want to load any previously saved Responses back into the
 	 * system for them to be used again.
 	 */
-	@Override
 	public void onCreate(Channel in_channel) throws Exception 
 	{
 		responses_path = in_channel.getPath() + responses_path_loc;
@@ -55,7 +51,6 @@ public class StringResponse implements Plugin
 			rl = new ResponseList();
 	}
 
-	@Override
 	public void onMessage(Message in_message) throws Exception
 	{
 		if (!in_message.isPrivMsg())
@@ -142,26 +137,9 @@ public class StringResponse implements Plugin
 		}
 	}
 	
-	@Override
 	public String getHelpString()
 	{
 		// TODO Auto-generated method stub
 		return ".response <regex here>//<text here>/{0} <bot name>/{1} <channel user>";
 	}
-	
-	// Unused.
-	@Override
-	public void onTime() throws Exception {}
-	@Override
-	public void onJoin(Join in_join) throws Exception {}
-	@Override
-	public void onQuit(Quit in_quit) throws Exception {}
-	@Override
-	public void onKick(Kick in_kick) throws Exception {}
-	@Override
-	public void rawInput(String in_str) throws Exception{}
-
-
-	
-	
 }
