@@ -82,7 +82,7 @@ be put under package `addon.*pluginname*`.
 |~|.nick|X|X|X|
 |~|.exception|X|X|X|
 |~|.reload|X|X|X|
-|~|.git|X|X|X|
+|~|.gitpull|X|X|X|
 |~|.cmd|X|X|X|
 |~|.loaded|X|X||
 |Authentication|
