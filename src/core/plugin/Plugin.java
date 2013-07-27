@@ -14,7 +14,7 @@ public abstract class Plugin
 {
 	public String name()
 	{
-		return this.getClass().getName();
+		return this.getClass().getSimpleName();
 	}
 	
 	public void onCreate(Channel in_channel) throws Exception{}
