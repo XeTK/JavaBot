@@ -2,6 +2,8 @@ package core.plugin;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 /**
  * This separates the plugin loading away from the core of the program.
  * It returns an ArrayList of the plugins that can be loaded and used by each channel.
@@ -81,12 +83,13 @@ public class PluginCore
 	 * @param pluginsglob this is the list of plugins we want to get the names for.
 	 * @return's a string containing the plugins that have been loaded.
 	 */
-	public static String loadedPlugins(ArrayList<Plugin> pluginsglob)
+	public static String loadedPlugins(ArrayList<Plugin> plugins)
 	{
-		String lp = new String();
-		// Loops through the plugins and gets the name of the plugins. and add it to the string.
-		for (int i = 0; i < pluginsglob.size();i++)
-			lp += pluginsglob.get(i).name() + ", ";
-		return lp;
+		String[] names = new String[plugins.size()];
+		for (int i = 0; i < names.length;i++)
+			names[i] = plugins.get(i).name();
+		Arrays.sort(names);
+		
+		return Arrays.toString(names);
 	}
 }
