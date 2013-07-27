@@ -82,7 +82,7 @@ public class IRC
 			checkConnection();
 			outToServer.write(in_str + "\r\n");
 			outToServer.flush();
-			System.out.println("\u001B[34m<- " +in_str);
+			System.out.println("\u001B[34m<- " + in_str);
 	}
 	
 	/**
@@ -96,7 +96,11 @@ public class IRC
 	public void sendPrivmsg(String channel, String message) 
 			throws IRCException, IOException
 	{
-		sendServer("PRIVMSG " + channel + " :" + message);
+		String[] lines = message.split("\n");
+		for (int i = 0; i < lines.length; i++)
+		{
+			sendServer("PRIVMSG " + channel + " :" + lines[i]);
+		}
 	}
 	
 	public void sendActionMsg(String channel, String message) 

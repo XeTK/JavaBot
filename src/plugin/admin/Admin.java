@@ -112,7 +112,7 @@ public class Admin extends Plugin
 			if (message.matches("^\\.loaded"))
 			{
 				String loaded = PluginCore.loadedPlugins(uchannel.getPlugins());
-				loaded = Colour.colour(loaded, Colour.YELLOW,Colour.RED);
+				loaded = Colour.colour(loaded, Colour.BLUE,Colour.WHITE);
 				String loadedString = "Plugins Loaded: %s";
 				loadedString = String.format(loadedString, loaded);
 				irc.sendPrivmsg(channel, loadedString);
@@ -129,12 +129,12 @@ public class Admin extends Plugin
 	public String getHelpString()
 	{
 		// TODO Auto-generated method stub
-		return "ADMIN: " +
-						".join #* - Join Channel : " +
-						".quit - Kill Bot : " +
-						".nick ** - Change Bot's Nick : " +
-						".help - Show Help Text : " +
-						".loaded - Returns list of loaded plugins : " +
+		return "ADMIN: \n" +
+						".join #* - Join Channel : \n" +
+						".quit - Kill Bot : \n" +
+						".nick ** - Change Bot's Nick : \n" +
+						".help - Show Help Text : \n" +
+						".loaded - Returns list of loaded plugins : \n" +
 						".reload - Reloads plugins from directory :";
 	} 
 }
