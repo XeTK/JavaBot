@@ -11,8 +11,8 @@ import core.plugin.Plugin;
 import core.utils.IRC;
 
 public class Quote extends Plugin {
-	private final String RGX_ADD = "\\.quoteadd\\s([a-zA-Z0-9]*)\\s([a-zA-Z\\w\\d\\s]*)";
-	private final String RGX_REMOVE = "\\.quotedel\\s([a-zA-Z\\w\\d\\s]*)";
+	private final String RGX_ADD = "\\.quoteadd\\s([\\w\\d]*)\\s(.*)";
+	private final String RGX_REMOVE = "\\.quotedel\\s(.*)";
 	private final String RGX_QUOTES = "\\.quotes\\s([\\w\\d]*)";
 	private final String RGX_QUOTE = "\\.quote\\s([\\w\\d]*)";
 
