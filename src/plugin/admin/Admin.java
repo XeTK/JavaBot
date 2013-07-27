@@ -8,6 +8,7 @@ import core.event.Join;
 import core.event.Message;
 import core.plugin.Plugin;
 import core.plugin.PluginCore;
+import core.utils.Colour;
 import core.utils.Details;
 import core.utils.IRC;
 
@@ -96,7 +97,10 @@ public class Admin extends Plugin
 				}
 				else if(message.matches("^\\.reload"))
 				{
-					irc.sendPrivmsg(channel, "Reloading from git");
+					String Msg = Colour.colour("Reloading from git!", 
+							Colour.RED, Colour.WHITE);
+					
+					irc.sendPrivmsg(channel, Msg);
 				    String pid = ManagementFactory.getRuntimeMXBean().getName();  
 				    String[]Ids = pid.split("@"); 
 				    Runtime.getRuntime().exec(new String[] { "/bin/bash", "-c", "./git.sh " + Ids[0]});
@@ -108,6 +112,7 @@ public class Admin extends Plugin
 			if (message.matches("^\\.loaded"))
 			{
 				String loaded = PluginCore.loadedPlugins(uchannel.getPlugins());
+				loaded = Colour.colour(loaded, Colour.YELLOW,Colour.RED);
 				String loadedString = "Plugins Loaded: %s";
 				loadedString = String.format(loadedString, loaded);
 				irc.sendPrivmsg(channel, loadedString);
