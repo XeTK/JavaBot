@@ -15,8 +15,15 @@ import core.utils.JSON;
 
 public class Users extends Plugin
 {
-
 	private final String dbFile_loc = "Users.json";
+	
+	private final String new_user = "Hello %s and welcome! Don't break things!";
+	private final String user_joined = "%s Has joined %s times";
+	private final String user_quit = "%s Has quit %s times";
+	private final String user_kicked = "%s Has be kicked %s times";
+	
+	private final IRC irc = IRC.getInstance();
+	
 	private String dbFile = new String();
 		
 	public void onCreate(Channel in_channel) throws Exception
@@ -40,13 +47,11 @@ public class Users extends Plugin
 	public void onJoin(Join in_join) throws Exception
 	{
 		JSON.saveGSON(dbFile, UserList.getInstance());
-		IRC irc = IRC.getInstance();
     	User userOBJ = UserList.getInstance().getUser(in_join.getUser());
     	if (userOBJ != null)
     	{
     		userOBJ.incjoins(in_join.getHost());
-    		String reply = "%s Has joined %s times";
-    		irc.sendPrivmsg(in_join.getChannel(), String.format(reply, 
+    		irc.sendPrivmsg(in_join.getChannel(), String.format(user_joined, 
     				in_join.getUser(), userOBJ.getJoins()));
     	}
     	else
@@ -54,24 +59,22 @@ public class Users extends Plugin
     		String botname = Details.getInstance().getNickName();
     		if (!botname.equalsIgnoreCase(in_join.getUser()))
     		{
-    			String reply = "Hello %s and welcome! Don't break things!";
     			irc.sendPrivmsg(in_join.getChannel(), 
-    					String.format(reply, in_join.getUser()));
+    					String.format(new_user, in_join.getUser()));
     		}
     	}
 	}
 
 	public void onQuit(Quit in_quit) throws Exception
 	{
-		IRC irc = IRC.getInstance();
 		JSON.saveGSON(dbFile, UserList.getInstance());
 
     	User userOBJ = UserList.getInstance().getUser(in_quit.getUser());
     	if (userOBJ != null)
     	{
     		userOBJ.incQuits();
-    		String reply = "%s Has quit %s times";
-    		irc.sendPrivmsg(in_quit.getChannel(), String.format(reply, 
+
+    		irc.sendPrivmsg(in_quit.getChannel(), String.format(user_quit, 
     				in_quit.getUser(), userOBJ.getQuits()));
     	}
 	}
@@ -84,8 +87,8 @@ public class Users extends Plugin
     	if (userOBJ != null)
     	{
     		userOBJ.incKicks();
-    		String reply = "%s Has be kicked %s times";
-    		irc.sendPrivmsg(in_kick.getChannel(), String.format(reply,
+
+    		irc.sendPrivmsg(in_kick.getChannel(), String.format(user_kicked,
     				in_kick.getKicked(), userOBJ.getKicks()));
     	}
 	}
