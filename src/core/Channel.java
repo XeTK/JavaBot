@@ -30,6 +30,7 @@ public class Channel
 	private String channel_name;
 	private String server_name;
 	private ArrayList<Plugin> plugins;
+	private TimeThread time_thread;
 	
 	/**
 	 * Set the class up on creation, as we don't want to change theses details later.
@@ -61,6 +62,11 @@ public class Channel
 			plugin_dir.mkdirs();
 		}
 		
+		loadPlugins();
+	}
+	
+	public void loadPlugins() throws Exception
+	{
 		// Assign this channel with a fresh list of plugins that we can now manipulate.
 		this.plugins = PluginCore.loadPlugins();
 		
@@ -73,7 +79,11 @@ public class Channel
 			plugins.get(i).onCreate(this);
 		
 		// Create a new TimeThread for our class, this will carry out actions on set times.
-		new TimeThread(plugins).start();
+		if (time_thread != null)
+			this.time_thread.interrupt();
+		this.time_thread = new TimeThread(plugins);
+		
+		this.time_thread.start();
 	}
 	
 	/**
