@@ -108,7 +108,7 @@ public class Admin extends Plugin
 			if (message.matches("^\\.loaded"))
 			{
 				String loaded = PluginCore.loadedPlugins(uchannel.getPlugins());
-				String loadedString = "Plugins Loaded, %s";
+				String loadedString = "Plugins Loaded: %s";
 				loadedString = String.format(loadedString, loaded);
 				irc.sendPrivmsg(channel, loadedString);
 			}

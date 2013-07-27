@@ -64,6 +64,10 @@ public class Channel
 		// Assign this channel with a fresh list of plugins that we can now manipulate.
 		this.plugins = PluginCore.loadPlugins();
 		
+		String loadedMsg = "\u001B[33mPlugins Loaded: %s";
+		
+		System.out.println(String.format(loadedMsg, PluginCore.loadedPlugins(plugins)));
+		
 		// Call onCreate for each plugin to set them up ready for use.
 		for (int i = 0;i < plugins.size();i++)
 			plugins.get(i).onCreate(this);
