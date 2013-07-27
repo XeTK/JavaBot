@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
@@ -14,6 +15,9 @@ import java.io.PrintWriter;
  */
 public class IRC
 {
+	// This is the maximum size that a message can be that is sent.
+	private final int MSG_MAX_SIZE = 410;
+	
 	//We are using the singleton pattern
 	private static IRC instance;
 	
@@ -99,10 +103,19 @@ public class IRC
 		String[] lines = message.split("\n");
 		for (int i = 0; i < lines.length; i++)
 		{
-			sendServer("PRIVMSG " + channel + " :" + lines[i]);
+			String[] subLines = breakLongLines(lines[i]);
+			for (int j = 0; j < subLines.length;j++)
+				sendServer("PRIVMSG " + channel + " :" + subLines[j]);
 		}
 	}
 	
+	/**
+	 * This a method for sending /me message as the bot.
+	 * @param channel this is the destination of the message.
+	 * @param message this is the text of the message.
+	 * @throws IRCException
+	 * @throws IOException
+	 */
 	public void sendActionMsg(String channel, String message) 
 			throws IRCException, IOException
 	{
@@ -130,5 +143,39 @@ public class IRC
 	public void closeConnection() throws IOException
 	{
 		clientSocket.close();
+	}
+	
+	/**
+	 * This breaks down long messages so that they can be sent via IRC.
+	 * @param in_str this is the text we want to break down into small chunks.
+	 * @return this is the broken down string.
+	 */
+	private String[] breakLongLines(String in_str)
+	{
+		ArrayList<String> splitStr = new ArrayList<String>();
+		String buffer = in_str;
+		while (true)
+		{
+			if (buffer.length() >= MSG_MAX_SIZE)
+			{
+				int lastSpace = 0;
+				for (int i = MSG_MAX_SIZE; i > 0; i--)
+				{
+					if (buffer.charAt(i) == ' ')
+					{
+						lastSpace = i;
+						break;
+					}
+				}
+				splitStr.add(buffer.substring(0, lastSpace));
+				buffer = buffer.substring(lastSpace + 1);
+			}
+			else
+			{
+				splitStr.add(buffer);
+				break;
+			}
+		}
+		return splitStr.toArray(new String[0]);
 	}
 }
