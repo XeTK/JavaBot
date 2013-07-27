@@ -93,9 +93,9 @@ public class Quote extends Plugin
 	public String getHelpString()
 	{
 		return "QUOTE: " +
-				".quotes *item* - returns all the quotes tied to this item : \n" +
-				".quote *item* - returns a random quote for that item : \n" +
-				".quoteadd *item* *message* - will add a new quote to the appropriate item : \n" +
-				".quotedel *message* - will remove the message from the libary of quotes : ";
+				".quotes <item> - returns all the quotes tied to this item : \n" +
+				".quote <item> - returns a random quote for that item : \n" +
+				".quoteadd <item> <message> - will add a new quote to the appropriate item : \n" +
+				".quotedel <message> - will remove the message from the libary of quotes : ";
 	}	
 }

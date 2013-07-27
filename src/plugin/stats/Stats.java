@@ -204,8 +204,8 @@ public class Stats extends Plugin
 	public String getHelpString()
 	{
 		return "STATS: \n" +
-				".lastonline *username* - check when a member was last active : \n" +
-				".msgsent *username* - check how many messages a user has sent globaly within the channel : \n" +
+				".lastonline <username> - check when a member was last active : \n" +
+				".msgsent <username> - check how many messages a user has sent globaly within the channel : \n" +
 				".stats (hour|day) (msgsent|joins|quits|kicks) - get stats for that given time frame : ";
 	}
 }

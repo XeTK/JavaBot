@@ -129,10 +129,10 @@ public class Admin extends Plugin
 	public String getHelpString()
 	{
 		return "ADMIN: \n" +
-						".join #* - Join Channel : \n" +
-						".part #* - Part Channel : \n" +
+						".join <channel> - Join Channel : \n" +
+						".part <channel> - Part Channel : \n" +
 						".quit - Kill Bot : \n" +
-						".nick ** - Change Bot's Nick : \n" +
+						".nick <nickname> - Change Bot's Nick : \n" +
 						".help - Show Help Text : \n" +
 						".loaded - Returns list of loaded plugins : \n" +
 						".reload - Pulls from git and reloads the bot :";
