@@ -76,14 +76,15 @@ be put under package `addon.*pluginname*`.
 |Plugin|Command|Channel|Query|Needs Admin|
 |:----:|:-----:|:-----:|:---:|:---------:|
 |Admin|
-|~|.join||X|X|
-|~|.part||X|X|
-|~|.quit||X|X|
-|~|.nick||X|X|
-|~|.exception||X|X|
-|~|.reload||X|X|
-|~|.cmd||X|X|
-|~|.loaded|X|||
+|~|.join|X|X|X|
+|~|.part|X|X|X|
+|~|.quit|X|X|X|
+|~|.nick|X|X|X|
+|~|.exception|X|X|X|
+|~|.reload|X|X|X|
+|~|.git|X|X|X|
+|~|.cmd|X|X|X|
+|~|.loaded|X|X||
 |Authentication|
 |~|.login||X||
 |~|.register||X||
