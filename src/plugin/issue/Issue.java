@@ -41,6 +41,7 @@ public class Issue extends Plugin {
     } catch (FileNotFoundException e) {
       System.err.println("No auth token file found in " + AUTH_TOKEN_FILE);
       System.err.println("Issue plugin failed to load");
+      return;
     }
 
     if (!authToken.equals(new String()))
