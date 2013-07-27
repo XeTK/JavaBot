@@ -61,10 +61,14 @@ public class Channel
 		{
 			plugin_dir.mkdirs();
 		}
-		
+		// Load the plugins
 		loadPlugins();
 	}
 	
+	/**
+	 * Have this in a seperate method so that we can quickly reload the plugins.
+	 * @throws Exception this is if we have any issues loading the plugins
+	 */
 	public void loadPlugins() throws Exception
 	{
 		// Assign this channel with a fresh list of plugins that we can now manipulate.

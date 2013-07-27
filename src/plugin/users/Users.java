@@ -92,7 +92,6 @@ public class Users extends Plugin
     
 	public String getHelpString()
 	{
-		// TODO Auto-generated method stub
-		return "Help string for users plugin";
+		return "Users: This plugin does not have any commands.";
 	}
 }

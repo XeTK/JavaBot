@@ -121,9 +121,9 @@ public class Reminder extends Plugin
 	
 	public String getHelpString()
 	{
-		return "REMINDER: " +
-				".reminder *username* *Message* - leave a message for another member : " +
-				".reminder 00:00 *Message* - Leave reminder for the channel to view later today : " +
+		return "REMINDER: \n" +
+				".reminder *username* *Message* - leave a message for another member : \n" +
+				".reminder 00:00 *Message* - Leave reminder for the channel to view later today : \n" +
 				".reminder 01/01/1970 00:00 *Message* Leave a reminder for the future on a different date : ";
 	}
 
