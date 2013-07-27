@@ -22,15 +22,6 @@ public class StringResponse extends Plugin
 	private Random random = new Random();
 
 	/**
-	 * Returns the Name of the class for the plugin loader.
-	 */
-	@Override
-	public String name() 
-	{
-		return "StringResponse";
-	}
-
-	/**
 	 * On create we want to load any previously saved Responses back into the
 	 * system for them to be used again.
 	 */

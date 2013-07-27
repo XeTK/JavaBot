@@ -5,11 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Stack;
 
-import core.Channel;
-import core.event.Join;
-import core.event.Kick;
 import core.event.Message;
-import core.event.Quit;
 import core.plugin.Plugin;
 import core.utils.Colour;
 import core.utils.Details;
@@ -62,10 +58,6 @@ public class Sed extends Plugin {
    */
   private Map<String, Stack<Message>> cache =
     new HashMap<String, Stack<Message>>();
-
-  public final String name() {
-    return "Sed";
-  }
 
   public final void onMessage(final Message messageObj) throws Exception {
     String message = messageObj.getMessage();

@@ -29,12 +29,6 @@ public class Stats extends Plugin
 	private StatDay today;
 	private StatOption options;
 	
-	
-	public String name() 
-	{
-		return "Statistics";
-	}
-	
 	public void onCreate(Channel in_channel) throws Exception 
 	{
 		channel_name = in_channel.getChannel_name();

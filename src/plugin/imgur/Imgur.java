@@ -5,21 +5,12 @@ import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import core.Channel;
-import core.event.Join;
-import core.event.Kick;
 import core.event.Message;
-import core.event.Quit;
 import core.plugin.Plugin;
 import core.utils.IRC;
 
 public class Imgur extends Plugin
 {
-
-	public String name()
-	{
-		return "Imgur";
-	}
 
 	public void onMessage(Message in_message) throws Exception
 	{

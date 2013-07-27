@@ -4,21 +4,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import plugin.users.UserList;
-import core.Channel;
 import core.event.Join;
-import core.event.Kick;
 import core.event.Message;
-import core.event.Quit;
 import core.plugin.Plugin;
 import core.utils.IRC;
 
 public class Quote extends Plugin
-{
-	public String name() 
-	{
-		return "Quotation";
-	}
-	
+{	
 	public void onMessage(Message in_message) throws Exception
 	{
 		if (!in_message.isPrivMsg())

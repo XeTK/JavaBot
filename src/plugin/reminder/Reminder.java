@@ -10,10 +10,7 @@ import java.util.regex.Pattern;
 import plugin.users.User;
 import plugin.users.UserList;
 import core.Channel;
-import core.event.Join;
-import core.event.Kick;
 import core.event.Message;
-import core.event.Quit;
 import core.plugin.Plugin;
 import core.utils.Details;
 import core.utils.IRC;
@@ -26,11 +23,6 @@ public class Reminder extends Plugin
 	private String cfgFile = new String(); 
 	
 	private RemindersList rl = new RemindersList();
-	
-	public String name() 
-	{
-		return "Reminder";
-	}
 	
 	public void onCreate(Channel in_channel) throws IRCException, IOException 
 	{

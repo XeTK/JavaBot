@@ -4,10 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import core.Channel;
-import core.event.Join;
-import core.event.Kick;
 import core.event.Message;
-import core.event.Quit;
 import core.plugin.Plugin;
 import core.utils.IRC;
 import core.utils.JSON;
@@ -18,11 +15,6 @@ public class Rep extends Plugin
 	private String cfgFile = new String();
 	
 	private RepList repList = new RepList();
-	
-	public Rep()
-	{
-		
-	}
 	
 	public String name() 
 	{

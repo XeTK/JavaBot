@@ -12,11 +12,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import com.google.gson.Gson;
 
-import core.Channel;
-import core.event.Join;
-import core.event.Kick;
 import core.event.Message;
-import core.event.Quit;
 import core.plugin.Plugin;
 import core.utils.Details;
 import core.utils.IRC;

@@ -5,11 +5,7 @@ import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import core.Channel;
-import core.event.Join;
-import core.event.Kick;
 import core.event.Message;
-import core.event.Quit;
 import core.plugin.Plugin;
 import core.utils.Colour;
 import core.utils.IRC;
@@ -19,11 +15,6 @@ public class Youtube extends Plugin
 
 //This needs rewritting again from scratch
 
-
-	public String name()
-	{
-		return "Youtube";
-	}
 
 	public void onMessage(Message in_message) throws Exception
 	{

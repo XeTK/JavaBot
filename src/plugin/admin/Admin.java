@@ -5,9 +5,7 @@ import java.util.regex.Pattern;
 
 import core.Channel;
 import core.event.Join;
-import core.event.Kick;
 import core.event.Message;
-import core.event.Quit;
 import core.plugin.Plugin;
 import core.plugin.PluginCore;
 import core.utils.Details;
@@ -29,11 +27,6 @@ public class Admin extends Plugin
 	/**
 	 * Get the name of the plugin so it can be presented to the end user.
 	 */
-	
-	public String name() 
-	{
-		return "Admin";
-	}
 	
 	public void onCreate(Channel in_channel) throws Exception 
 	{

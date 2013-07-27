@@ -18,12 +18,7 @@ public class Users extends Plugin
 
 	private final String dbFile_loc = "Users.json";
 	private String dbFile = new String();
-	
-	public String name() 
-	{
-		return "Users";
-	}
-	
+		
 	public void onCreate(Channel in_channel) throws Exception
 	{
 		dbFile = in_channel.getPath() + dbFile_loc;

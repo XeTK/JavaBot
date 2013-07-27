@@ -33,9 +33,6 @@ public abstract class Plugin
 	/**
 	 * The string displayed by .help message
 	 */
-	public String getHelpString()
-	{
-		return this.getClass().getName() + " Help String";
-	}
+	public abstract String getHelpString();
 
 }

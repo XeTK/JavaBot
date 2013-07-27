@@ -13,7 +13,6 @@ import javax.crypto.spec.SecretKeySpec;
 
 import plugin.users.User;
 import plugin.users.UserList;
-import core.Channel;
 import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
@@ -27,12 +26,6 @@ public class Authenticate extends Plugin
 	private final String key_Path = "key.txt";
 	
 	private AuthenticatedUsers auth_Users = AuthenticatedUsers.getInstance();
-	
-	
-	public String name() 
-	{
-		return "Authentication";
-	}
 
 	public void onMessage(Message in_message) throws Exception 
 	{
