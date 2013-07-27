@@ -99,6 +99,11 @@ public class IRC
 		sendServer("PRIVMSG " + channel + " :" + message);
 	}
 	
+	public void sendActionMsg(String channel, String message) 
+			throws IRCException, IOException
+	{
+		sendPrivmsg(channel, (char)1 + message);
+	}
 	/**
 	 * This method gets the data from the server 
 	 * and returns it to be used within the application
