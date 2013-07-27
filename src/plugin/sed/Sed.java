@@ -29,7 +29,7 @@ public class Sed extends Plugin {
   /**
    * The ASCII SOH character.
    */
-  private static final char ASCII_SOH = (char) 1;
+  private static final char ASCII_SOH = '\001';
 
   /**
    * The first group of the sed regex.
