@@ -13,16 +13,14 @@ import core.event.Quit;
 import core.plugin.Plugin;
 import core.utils.IRC;
 
-public class Imgur implements Plugin
+public class Imgur extends Plugin
 {
 
-	@Override
 	public String name()
 	{
 		return "Imgur";
 	}
 
-	@Override
 	public void onMessage(Message in_message) throws Exception
 	{
 		Matcher m = Pattern.compile("(http://(?:www.)?imgur.com/((?:gallery/)?).*)",
@@ -107,20 +105,6 @@ public class Imgur implements Plugin
 		}
 	}
 	
-	@Override
-	public void onCreate(Channel in_channel) throws Exception{}
-	@Override
-	public void onTime() throws Exception{}
-	@Override
-	public void onJoin(Join in_join) throws Exception{}
-	@Override
-	public void onQuit(Quit in_quit) throws Exception{}
-	@Override
-	public void onKick(Kick in_kick) throws Exception{}
-	@Override
-	public void rawInput(String in_str) throws Exception{}
-
-	@Override
 	public String getHelpString()
 	{
 		// TODO Auto-generated method stub

@@ -22,7 +22,6 @@ public class Reminders
 		this.reminder = reminder;
 		this.timeOfEvent = timeOfEvent;
 	}
-
 	// Getters
 	public Date getTimeOfEvent()
 	{
@@ -33,6 +32,4 @@ public class Reminders
 	{
 		return reminder;
 	}
-	
-	
 }

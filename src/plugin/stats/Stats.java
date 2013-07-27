@@ -17,7 +17,7 @@ import core.utils.IRC;
 import core.utils.IRCException;
 import core.utils.JSON;
 
-public class Stats implements Plugin
+public class Stats extends Plugin
 {
 	private final String popt_path = "options/Stat_options.json";
 	private final String log_path = "logs/%s.json";
@@ -30,13 +30,11 @@ public class Stats implements Plugin
 	private StatOption options;
 	
 	
-	@Override
 	public String name() 
 	{
 		return "Statistics";
 	}
 	
-	@Override
 	public void onCreate(Channel in_channel) throws Exception 
 	{
 		channel_name = in_channel.getChannel_name();
@@ -57,7 +55,6 @@ public class Stats implements Plugin
 			JSON.saveGSON(opt_path, new StatOption());
 	}
 
-	@Override
 	public void onTime() throws Exception
 	{
 		IRC irc = IRC.getInstance();
@@ -96,7 +93,6 @@ public class Stats implements Plugin
 		}
 	}
 
-	@Override
 	public void onMessage(Message in_message) throws IRCException, IOException
 	{		
 		if (!in_message.isPrivMsg())
@@ -187,7 +183,6 @@ public class Stats implements Plugin
 		}
 	}
 
-	@Override
 	public void onJoin(Join in_join) throws IRCException, IOException
 	{
 		if (today == null)
@@ -196,7 +191,6 @@ public class Stats implements Plugin
 		today.incJoins();
 	}
 	
-	@Override
 	public void onQuit(Quit in_quit) throws IRCException, IOException
 	{
 		if (today == null)
@@ -205,7 +199,6 @@ public class Stats implements Plugin
 		today.incQuits();
 	}
 	
-    @Override
     public void onKick(Kick in_kick) throws IRCException, IOException 
 	{
 		if (today == null)
@@ -213,7 +206,7 @@ public class Stats implements Plugin
 		
 		today.incKicks();
 	}
-	@Override
+
 	public String getHelpString()
 	{
 		return "STATS: " +
@@ -221,9 +214,4 @@ public class Stats implements Plugin
 				".msgsent *username* - check how many messages a user has sent globaly within the channel : " +
 				".stats (hour|day) (msgsent|joins|quits|kicks) - get stats for that given time frame : ";
 	}
-    // Unused
-	@Override
-	public void rawInput(String in_str) throws Exception{}
-
-
 }
