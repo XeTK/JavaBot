@@ -115,7 +115,7 @@ public class Admin extends Plugin
 				loaded = Colour.colour(loaded, Colour.BLUE,Colour.WHITE);
 				String loadedString = "Plugins Loaded: %s";
 				loadedString = String.format(loadedString, loaded);
-				irc.sendPrivmsg(channel, loadedString);
+				irc.sendActionMsg(channel, loadedString);
 			}
 		}
 	}

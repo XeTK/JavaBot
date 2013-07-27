@@ -119,7 +119,7 @@ public class IRC
 	public void sendActionMsg(String channel, String message) 
 			throws IRCException, IOException
 	{
-		sendPrivmsg(channel, (char)1 + message);
+		sendPrivmsg(channel, '\001' + "ACTION " + message + '\001');
 	}
 	/**
 	 * This method gets the data from the server 

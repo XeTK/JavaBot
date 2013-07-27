@@ -16,11 +16,6 @@ public class Rep extends Plugin
 	
 	private RepList repList = new RepList();
 	
-	public String name() 
-	{
-		return "Reputation";
-	}
-	
 	public void onCreate(Channel in_channel) throws Exception 
 	{
 		cfgFile = in_channel.getPath() + cfgFile_loc;

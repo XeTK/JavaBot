@@ -73,10 +73,18 @@ public class StringResponse extends Plugin
 						String reply = replies[inx];
 	
 						// fix up reply strings to include target usernames
-						reply = reply.replace("{0}", botname);
 						reply = reply.replace("{1}", in_message.getUser());
-						
-						irc.sendPrivmsg(in_message.getChannel(), reply);
+						// Checks if it is a /me message or not
+						if (reply.startsWith("{0}"))
+						{
+							reply = reply.replace("{0}", "");
+							irc.sendActionMsg(in_message.getChannel(), reply);
+						}
+						else
+						{
+							reply = reply.replace("{0}", botname);
+							irc.sendPrivmsg(in_message.getChannel(), reply);
+						}
 					}
 				}
 			}
