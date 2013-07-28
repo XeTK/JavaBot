@@ -33,8 +33,9 @@ Make sure that the dependancies exist first and that the source has been compile
 
 Dependancies needed, 
 
-`Google GSON libary`
-`javax mail libary`
+`Google GSON libary` https://code.google.com/p/google-gson/
+
+`javax mail libary` https://java.net/projects/javamail/pages/Home
 
 `java -cp .:bin/:gson-2.2.4.jar:javax.mail.jar core.Start`
 
