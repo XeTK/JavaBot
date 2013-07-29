@@ -12,6 +12,7 @@ import java.util.Date;
 public class StatDay {
 	// Hold a days worth of hours
 	private StatHour[] hours_ = new StatHour[24];
+	private boolean displayedDayStats_ = false;
 
 	/**
 	 * Increment the message sent for the current hour
@@ -114,5 +115,21 @@ public class StatDay {
 			if (hours_[i] != null)
 				t += hours_[i].getKicks();
 		return t;
+	}
+	
+	public boolean hourIsViewed(){
+		return getHour().isDisplayedStats();
+	}
+	
+	public void hasViewed(){
+		getHour().setDisplayedStats(true);
+	}
+	
+	public boolean isDisplayedDayStats() {
+		return displayedDayStats_;
+	}
+
+	public void setDisplayedDayStats() {
+		this.displayedDayStats_ = true;
 	}
 }

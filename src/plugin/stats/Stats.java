@@ -82,7 +82,8 @@ public class Stats extends Plugin {
 			String sec = m.group(3);
 
 			if (options_.isHourStats() && min.equals("59") && sec.equals("59")
-					&& today_.getHour().getMsgSent() != 0) {
+					&& today_.getHour().getMsgSent() != 0
+					&&!today_.hourIsViewed()) {
 				StatHour tempHour = today_.getHour();
 
 				String msg = String.format(STAT_MSG, 
@@ -91,20 +92,25 @@ public class Stats extends Plugin {
 						tempHour.getQuits(), 
 						tempHour.getKicks(),
 						"hour");
-
+				
+				today_.hasViewed();
+				
 				irc.sendActionMsg(channelName_, msg);
 			}
 
 			if (hour.equals("00") && min.equals("00") && sec.equals("00")) {
-				if (options_.isDayStats() && today_.msgsSent() != 0) {
+				if (options_.isDayStats() && today_.msgsSent() != 0&&
+						!today_.isDisplayedDayStats()) {
 					String msg = String.format(STAT_MSG, 
 							today_.msgsSent(),
 							today_.joins(),
 							today_.quits(), 
 							today_.kicks(), 
 							"day");
-
+					
 					irc.sendActionMsg(channelName_, msg);
+					
+					today_.setDisplayedDayStats();
 				}
 				today_ = new StatDay();
 			}

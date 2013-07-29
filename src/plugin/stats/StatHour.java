@@ -18,6 +18,8 @@ public class StatHour {
 	private int joins_ = 0;
 	private int quits_ = 0;
 	private int kicks_ = 0;
+	
+	private boolean displayedStats_ = false;
 
 	/**
 	 * Quick method to increment the number of users that have joined.
@@ -86,5 +88,13 @@ public class StatHour {
 		for (int i = 0; i < users_.size(); i++)
 			msgs += users_.get(i).getMsgSent();
 		return msgs;
+	}
+
+	public boolean isDisplayedStats() {
+		return displayedStats_;
+	}
+
+	public void setDisplayedStats(boolean displayedStats_) {
+		this.displayedStats_ = displayedStats_;
 	}
 }
