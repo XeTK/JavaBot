@@ -3,6 +3,7 @@ package core.plugin;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import core.plugin.plugin;
 
 /**
  * This is the method for loading each plugin into the program, it was based of
@@ -71,12 +72,13 @@ public class PluginLoader extends ClassLoader {
 			resolveClass(c);
 			// Check the class has loaded correctly and has the correct number
 			// of methods.
-			if (c.getInterfaces().length != 0 || c.getMethods().length != 0)
-				try {
+
+			if (c.isAnnotationPresent(plugin.class)) {
+				plugin annotation = c.getAnnotation(plugin.class);
+				if(annotation.autoload()) {
 					return c.newInstance();
-				} catch (final java.lang.InstantiationException e) {
-					System.err.printf("Unable to load pluging in %s. (Exception message: %s)%n", c.getName(), e.getLocalizedMessage());
 				}
+			}
 		}
 		// And if we can't load we return null so there is a status to say if it
 		// hasn't loaded.
