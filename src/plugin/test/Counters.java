@@ -23,7 +23,7 @@ public class Counters extends Plugin {
 
 	public void onTime() throws Exception {
 		times_++;
-		printDebug();
+		//printDebug();
 	}
 
 	public void onMessage(Message inMessage) throws Exception {
@@ -47,7 +47,7 @@ public class Counters extends Plugin {
 	}
 	@Override
 	public String getHelpString() {
-		printDebug();
+		//printDebug();
 		return null;
 	}
 	private void printDebug()
