@@ -21,7 +21,7 @@ import core.utils.IRCException;
 
 /**
  * Allows admin users to create a new bug on github's issue tracker.
- * 
+ *
  * @author Tom Leaman (tom@tomleaman.co.uk)
  */
 public class Issue extends Plugin {
@@ -31,15 +31,15 @@ public class Issue extends Plugin {
 	private static final String REPO_OWNER = "XeTK";
 	private static final String REPO_NAME = "JavaBot";
 
-	private Details details_ = Details.getInstance();
-	private IRC irc_ = IRC.getInstance();
+	private Details details = Details.getInstance();
+	private IRC irc = IRC.getInstance();
 
-	private String authToken_;
-	private boolean isLoaded_ = false;
+	private String authToken;
+	private boolean isLoaded = false;
 
 	public Issue() {
 		try {
-			authToken_ = loadAuthToken(AUTH_TOKEN_FILE);
+			authToken = loadAuthToken(AUTH_TOKEN_FILE);
 		} catch (FileNotFoundException e) {
 			System.err
 					.println("No auth token file found in " + AUTH_TOKEN_FILE);
@@ -47,8 +47,8 @@ public class Issue extends Plugin {
 			return;
 		}
 
-		if (!authToken_.equals(new String()))
-			isLoaded_ = true;
+		if (!authToken.equals(new String()))
+			isLoaded = true;
 	}
 
 	private String loadAuthToken(String filename) throws FileNotFoundException {
@@ -61,7 +61,7 @@ public class Issue extends Plugin {
 			in.close();
 		} catch (IOException e) {
 			// tin foil hats a-plenty
-			isLoaded_ = false;
+			isLoaded = false;
 			line = new String();
 			e.printStackTrace();
 		}
@@ -70,11 +70,11 @@ public class Issue extends Plugin {
 	}
 
 	public void onMessage(Message message) throws Exception {
-		if (!isLoaded_)
+		if (!isLoaded)
 			return;
 
 		if (message.getMessage().startsWith(".bug ")
-				&& details_.isAdmin(message.getUser()))
+				&& details.isAdmin(message.getUser()))
 			createIssue(message);
 	}
 
@@ -87,7 +87,7 @@ public class Issue extends Plugin {
 		// Should remove ".bug " from the start of the message
 		String issueTitle = message.getMessage().substring(5);
 		if (issueTitle.length() <= 0) {
-			irc_.sendPrivmsg(message.getChannel(), message.getUser() + ": "
+			irc.sendPrivmsg(message.getChannel(), message.getUser() + ": "
 					+ getHelpString());
 		}
 		String issueBody = ":octocat: This message was generated automatically by "
@@ -107,7 +107,7 @@ public class Issue extends Plugin {
 
 			conn.setDoOutput(true);
 			conn.setRequestMethod("POST");
-			conn.setRequestProperty("Authorization", "token " + authToken_);
+			conn.setRequestProperty("Authorization", "token " + authToken);
 			conn.setRequestProperty("Content-Type",
 					"application/x-www-form-urlencoded");
 			conn.getOutputStream().write(jsonContent.getBytes("UTF-8"));
@@ -133,7 +133,7 @@ public class Issue extends Plugin {
 			Gson parser = new Gson();
 			IssueResponse responseData = (IssueResponse) parser.fromJson(
 					response.toString(), IssueResponse.class);
-			irc_.sendPrivmsg(message.getChannel(), message.getUser() + ": "
+			irc.sendPrivmsg(message.getChannel(), message.getUser() + ": "
 					+ "Issue #" + responseData.getNumber() + " created: "
 					+ responseData.getHtmlUrl());
 		} catch (MalformedURLException e) {
