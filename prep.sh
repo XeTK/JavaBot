@@ -8,10 +8,10 @@ JAVA_MAIL="javax.mail.jar"
 # Get GSON dependancy unzip and move to correct location.
 if [ ! -f ${JSON}.jar ]; then
 	wget http://google-gson.googlecode.com/files/google-$JSON-release.zip
-	unzip google-$JSON-release.zip
+	unzip google-$JSON-release.zip google-$JSON/$JSON.jar
 	rm google-$JSON-release.zip
 	mv google-$JSON/$JSON.jar .
-	rm -R $JSON
+	rm -R google-$JSON
 	echo JSON dependancy downloaded.
 else
 	echo JSON dependancy already exists.
