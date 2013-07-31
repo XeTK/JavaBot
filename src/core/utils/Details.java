@@ -12,20 +12,20 @@ import java.io.IOException;
 public class Details {
 	private static final String CONFIG_FILE_ = "Details.json";
 
-	private static Details details_ = null;
+	private static Details details = null;
 
-	private int port_ = 6667;
+	private int port = 6667;
 
-	private String server_ = "127.0.0.1";
-	private String botNickName_ = "JavaBot";
-	private String smtpEmail_ = "Spunky@Spunkybot.co.uk";
-	private String smtpHost_ = "smtp.gmail.com";
-	private String smtpUser_ = "spunky@gmail.com";
-	private String smtpPassword_ = "Helloworld";
+	private String server = "127.0.0.1";
+	private String botNickName = "JavaBot";
+	private String smtpEmail = "Spunky@Spunkybot.co.uk";
+	private String smtpHost = "smtp.gmail.com";
+	private String smtpUser = "spunky@gmail.com";
+	private String smtpPassword = "Helloworld";
 
-	private String[] channels_ = { "#xetk" };
-	private String[] admins_ = { "xetk" };
-	private String[] startup_ = { "PRIVMSG zippy identify helloworld" };
+	private String[] channels = { "#xetk" };
+	private String[] admins = { "xetk" };
+	private String[] startup = { "PRIVMSG zippy identify helloworld" };
 
 	/**
 	 * Get our instance of the details class back for us to use.
@@ -37,10 +37,10 @@ public class Details {
 	public static Details getInstance() {
 		try {
 			if (new File(CONFIG_FILE_).exists()) {
-				details_ = (Details) JSON.load(CONFIG_FILE_, Details.class);
+				details = (Details) JSON.load(CONFIG_FILE_, Details.class);
 			} else {
-				details_ = new Details();
-				JSON.save(CONFIG_FILE_, details_);
+				details = new Details();
+				JSON.save(CONFIG_FILE_, details);
 				// We don't want the program to load with a unpopulated json
 				// file.
 				System.out.println("Populate Details.json"
@@ -52,7 +52,7 @@ public class Details {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		return details_;
+		return details;
 	}
 
 	/**
@@ -63,7 +63,7 @@ public class Details {
 	 *            take in the instance we want to set the class to.
 	 */
 	public static void setInstance(Details instance) {
-		details_ = instance;
+		details = instance;
 	}
 
 	/**
@@ -74,8 +74,8 @@ public class Details {
 	 * @return true or false to if the user is a admin.
 	 */
 	public boolean isAdmin(String name) {
-		for (int i = 0; i < admins_.length; i++)
-			if (name.equalsIgnoreCase(admins_[i]))
+		for (int i = 0; i < admins.length; i++)
+			if (name.equalsIgnoreCase(admins[i]))
 				return true;
 		return false;
 	}
@@ -84,51 +84,51 @@ public class Details {
 	 * Getters
 	 */
 	public static Details getDetails() {
-		return details_;
+		return details;
 	}
 
 	public String getServer() {
-		return server_;
+		return server;
 	}
 
 	public int getPort() {
-		return port_;
+		return port;
 	}
 
 	public String[] getChannels() {
-		return channels_;
+		return channels;
 	}
 
 	public String[] getAdmins() {
-		return admins_;
+		return admins;
 	}
 
 	public String[] getStartup() {
-		return startup_;
+		return startup;
 	}
 
 	public String getNickName() {
-		return botNickName_;
+		return botNickName;
 	}
 
 	public String getSmtpEmail() {
-		return smtpEmail_;
+		return smtpEmail;
 	}
 
 	public String getSmtpHost() {
-		return smtpHost_;
+		return smtpHost;
 	}
 
 	public String getSmtpUser() {
-		return smtpUser_;
+		return smtpUser;
 	}
 
 	public String getSmtpPassword() {
-		return smtpPassword_;
+		return smtpPassword;
 	}
 
 	// Setters
 	public void setNickName(String nickname) {
-		this.botNickName_ = nickname;
+		this.botNickName = nickname;
 	}
 }
