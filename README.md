@@ -16,15 +16,15 @@ program.
 
 To get all depedancies and set up default JSON file, run this command
 
-`make prep`
+  `make prep`
 
 To compile the project, run this
 
-`make compile`
+  `make compile`
 
 To execute the project, run this
 
-`make run`
+  `make run`
 
 
 ##Run without makefile
