@@ -125,7 +125,11 @@ public class Sed extends Plugin {
 					}
 
 					reply += "%s meant: %s";
-					text = text.replaceAll(search, replacement);
+					try {
+					  text = text.replaceAll(search, replacement);
+          } catch (StringIndexOutOfBoundsException e) {
+            throw new SedException(e.getMessage());
+          }
 					irc_.sendPrivmsg(channel,
 							String.format(reply, tempMessage.getUser(), text));
 					break;
@@ -252,5 +256,13 @@ public class Sed extends Plugin {
 				+ "e.g XeTK: s/.*/hello/ is used to "
 				+ "replace the previous statement with hello :";
 	}
+
+  public class SedException extends Exception {
+
+    public SedException(String message) {
+      super(message);
+    }
+
+  }
 
 }
