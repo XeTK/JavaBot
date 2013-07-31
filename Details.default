@@ -1,18 +1,17 @@
 {
-	"server": "127.0.0.1",
+	"server_": "irc.test.com",
 	"port": 6667,
 	"botNickName": "JavaBot",
-	"smtpEmail": "Spunky@Spunkybot.co.uk",
-	"smtpHost": "smtp.gmail.com",
-	"smtpUser": "spunky@gmail.com",
-	"smtpPassword": "Helloworld",
+	"smtpEmail_": "javabot@test.com",
+	"smtpHost_": "smtphost.test.com",
+	"smtpUser_": "javabot@test.com",
+	"smtpPassword_": "javabot",
 	"channels": [
-		"#xetk"
+		"#javabot"
 	],
 	"admins": [
-		"xetk"
+		"admin"
 	],
 	"startup": [
-		"PRIVMSG zippy identify helloworld"
 	]
 }
