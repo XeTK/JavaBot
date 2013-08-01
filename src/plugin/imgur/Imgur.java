@@ -93,8 +93,7 @@ public class Imgur extends Plugin {
 
 			}
 			title = title.trim();
-			IRC irc = IRC.getInstance();
-			irc.sendPrivmsg(in_message.getChannel(), title + ", Views : "
+			IRC.instance.sendPrivmsg(in_message.getChannel(), title + ", Views : "
 					+ viewcount + ", Bandwidth used : " + bandwidth
 					+ ", Likes/Dislikes : " + likes + "/" + dislikes);
 		}

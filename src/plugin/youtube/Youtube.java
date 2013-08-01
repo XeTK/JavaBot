@@ -68,7 +68,7 @@ public class Youtube extends Plugin {
 
 				// ADD UPLOADED TIME
 			}
-			IRC irc = IRC.getInstance();
+			IRC irc = IRC.instance;
 
 			String yt = Colour.colour("You", Colour.BLACK, Colour.WHITE);
 			yt += Colour.colour("Tube", Colour.WHITE, Colour.RED);

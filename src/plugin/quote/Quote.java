@@ -28,7 +28,7 @@ public class Quote extends Plugin {
 	private final Pattern DOT_QUOTE = Pattern.compile(RGX_QUOTE,
 			Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
-	private final IRC irc_ = IRC.getInstance();
+	private final IRC irc_ = IRC.instance;
 	private final UserList userList_ = UserList.getInstance();
 
 	public void onMessage(Message inMessage) throws Exception {

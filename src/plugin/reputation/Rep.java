@@ -36,7 +36,7 @@ public class Rep extends Plugin {
 			if (message.charAt(message.length() - 1) == ' ')
 				message = message.substring(0, message.length() - 1);
 
-			IRC irc = IRC.getInstance();
+			IRC irc = IRC.instance;
 			if (message
 					.matches("(^[a-zA-Z0-9]*)[\\s\\+-]([-\\+])[\\=\\s]*([\\d]*)")) {
 				Matcher r = Pattern.compile(

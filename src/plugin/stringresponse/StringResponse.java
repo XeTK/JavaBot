@@ -53,7 +53,7 @@ public class StringResponse extends Plugin {
 
 	public void onMessage(Message inMessage) throws Exception {
 		if (!inMessage.isPrivMsg()) {
-			IRC irc = IRC.getInstance();
+			IRC irc = IRC.instance;
 			ArrayList<Response> responces = responseList_.getResponses();
 
 			// Get the information for the bot, so we can use the username.

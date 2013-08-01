@@ -105,7 +105,7 @@ public class Channel {
 	 *            program.
 	 */
 	public void onMessage(Message inMessage) {
-		IRC irc = IRC.getInstance();
+		IRC irc = IRC.instance;
 		// Double check that the message is actually for this class.
 		if (inMessage.getChannel().equalsIgnoreCase(channelName_)) {
 			for (int i = 0; i < plugins_.size(); i++) {

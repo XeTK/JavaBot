@@ -44,7 +44,7 @@ public class Stats extends Plugin {
 			Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 	private final Pattern DOT_LASTONLINE = Pattern.compile(RGX_LASTONLINE,
 			Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-	private final IRC irc = IRC.getInstance();
+	private final IRC irc = IRC.instance;
 
 	private String savePath_ = new String();
 	private String optPath_ = new String();

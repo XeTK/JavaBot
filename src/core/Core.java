@@ -49,7 +49,7 @@ public class Core {
 	 */
 	private void connect() throws Exception {
 		// Get an instance of the IRC class to send the messages on.
-		IRC irc = IRC.getInstance();
+		IRC irc = IRC.instance;
 		// Also get an instance of the details needed to connect to the server
 		Details details = Details.getInstance();
 
@@ -95,7 +95,7 @@ public class Core {
 	private void mainLoop() throws Exception {
 		// Get an instance of the IRC class so we can later carry out operations
 		// on it.
-		IRC irc = IRC.getInstance();
+		IRC irc = IRC.instance;
 		Details details = Details.getInstance();
 
 		// Keep a list of private messages.

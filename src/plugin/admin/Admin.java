@@ -20,7 +20,13 @@ import core.utils.IRC;
  * @author Tom Rosier(XeTK)
  */
 public class Admin extends Plugin {
+	private static final String RE_JOIN = String.format("^\\.%s %s$", "join", IRC.RE_CHAN);
+	private static final String RE_PART = String.format("^\\.%s %s$", "part", IRC.RE_CHAN);
+	private static final String RE_NICK = String.format("^\\.%s %s$", "nick", IRC.RE_NICK);
+
 	private Channel uchannel_;
+	private final Details details_ = Details.getInstance();
+	private final IRC irc_ = IRC.instance;
 
 	/**
 	 * Get the name of the plugin so it can be presented to the end user.
@@ -35,56 +41,50 @@ public class Admin extends Plugin {
 	 * command.
 	 */
 	public void onMessage(Message inMessage) throws Exception {
-
-		// Get the IRC instance so that we can send commands to the server.
-		IRC irc = IRC.getInstance();
-		// Get the details for the bot so we can check if the user issuing the
-		// command is a admin.
-		Details details = Details.getInstance();
-
 		// Information about the message that is sent.
 		String message = inMessage.getMessage();
 		String user = inMessage.getUser();
 		String channel = inMessage.getChannel();
+
 		// Check if the user is an admin and is aloud to issues theses commands.
-		if (details.isAdmin(user)) {
+		if (details_.isAdmin(user)) {
 			// Remove padding at the end of message. To stop any issues.
 			if (message.charAt(message.length() - 1) == ' ')
 				message = message.substring(0, message.length() - 1);
 
 			// If we want to join a channel then we access this command.
-			if (message.matches("^\\.join [A-Za-z0-9#]+$")) {
+			if (message.matches(RE_JOIN)) {
 				String str[] = message.split(" ");
-				irc.sendServer("JOIN " + str[1]);
-				irc.sendPrivmsg(channel, "I Have Joined " + str[1]);
-			} else if (message.matches("^\\.part [A-Za-z0-9#]+$")) {
+				irc_.sendServer("JOIN " + str[1]);
+				irc_.sendPrivmsg(channel, "I Have Joined " + str[1]);
+			} else if (message.matches(RE_PART)) {
 				String str[] = message.split(" ");
-				irc.sendServer("PART " + str[1]);
-				irc.sendPrivmsg(channel, "I Have Parted " + str[1]);
+				irc_.sendServer("PART " + str[1]);
+				irc_.sendPrivmsg(channel, "I Have Parted " + str[1]);
 			} else if (message.matches("^\\.quit")) {
-				irc.sendServer("QUIT Goodbye All!");
+				irc_.sendServer("QUIT Goodbye All!");
 				System.exit(0);
-			} else if (message.matches("^\\.nick [A-Za-z0-9#]+$")) {
+			} else if (message.matches(RE_NICK)) {
 				String str[] = message.split(" ");
-				irc.sendServer("NICK " + str[1]);
+				irc_.sendServer("NICK " + str[1]);
 			} else if (message.matches("^\\.cmd .*")) {
 				Matcher p = Pattern.compile("^\\.cmd (.*)",
 						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(
 						message);
 
 				if (p.find())
-					irc.sendServer(p.group(1));
+					irc_.sendServer(p.group(1));
 			}
 			/*
 			 * else if (message.matches("^\\.exception")) {
-			 * irc.sendPrivmsg(channel, "Exception Thrown."); throw new
+			 * irc_.sendPrivmsg(channel, "Exception Thrown."); throw new
 			 * Exception(); }
 			 */
 			else if (message.matches("^\\.gitpull")) {
 				String msg = Colour.colour("Reloading from git!", Colour.RED,
 						Colour.WHITE);
 
-				irc.sendPrivmsg(channel, msg);
+				irc_.sendPrivmsg(channel, msg);
 				String pid = ManagementFactory.getRuntimeMXBean().getName();
 				String[] ids = pid.split("@");
 				Runtime.getRuntime()
@@ -92,21 +92,20 @@ public class Admin extends Plugin {
 								"./git.sh " + ids[0] });
 			} else if (message.matches("^\\.reload")) {
 				String msg = Colour.colour("Reloading Plugins!", Colour.RED);
-				irc.sendActionMsg(channel, msg);
+				irc_.sendActionMsg(channel, msg);
 				uchannel_.loadPlugins();
 			} else if (message.matches("^\\.loaded")) {
 				String loaded = PluginCore.loadedPlugins(uchannel_.getPlugins());
 				loaded = Colour.colour(loaded, Colour.BLUE_DARK, Colour.WHITE);
 				String loadedString = "Plugins Loaded: %s";
 				loadedString = String.format(loadedString, loaded);
-				irc.sendActionMsg(channel, loadedString);
+				irc_.sendActionMsg(channel, loadedString);
 			}
 		}
 	}
 
 	public void onJoin(Join inJoin) throws Exception {
-		IRC irc = IRC.getInstance();
-		irc.sendServer("MODE " + inJoin.getChannel() + " +v "
+		irc_.sendServer("MODE " + inJoin.getChannel() + " +v "
 				+ inJoin.getUser());
 	}
 

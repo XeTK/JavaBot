@@ -13,30 +13,28 @@ import java.io.PrintWriter;
  * This class handles all interaction with the IRC client and remote server
  * 
  * @author Tom Rosier (XeTK)
+ * @author Alexander Brown (SoftlySplinter)
  */
 public class IRC {
-	// This is the maximum size that a message can be that is sent.
+	/**
+	 * IRC Channel Regex as defined by RFC 1459
+	 */
+	public static final String RE_CHAN = "[#&][^\\x07\\x2C\\s]{0,200}";
+
+	/**
+	 * IRC Nickname regex. Not quite as defined by a RFC at the moment though.
+	 */
+	public static final String RE_NICK = "[a-zA-Z_\\-\\[\\]\\^{}|`][a-zA-Z0-9_\\-\\[\\]\\^{}|`]*";
+
+	/** This is the maximum size that a message can be that is sent. */
 	private final int MSG_MAX_SIZE_ = 410;
 
-	// We are using the singleton pattern
-	private static IRC instance_;
+	/** Singleton instance */
+	public final static IRC instance = new IRC();
 
 	private PrintWriter outToServer_;
 	private BufferedReader inFromServer_;
 	private Socket clientSocket_;
-
-	/**
-	 * To comply with the singleton pattern we return the instance of the
-	 * object, If one already exists otherwise we create a new object.
-	 * 
-	 * @return return instance of the IRC class that has already been created
-	 */
-	public static IRC getInstance() {
-		if (instance_ == null)
-			instance_ = new IRC();
-
-		return instance_;
-	}
 
 	/**
 	 * This is to create are connection to the server, we create the connection
@@ -63,9 +61,6 @@ public class IRC {
 	 *             if there is an error with the connection.
 	 */
 	private void checkConnection() throws IRCException {
-		if (instance_ == null)
-			throw new IRCException("IRC class has not yet been declared");
-
 		if (clientSocket_ == null)
 			throw new IRCException("Remote Socket has not been opened");
 

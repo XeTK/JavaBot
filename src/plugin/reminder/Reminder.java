@@ -21,7 +21,7 @@ public class Reminder extends Plugin {
 	private final String CONFIG_FILE_LOCATION = "Reminders.json";
 	private String cfgFile_ = new String();
 
-	private IRC irc_ = IRC.getInstance();
+	private IRC irc_ = IRC.instance;
 
 	private Channel channel_;
 	private RemindersList remindersList_ = new RemindersList();
@@ -47,7 +47,7 @@ public class Reminder extends Plugin {
 
 	public void onMessage(Message inMessage) throws Exception {
 		if (!inMessage.isPrivMsg()) {
-			IRC irc = IRC.getInstance();
+			IRC irc = IRC.instance;
 			UserList userList = UserList.getInstance();
 
 			String user = inMessage.getUser();
