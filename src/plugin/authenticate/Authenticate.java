@@ -28,7 +28,7 @@ public class Authenticate extends Plugin {
 	private AuthenticatedUsers authUsers_ = AuthenticatedUsers.getInstance();
 
 	public void onMessage(Message inMessage) throws Exception {
-		IRC irc = IRC.getInstance();
+		IRC irc = IRC.instance;
 
 		if (inMessage.isPrivMsg()) {
 			User user = UserList.getInstance().getUser(inMessage.getUser());
@@ -125,12 +125,11 @@ public class Authenticate extends Plugin {
 	}
 
 	public void onJoin(Join inJoin) throws Exception {
-		IRC irc = IRC.getInstance();
 		User user = UserList.getInstance().getUser(inJoin.getUser());
 		if (user != null)
 			if (!authUsers_.contains(user))
 				if (user.getEmail() != null && !user.getEmail().isEmpty())
-					irc.sendPrivmsg(user.getUser(), "Please Login!");
+					IRC.instance.sendPrivmsg(user.getUser(), "Please Login!");
 	}
 
 	public void onQuit(Quit inQuit) throws Exception {

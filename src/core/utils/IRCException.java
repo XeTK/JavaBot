@@ -16,7 +16,7 @@ public class IRCException extends Exception {
 	public IRCException(String message) {
 		super(message);
 
-		IRC irc = IRC.getInstance();
+		IRC irc = IRC.instance;
 		// This sends any exceptions to the admins of the bot so they are aware
 		// if there is a problem.
 
@@ -41,7 +41,6 @@ public class IRCException extends Exception {
 	public IRCException(Exception ex) {
 		super(ex);
 
-		IRC irc = IRC.getInstance();
 		// This sends any exceptions to the admins of the bot so they are aware
 		// if there is a problem.
 
@@ -51,7 +50,7 @@ public class IRCException extends Exception {
 
 		for (int i = 0; i < admins.length; i++) {
 			try {
-				irc.sendPrivmsg(
+				IRC.instance.sendPrivmsg(
 						admins[i],
 						ex.toString() + ", "
 								+ Arrays.toString(ex.getStackTrace()));

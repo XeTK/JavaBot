@@ -32,7 +32,7 @@ public class Issue extends Plugin {
 	private static final String REPO_NAME = "JavaBot";
 
 	private Details details = Details.getInstance();
-	private IRC irc = IRC.getInstance();
+	private IRC irc = IRC.instance;
 
 	private String authToken;
 	private boolean isLoaded = false;

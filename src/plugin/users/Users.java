@@ -22,7 +22,7 @@ public class Users extends Plugin {
 	private final String USER_QUIT = "%s Has quit %s times";
 	private final String USER_KICKED = "%s Has be kicked %s times";
 
-	private final IRC irc_ = IRC.getInstance();
+	private final IRC irc_ = IRC.instance;
 
 	private String dbFile_ = new String();
 
@@ -73,7 +73,7 @@ public class Users extends Plugin {
 	}
 
 	public void onKick(Kick in_kick) throws Exception {
-		IRC irc = IRC.getInstance();
+		IRC irc = IRC.instance;
 
 		User userOBJ = UserList.getInstance().getUser(in_kick.getKicked());
 		if (userOBJ != null) {

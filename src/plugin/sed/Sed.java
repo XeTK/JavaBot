@@ -50,7 +50,7 @@ public class Sed extends Plugin {
 	/**
 	 * IRC instance.
 	 */
-	private IRC irc_ = IRC.getInstance();
+	private IRC irc_ = IRC.instance;
 
 	/**
 	 * Stores Messages objects per-user.
