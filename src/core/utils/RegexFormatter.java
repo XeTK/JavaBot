@@ -1,5 +1,5 @@
 package core.utils;
-
+@author Alexander Brown (SoftlySplinter) 
 public enum RegexFormatter {
 	/**
 	 * IRC Channel Regex as defined by RFC 1459
