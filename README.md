@@ -17,7 +17,7 @@ program.
 To get all depedancies and set up default JSON file, run this command
 
   `make prep`
-
+ 
 To compile the project, run this
 
   `make compile`
@@ -50,7 +50,7 @@ Dependancies needed,
 
 `Make run` - Starts the program.
 
-##Plugin setup
+##Plugin setup 
 
 ###Issue
 
@@ -71,6 +71,10 @@ and should compile for Java6 and above.
 
 Plugins - All plugins should be placed in `src/` and must use the Plugin interface, any additional classes must
 be put under package `addon.*pluginname*`.
+
+#Special thanks 
+
+Thanks to softly, sambuca and bugsduggan for there input into the design and plugins
 
 #Available commands
 
