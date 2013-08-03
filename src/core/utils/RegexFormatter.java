@@ -12,7 +12,7 @@ public enum RegexFormatter {
 	 */
 	REG_NICK("[a-zA-Z_\\-\\[\\]\\^{}|`][a-zA-Z0-9_\\-\\[\\]\\^{}|`]*");
 	
-	private String regex;
+	private String regex = new String();
 	private RegexFormatter(String regex)
 	{
 		this.regex = regex;
@@ -20,6 +20,6 @@ public enum RegexFormatter {
 	
 	public static String format(String command, RegexFormatter type)
 	{
-		return String.format("^\\.%s %s$", command,type);
+		return String.format("^\\.%s %s$", command,type.regex);
 	}
 }
