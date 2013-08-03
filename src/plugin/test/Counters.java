@@ -6,6 +6,7 @@ import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
 import core.plugin.Plugin;
+import core.utils.IRC;
 
 public class Counters extends Plugin {
 
@@ -23,10 +24,11 @@ public class Counters extends Plugin {
 
 	public void onTime() throws Exception {
 		times_++;
-		printDebug();
 	}
 
 	public void onMessage(Message inMessage) throws Exception {
+		if (inMessage.getMessage().startsWith(".globstats"))
+			IRC.getInstance().sendActionMsg(inMessage.getChannel(), printDebug());
 		messages_++;
 	}
 
@@ -49,15 +51,15 @@ public class Counters extends Plugin {
 	public String getHelpString() {
 		//printDebug();
 		return "COUNTERS: \n"
-				+ "\tThis class does not have any commands.";
+				+ "\t.globstats - Gets raw stats about the bot since it started.";
 	}
-	private void printDebug()
+	private String printDebug()
 	{
 		String text = "| %s Creates | %s Times | %s Joins | %s Quits | " +
 				" %s Messages | %s Kicks | %s Raws |";
 		text = String.format(text, 
 				creates_,times_,joins_,quits_,messages_,kicks_,raws_);
-		System.out.println(text);
+		return text;
 	}
 
 }
