@@ -96,6 +96,8 @@ Thanks to SoftlySplinter, ssherar and bugsduggan for there input into the design
 |~|.register||X||
 |~|.logout||X||
 |~|.recover||X||
+|Counters|
+|~|.globstats|X|X||
 |Imgur|
 |~|\<URL\>|X|X||
 |Issue|
