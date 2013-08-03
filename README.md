@@ -74,7 +74,7 @@ be put under package `addon.*pluginname*`.
 
 #Special thanks 
 
-Thanks to softly, sambuca and bugsduggan for there input into the design and plugins
+Thanks to SoftlySplinter, ssherar and bugsduggan for there input into the design and plugins
 
 #Available commands
 
@@ -89,7 +89,8 @@ Thanks to softly, sambuca and bugsduggan for there input into the design and plu
 |~|.reload|X|X|X|
 |~|.gitpull|X|X|X|
 |~|.cmd|X|X|X|
-|~|.loaded|X|X||
+|~|.loaded|X|||
+|~|.notloaded|X|||
 |Authentication|
 |~|.login||X||
 |~|.register||X||
