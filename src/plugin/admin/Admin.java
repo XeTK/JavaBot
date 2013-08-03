@@ -12,6 +12,7 @@ import core.plugin.PluginCore;
 import core.utils.Colour;
 import core.utils.Details;
 import core.utils.IRC;
+import core.utils.RegexFormatter;
 
 /**
  * Handles admin tasks - joining channels - bot nick change - start/stop bot -
@@ -21,10 +22,32 @@ import core.utils.IRC;
  */
 public class Admin extends Plugin {
 	private Channel uchannel_;
+	
+	private final String REG_JOIN = RegexFormatter.format("join", 
+			RegexFormatter.REG_CHAN);
+	private final String REG_PART = RegexFormatter.format("part", 
+			RegexFormatter.REG_CHAN);
+	private final String REG_NICK = RegexFormatter.format("nick", 
+			RegexFormatter.REG_NICK);
+	
+	private final String REG_QUIT = RegexFormatter.format("quit");
+	private final String REG_CMD = RegexFormatter.format("cmd .*");
+	private final String REG_EXCEPTION = RegexFormatter.format("exception");
+	private final String REG_GIT_PULL = RegexFormatter.format("gitpull");
+	private final String REG_RELOAD = RegexFormatter.format("reload");
+	private final String REG_LOADED = RegexFormatter.format("loaded");
+	private final String REG_NOT_LOADED = RegexFormatter.format("notloaded");
+	
+	private final String TXT_NOT_LOADED = "plugins not loaded: %s";
+	private final String TXT_LOADED = "plugins loaded: %s";
+	private final String TXT_RELOAD = "reloading plugins!";
+	private final String TXT_GIT_PULL = "reloading from git!";
+	private final String TXT_EXCEPTION = "Exception Thrown.";
+	private final String TXT_QUIT = "GoodBye";
+	private final String TXT_JOIN = "joined %s";
+	private final String TXT_PART = "left %s";
 
-	/**
-	 * Get the name of the plugin so it can be presented to the end user.
-	 */
+	private IRC irc = IRC.getInstance();
 
 	public void onCreate(Channel inChannel) throws Exception {
 		this.uchannel_ = inChannel;
@@ -36,8 +59,6 @@ public class Admin extends Plugin {
 	 */
 	public void onMessage(Message inMessage) throws Exception {
 
-		// Get the IRC instance so that we can send commands to the server.
-		IRC irc = IRC.getInstance();
 		// Get the details for the bot so we can check if the user issuing the
 		// command is a admin.
 		Details details = Details.getInstance();
@@ -46,6 +67,7 @@ public class Admin extends Plugin {
 		String message = inMessage.getMessage();
 		String user = inMessage.getUser();
 		String channel = inMessage.getChannel();
+		
 		// Check if the user is an admin and is aloud to issues theses commands.
 		if (details.isAdmin(user)) {
 			// Remove padding at the end of message. To stop any issues.
@@ -53,56 +75,60 @@ public class Admin extends Plugin {
 				message = message.substring(0, message.length() - 1);
 
 			// If we want to join a channel then we access this command.
-			if (message.matches("^\\.join [A-Za-z0-9#]+$")) {
+			if (message.matches(REG_JOIN)) {
 				String str[] = message.split(" ");
 				irc.sendServer("JOIN " + str[1]);
-				irc.sendPrivmsg(channel, "I Have Joined " + str[1]);
-			} else if (message.matches("^\\.part [A-Za-z0-9#]+$")) {
+				String msg = String.format(TXT_JOIN, str[1]);
+				irc.sendActionMsg(channel, msg);
+			} else if (message.matches(REG_PART)) {
 				String str[] = message.split(" ");
 				irc.sendServer("PART " + str[1]);
-				irc.sendPrivmsg(channel, "I Have Parted " + str[1]);
-			} else if (message.matches("^\\.quit")) {
-				irc.sendServer("QUIT Goodbye All!");
+				String msg = String.format(TXT_PART, str[1]);
+				irc.sendActionMsg(channel, msg);
+			} else if (message.matches(REG_QUIT)) {
+				irc.sendServer("QUIT " + TXT_QUIT);
 				System.exit(0);
-			} else if (message.matches("^\\.nick [A-Za-z0-9#]+$")) {
+			} else if (message.matches(REG_NICK)) {
 				String str[] = message.split(" ");
 				irc.sendServer("NICK " + str[1]);
-			} else if (message.matches("^\\.cmd .*")) {
-				Matcher p = Pattern.compile("^\\.cmd (.*)",
+			} else if (message.matches(REG_CMD)) {
+				Matcher p = Pattern.compile(REG_CMD,
 						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(
 						message);
 
 				if (p.find())
 					irc.sendServer(p.group(1));
-			} else if (message.matches("^\\.exception")) {
-				irc.sendPrivmsg(channel, "Exception Thrown."); 
+			} else if (message.matches(REG_EXCEPTION)) {
+				irc.sendPrivmsg(channel, TXT_EXCEPTION); 
 				throw new Exception(); 
-			} else if (message.matches("^\\.gitpull")) {
-				String msg = Colour.colour("Reloading from git!", Colour.RED,
-						Colour.WHITE);
-
-				irc.sendPrivmsg(channel, msg);
+			} else if (message.matches(REG_GIT_PULL)) {
+				String msg = Colour.colour(TXT_GIT_PULL, Colour.RED, Colour.WHITE);
+				irc.sendActionMsg(channel, msg);
 				String pid = ManagementFactory.getRuntimeMXBean().getName();
 				String[] ids = pid.split("@");
 				Runtime.getRuntime()
 						.exec(new String[] { "/bin/bash", "-c",
 								"./git.sh " + ids[0] });
-			} else if (message.matches("^\\.reload")) {
-				String msg = Colour.colour("reloading plugins!", Colour.RED);
+				
+			} else if (message.matches(REG_RELOAD)) {
+				String msg = Colour.colour(TXT_RELOAD, Colour.RED);
 				irc.sendActionMsg(channel, msg);
 				uchannel_.loadPlugins();
-			} else if (message.matches("^\\.loaded")) {
+			}
+		}
+		if (!inMessage.isPrivMsg()){
+			if (message.matches(REG_LOADED)) {
 				String loaded = PluginCore.loadedPlugins(uchannel_.getPlugins());
 				loaded = Colour.colour(loaded, Colour.GREEN, Colour.BLACK);
-				String loadedString = "plugins loaded: %s";
-				loadedString = String.format(loadedString, loaded);
-				irc.sendActionMsg(channel, loadedString);
-			} else if (message.matches("^\\.notloaded")) {
+
+				String msg = String.format(TXT_LOADED, loaded);
+				irc.sendActionMsg(channel, msg);
+			} else if (message.matches(REG_NOT_LOADED)) {
 				String notLoaded = uchannel_.notLoaded();
 				notLoaded = Colour.colour(notLoaded, Colour.RED, Colour.WHITE);
-				String notLoadedString = "plugins not loaded: %s";
-				notLoadedString = String.format(notLoadedString, notLoaded);
-				irc.sendActionMsg(channel, notLoadedString);
+				
+				String msg = String.format(TXT_NOT_LOADED, notLoaded);
+				irc.sendActionMsg(channel, msg);
 			}
 		}
 	}
