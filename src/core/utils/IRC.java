@@ -178,8 +178,12 @@ public class IRC {
 						break;
 					}
 				}
-				splitStr.add(buffer.substring(0, lastSpace));
-				buffer = buffer.substring(lastSpace + 1);
+				if (buffer.length() >= lastSpace)
+					splitStr.add(buffer.substring(0, lastSpace));
+				if (buffer.length() >= lastSpace +1)
+					buffer = buffer.substring(lastSpace + 1);
+				else
+					break;
 			} else {
 				splitStr.add(buffer);
 				break;

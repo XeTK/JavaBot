@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 import core.event.Message;
 import core.plugin.Plugin;
+import core.utils.Colour;
 import core.utils.IRC;
 
 public class Imgur extends Plugin {
@@ -94,7 +95,10 @@ public class Imgur extends Plugin {
 			}
 			title = title.trim();
 			IRC irc = IRC.getInstance();
-			irc.sendPrivmsg(in_message.getChannel(), title + ", Views : "
+			String coloured = Colour.colour(" I", Colour.GREEN,Colour.BLACK);
+			coloured += Colour.colour("mgur ", Colour.WHITE, Colour.BLACK);
+			title = title.replace("Imgur",coloured);
+			irc.sendPrivmsg(in_message.getChannel(), "'" + title + "', Views : "
 					+ viewcount + ", Bandwidth used : " + bandwidth
 					+ ", Likes/Dislikes : " + likes + "/" + dislikes);
 		}

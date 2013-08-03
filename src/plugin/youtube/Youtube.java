@@ -73,7 +73,7 @@ public class Youtube extends Plugin {
 			String yt = Colour.colour("You", Colour.BLACK, Colour.WHITE);
 			yt += Colour.colour("Tube", Colour.WHITE, Colour.RED);
 			title = title.replace("YouTube", yt);
-			irc.sendPrivmsg(in_message.getChannel(), title + ", " + viewcount
+			irc.sendPrivmsg(in_message.getChannel(), "'" + title + "', " + viewcount
 					+ " Views, " + likes + "|" + dislikes + " Likes|Dislikes");
 			in.close();
 		}
