@@ -23,7 +23,7 @@ public class Counters extends Plugin {
 
 	public void onTime() throws Exception {
 		times_++;
-		//printDebug();
+		printDebug();
 	}
 
 	public void onMessage(Message inMessage) throws Exception {

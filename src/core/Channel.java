@@ -1,6 +1,8 @@
 package core;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,7 +28,8 @@ import core.utils.TimeThread;
 public class Channel {
 
 	private String path_ = "servers/%s/%s/";
-
+	private final String blackListFile_ = "BlackListed.txt";
+	
 	// Keep the channel name & plugins save so they can be accessed later.
 	private String channelName_;
 	private String serverName_;
@@ -64,10 +67,68 @@ public class Channel {
 		if (!pluginDir.exists()) {
 			pluginDir.mkdirs();
 		}
+		
+		File blackList = new File(path_ + blackListFile_);
+		if (!blackList.exists())
+			blackList.createNewFile();
+		
 		// Load the plugins
 		loadPlugins();
 	}
-
+	private ArrayList<String> blackListedPlugins(){
+		ArrayList<String> lines = new ArrayList<String>();
+		try {
+			BufferedReader br = new BufferedReader(
+					new FileReader(path_ + blackListFile_
+							));
+			
+			String line = br.readLine();
+			while (line != null){
+			    lines.add(line);
+			    line = br.readLine();
+			}
+			br.close();
+		} catch (Exception ex) {
+			try {
+				throw new IRCException(ex);
+			} catch (IRCException e) {
+				e.printStackTrace();
+			}
+		}
+		return lines;
+	}
+	private ArrayList<Plugin> vettedList(ArrayList<Plugin> plugins){
+		ArrayList<Plugin> vetted = new ArrayList<Plugin>();
+		ArrayList<String> blackListed = blackListedPlugins();
+		
+		for (int i = 0; i < plugins.size();i++){
+			
+			boolean found = false;
+			
+			for (int j = 0; j < blackListed.size();j++){
+				if (plugins.get(i).name().equals(blackListed.get(j))){
+					found = true;
+					break;
+				}
+			}
+			
+			if (!found)
+				vetted.add(plugins.get(i));
+		}
+		return vetted;
+	}
+	
+	public String notLoaded(){
+		String temp = new String();
+		ArrayList<String> blackListed = blackListedPlugins();
+		for (int i = 0; i < blackListed.size();i++)
+			temp += blackListed.get(i) + ", ";
+		if (!temp.isEmpty())
+			return "[" + temp.substring(0, temp.length() -2) + "]";
+		else
+			return "[]";
+	}
+	
 	/**
 	 * Have this in a seperate method so that we can quickly reload the plugins.
 	 * 
@@ -77,12 +138,13 @@ public class Channel {
 	public void loadPlugins() throws Exception {
 		// Assign this channel with a fresh list of plugins that we can now
 		// manipulate.
-		this.plugins_ = PluginCore.loadPlugins();
+		this.plugins_ = vettedList(PluginCore.loadPlugins());
 
 		String loadedMsg = "\u001B[33mPlugins Loaded: %s";
 
 		System.out.println(String.format(loadedMsg,
 				PluginCore.loadedPlugins(plugins_)));
+		System.out.println("\u001B[33mPlugins Not Loaded: " + notLoaded());
 
 		// Call onCreate for each plugin to set them up ready for use.
 		for (int i = 0; i < plugins_.size(); i++)
