@@ -87,6 +87,7 @@ public class Users extends Plugin {
 	}
 
 	public String getHelpString() {
-		return "Users: This plugin does not have any commands.";
+		return "USERS: \n"
+				+ "\tThis class does not have any commands.";
 	}
 }

@@ -183,6 +183,7 @@ public class Channel {
 						irc.sendPrivmsg(inMessage.getUser(), helpString);
 					}
 				} catch (Exception ex) {
+					ex.printStackTrace();
 					try {
 						throw new IRCException(ex);
 					} catch (IRCException e) {

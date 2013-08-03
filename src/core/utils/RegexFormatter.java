@@ -24,6 +24,6 @@ public enum RegexFormatter {
 	}
 	public static String format(String command)
 	{
-		return String.format("^\\.%s$", command);
+		return String.format("^\\.%s", command);
 	}
 }

@@ -31,7 +31,7 @@ public class Admin extends Plugin {
 			RegexFormatter.REG_NICK);
 	
 	private final String REG_QUIT = RegexFormatter.format("quit");
-	private final String REG_CMD = RegexFormatter.format("cmd .*");
+	private final String REG_CMD = RegexFormatter.format("cmd (.*)");
 	private final String REG_EXCEPTION = RegexFormatter.format("exception");
 	private final String REG_GIT_PULL = RegexFormatter.format("gitpull");
 	private final String REG_RELOAD = RegexFormatter.format("reload");
@@ -140,12 +140,16 @@ public class Admin extends Plugin {
 	}
 
 	public String getHelpString() {
-		return "ADMIN: \n" + ".join <channel> - Join Channel : \n"
-				+ ".part <channel> - Part Channel : \n"
-				+ ".quit - Kill Bot : \n"
-				+ ".nick <nickname> - Change Bot's Nick : \n"
-				+ ".help - Show Help Text : \n"
-				+ ".loaded - Returns list of loaded plugins : \n"
-				+ ".reload - Pulls from git and reloads the bot :";
+		return "ADMIN: \n" 
+				+ "\t.join <channel> - Join Channel\n"
+				+ "\t.part <channel> - Part Channel\n"
+				+ "\t.quit - Kill Bot : \n"
+				+ "\t.nick <nickname> - Change bot's Nick\n"
+				+ "\t.loaded - Returns list of loaded plugins\n"
+				+ "\t.notloaded - Returns list of plugins not loaded\n"
+				+ "\t.reload - Reloads plugins from local directory without restarting the bot\n"
+				+ "\t.gitpull - Pulls from git and reloads the bot\n"
+				+ "\t.exception - This tests that admins can get exception notifications\n"
+				+ "\t.cmd <raw irc message> - Admin command to execute commands directly on the irc server\n";
 	}
 }

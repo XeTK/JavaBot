@@ -79,7 +79,8 @@ public class Issue extends Plugin {
 	}
 
 	public String getHelpString() {
-		return "ISSUE: .bug <one_line_bug_report>";
+		return "ISSUE:\n"
+				+ "\t.bug <one_line_bug_report>";
 	}
 
 	// TODO fix Exceptions

@@ -101,7 +101,7 @@ public class Imgur extends Plugin {
 	}
 
 	public String getHelpString() {
-		// TODO Auto-generated method stub
-		return "Imgur help String";
+		return "IMGUR:\n"
+				+ "\t<URL> - This will pharse Imgur links\n";
 	}
 }

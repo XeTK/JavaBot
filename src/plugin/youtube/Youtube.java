@@ -80,7 +80,7 @@ public class Youtube extends Plugin {
 	}
 
 	public String getHelpString() {
-		// TODO Auto-generated method stub
-		return "YouTube help string here";
+		return "YOUTUBE:\n"
+				+ "\t<URL> - This will pharse YouTube links for there stats\n";
 	}
 }

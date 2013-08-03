@@ -110,8 +110,10 @@ public class IRC {
 		String[] lines = message.split("\n");
 		for (int i = 0; i < lines.length; i++) {
 			String[] subLines = breakLongLines(lines[i]);
-			for (int j = 0; j < subLines.length; j++)
-				sendServer("PRIVMSG " + channel + " :" + subLines[j]);
+			for (int j = 0; j < subLines.length; j++) {
+				String msg = subLines[j].replace("\t", "     ");
+				sendServer("PRIVMSG " + channel + " :" + msg);
+			}
 		}
 	}
 

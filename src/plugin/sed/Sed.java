@@ -252,9 +252,10 @@ public class Sed extends Plugin {
 	}
 
 	public final String getHelpString() {
-		return "SED: " + "[<username>: ]s/<search>/<replacement>/ - "
+		return "SED: \n" 
+				+ "\t[<username>: ]s/<search>/<replacement>/ - "
 				+ "e.g XeTK: s/.*/hello/ is used to "
-				+ "replace the previous statement with hello :";
+				+ "replace the previous statement with hello";
 	}
 
   public class SedException extends Exception {

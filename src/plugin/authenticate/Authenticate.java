@@ -183,7 +183,10 @@ public class Authenticate extends Plugin {
 	}
 
 	public String getHelpString() {
-		// TODO Auto-generated method stub
-		return "Authentication help string";
+		return "AUTHENICATIONL:\n"
+				+ "\tLOGIN <EMAIL> <PASSWORD> - This is to authenticate with the bot\n"
+				+ "\tREGISTER <EMAIL> <PASSWORD> - Use this to register with the bot\n"
+				+ "\tLOGOUT - This will unauthenticate you with the bot\n"
+				+ "\tRECOVER - TO BE COMPLETED\n";
 	}
 }

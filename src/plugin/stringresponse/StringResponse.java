@@ -135,6 +135,6 @@ public class StringResponse extends Plugin {
 
 	public String getHelpString() {
 		return "RESPONSE: \n"
-				+ ".response <regex here>//<text here>/{0} <bot name>/{1} <channel user>";
+				+ "\t.response <regex here>//<text here>/{0} <bot name>/{1} <channel user>\n";
 	}
 }

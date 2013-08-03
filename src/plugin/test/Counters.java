@@ -48,7 +48,8 @@ public class Counters extends Plugin {
 	@Override
 	public String getHelpString() {
 		//printDebug();
-		return null;
+		return "COUNTERS: \n"
+				+ "\tThis class does not have any commands.";
 	}
 	private void printDebug()
 	{

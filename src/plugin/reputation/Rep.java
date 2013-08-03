@@ -88,10 +88,10 @@ public class Rep extends Plugin {
 	}
 
 	public String getHelpString() {
-		return "REP: "
-				+ ".rep <Item> - view the reputation of a item : \n"
-				+ "<Item>--/++ - increment or decrement the rep of a item / : \n"
-				+ "<Item> +/- <Ammount> - increment or decrement the rep of a set item by a set amount : \n";
+		return "REP: \n"
+				+ "\t.rep <Item> - view the reputation of a item\n"
+				+ "\t<Item>--/++ - increment or decrement the rep of a item /\n"
+				+ "\t<Item> +/- <Ammount> - increment or decrement the rep of a set item by a set amount\n";
 	}
 
 }
