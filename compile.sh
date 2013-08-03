@@ -35,3 +35,4 @@ done | grep -E "\.java$" > $SOURCES_LIST
 echo "List of files saved to $SOURCES_LIST"
 javac -cp "libs/gson-2.2.4.jar:libs/javax.mail.jar" -d bin/ -sourcepath src/ @${SOURCES_LIST}
 echo Javabot Compiled
+rm $SOURCES_LIST

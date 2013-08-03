@@ -74,13 +74,10 @@ public class Admin extends Plugin {
 
 				if (p.find())
 					irc.sendServer(p.group(1));
-			}
-			/*
-			 * else if (message.matches("^\\.exception")) {
-			 * irc.sendPrivmsg(channel, "Exception Thrown."); throw new
-			 * Exception(); }
-			 */
-			else if (message.matches("^\\.gitpull")) {
+			} else if (message.matches("^\\.exception")) {
+				irc.sendPrivmsg(channel, "Exception Thrown."); 
+				throw new Exception(); 
+			} else if (message.matches("^\\.gitpull")) {
 				String msg = Colour.colour("Reloading from git!", Colour.RED,
 						Colour.WHITE);
 
@@ -91,15 +88,21 @@ public class Admin extends Plugin {
 						.exec(new String[] { "/bin/bash", "-c",
 								"./git.sh " + ids[0] });
 			} else if (message.matches("^\\.reload")) {
-				String msg = Colour.colour("Reloading Plugins!", Colour.RED);
+				String msg = Colour.colour("reloading plugins!", Colour.RED);
 				irc.sendActionMsg(channel, msg);
 				uchannel_.loadPlugins();
 			} else if (message.matches("^\\.loaded")) {
 				String loaded = PluginCore.loadedPlugins(uchannel_.getPlugins());
-				loaded = Colour.colour(loaded, Colour.BLUE_DARK, Colour.WHITE);
-				String loadedString = "Plugins Loaded: %s";
+				loaded = Colour.colour(loaded, Colour.GREEN, Colour.BLACK);
+				String loadedString = "plugins loaded: %s";
 				loadedString = String.format(loadedString, loaded);
 				irc.sendActionMsg(channel, loadedString);
+			} else if (message.matches("^\\.notloaded")) {
+				String notLoaded = uchannel_.notLoaded();
+				notLoaded = Colour.colour(notLoaded, Colour.RED, Colour.WHITE);
+				String notLoadedString = "plugins not loaded: %s";
+				notLoadedString = String.format(notLoadedString, notLoaded);
+				irc.sendActionMsg(channel, notLoadedString);
 			}
 		}
 	}
