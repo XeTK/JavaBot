@@ -1,14 +1,43 @@
 package core.plugin;
 
-import java.lang.annotation.Target;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
+import core.Channel;
+import core.event.Join;
+import core.event.Kick;
+import core.event.Message;
+import core.event.Quit;
 
-@Inherited
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface plugin {
-	public boolean autoload() default true;
+/**
+ * This is the abstract class that all the plugins extend from.
+ * 
+ * @author Tom Rosier (XeTK)
+ */
+@IsPlugin
+public abstract class Plugin {
+
+	public String name() {
+		return this.getClass().getSimpleName();
+	}
+
+	public void onCreate(Channel inChannel) throws Exception {}
+
+	public void onTime() throws Exception {}
+
+	/**
+	 * Called in response to incoming PRIVMSG
+	 */
+	public void onMessage(Message inMessage) throws Exception {}
+
+	public void onJoin(Join inJoin) throws Exception {}
+
+	public void onQuit(Quit inQuit) throws Exception {}
+
+	public void onKick(Kick inKick) throws Exception {}
+
+	public void rawInput(String inStr) throws Exception {}
+
+	/**
+	 * The string displayed by .help message
+	 */
+	public abstract String getHelpString();
+
 }

@@ -70,8 +70,7 @@ public class PluginCore {
 					 * file is acceptable, then passes it back to us if it has
 					 * loaded correctly.
 					 */
-					Object pf = new PluginLoader().loadClassObj(file,
-							Plugin.class);
+					Object pf = new PluginLoader().loadClassObj(file);
 					if (pf instanceof Plugin) {
 						// If the plugin was loaded correctly then it is finaly
 						// added to the list and is returned to the channel.
@@ -79,7 +78,6 @@ public class PluginCore {
 							inPtr.add((Plugin) pf);
 					}
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

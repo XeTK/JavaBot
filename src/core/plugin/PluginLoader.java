@@ -3,7 +3,6 @@ package core.plugin;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import core.plugin.plugin;
 
 /**
  * This is the method for loading each plugin into the program, it was based of
@@ -25,7 +24,8 @@ public class PluginLoader extends ClassLoader {
 	 * @throws Exception
 	 *             as this is a complicated process it may throw any exception.
 	 */
-	public Object loadClassObj(File file, Class<?> classdef) throws Exception {
+	public Object loadClassObj(File file) 
+			throws Exception {
 		// Get the full location of the file we are working on.
 		String fileName = file.getAbsolutePath();
 
@@ -72,9 +72,8 @@ public class PluginLoader extends ClassLoader {
 			resolveClass(c);
 			// Check the class has loaded correctly and has the correct number
 			// of methods.
-
-			if (c.isAnnotationPresent(plugin.class)) {
-				plugin annotation = c.getAnnotation(plugin.class);
+			if (c.isAnnotationPresent(IsPlugin.class)) {
+				IsPlugin annotation = c.getAnnotation(IsPlugin.class);
 				if(annotation.autoload()) {
 					return c.newInstance();
 				}

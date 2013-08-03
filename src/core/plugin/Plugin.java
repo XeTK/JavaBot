@@ -5,15 +5,15 @@ import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
-import core.plugin.plugin;
 
 /**
  * This is the abstract class that all the plugins extend from.
  * 
  * @author Tom Rosier (XeTK)
  */
-@plugin
+@IsPlugin
 public abstract class Plugin {
+
 	public String name() {
 		return this.getClass().getSimpleName();
 	}
