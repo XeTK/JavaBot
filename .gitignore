@@ -6,6 +6,7 @@ bin/*
 plugin/*
 *.class
 logs/*
+libs/*
 *.json
 *.jar
 *.xml
