@@ -67,7 +67,7 @@ public class Reminder extends Plugin {
 						+ " next time they are here.");
 			}
 
-			m = Pattern.compile("^\\.reminder ([\\d//:]*) ([\\d:]*)(.*)",
+			m = Pattern.compile("^\\.reminder\\s([\\d//:]*) ([\\d:]*)(.*)",
 					Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
 
 			if (m.find()) {

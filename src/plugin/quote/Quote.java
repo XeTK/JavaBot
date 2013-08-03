@@ -9,12 +9,17 @@ import core.event.Join;
 import core.event.Message;
 import core.plugin.Plugin;
 import core.utils.IRC;
+import core.utils.RegexFormatter;
 
 public class Quote extends Plugin {
-	private final String RGX_ADD = "\\.quoteadd\\s([\\w\\d]*)\\s(.*)";
-	private final String RGX_REMOVE = "\\.quotedel\\s(.*)";
-	private final String RGX_QUOTES = "\\.quotes\\s([\\w\\d]*)";
-	private final String RGX_QUOTE = "\\.quote\\s([\\w\\d]*)";
+	private final String RGX_ADD = 
+			RegexFormatter.format("quoteadd\\s([\\w\\d]*)\\s(.*)");
+	private final String RGX_REMOVE = 
+			RegexFormatter.format("quotedel\\s(.*)");
+	private final String RGX_QUOTES = 
+			RegexFormatter.format("quotes", RegexFormatter.REG_NICK);
+	private final String RGX_QUOTE =
+			RegexFormatter.format("quote", RegexFormatter.REG_NICK);
 
 	private final String MSG_ADD = "%s: quote added";
 	private final String MSG_REMOVE = "%s: quote removed";

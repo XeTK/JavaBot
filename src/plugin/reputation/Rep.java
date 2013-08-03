@@ -9,6 +9,7 @@ import core.event.Message;
 import core.plugin.Plugin;
 import core.utils.IRC;
 import core.utils.JSON;
+import core.utils.RegexFormatter;
 
 public class Rep extends Plugin {
 	private final String CONFIG_FILE_LOCATION = "Rep.json";
@@ -77,7 +78,7 @@ public class Rep extends Plugin {
 						}
 					}
 				}
-			} else if (message.matches("\\.rep [A-Za-z0-9#]+$")) {
+			} else if (message.matches(RegexFormatter.format("rep",RegexFormatter.REG_NICK))) {
 				String[] t = message.split(" ");
 				if (t.length > 0 || t[1] != null)
 					irc.sendPrivmsg(channel, t[1] + ": Rep = "
