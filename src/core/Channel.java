@@ -97,6 +97,14 @@ public class Channel {
 		}
 		return lines;
 	}
+	public Object getPlugin(Class<?> classdef){
+		for (Plugin plugin: plugins_) {
+			if (plugin.getClass().equals(classdef)){
+				return plugin;
+			}
+		}
+		return null;
+	}
 	private ArrayList<Plugin> vettedList(ArrayList<Plugin> plugins){
 		ArrayList<Plugin> vetted = new ArrayList<Plugin>();
 		ArrayList<String> blackListed = blackListedPlugins();
@@ -300,5 +308,11 @@ public class Channel {
 	public ArrayList<Plugin> getPlugins() {
 		return plugins_;
 	}
-
+	public ArrayList<Plugin> getPlugins_() {
+		return plugins_;
+	}
+	public void setPlugins_(ArrayList<Plugin> plugins_) {
+		this.plugins_ = plugins_;
+	}
+	
 }

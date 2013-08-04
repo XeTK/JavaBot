@@ -48,7 +48,7 @@ public class Reminder extends Plugin {
 	public void onMessage(Message inMessage) throws Exception {
 		if (!inMessage.isPrivMsg()) {
 			IRC irc = IRC.getInstance();
-			UserList userList = UserList.getInstance();
+			UserList userList = (UserList) channel_.getPlugin(UserList.class);
 
 			String user = inMessage.getUser();
 			String channel = inMessage.getChannel();

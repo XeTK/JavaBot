@@ -3,43 +3,17 @@ package plugin.stats.user;
 import java.util.ArrayList;
 
 import core.event.Message;
+import core.plugin.Plugin;
 
 /**
  * This Class encapsulate users objects and also interacts with them.
  * 
  * @author Tom Rosier(XeTK)
  */
-public class UserList {
-	// Keep instance of class for singleton methodology
-	private static UserList userList_;
+public class UserList extends Plugin {
 
 	// Keep a list of the users that are members of the channel
 	private ArrayList<User> users_ = new ArrayList<User>();
-
-	/**
-	 * Static method to return a instance of the class for the singleton
-	 * methodology.
-	 * 
-	 * @return's and instance of the class that can then be manipulated.
-	 */
-	public static UserList getInstance() {
-		if (userList_ == null)
-			userList_ = new UserList();
-		return userList_;
-	}
-
-	/**
-	 * If we don't want the instance we have we can set the singleton to one
-	 * that already exists, this is useful for when setting the reference from a
-	 * JSON file.
-	 * 
-	 * @param instance
-	 *            this is the instance of the thing we want to set this class
-	 *            to.
-	 */
-	public static void setInstance(UserList instance) {
-		userList_ = instance;
-	}
 
 	/**
 	 * This returns the user object for a given username.
@@ -166,5 +140,11 @@ public class UserList {
 	public void removeQuote(String message) {
 		for (int i = 0; i < users_.size(); i++)
 			users_.get(i).removeQuote(message);
+	}
+
+	@Override
+	public String getHelpString() {
+		// TODO Auto-generated method stub
+		return "";
 	}
 }
