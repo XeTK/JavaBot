@@ -1,11 +1,11 @@
 {
-	"server_": "irc.test.com",
+	"server": "irc.test.com",
 	"port": 6667,
 	"botNickName": "JavaBot",
-	"smtpEmail_": "javabot@test.com",
-	"smtpHost_": "smtphost.test.com",
-	"smtpUser_": "javabot@test.com",
-	"smtpPassword_": "javabot",
+	"smtpEmail": "javabot@test.com",
+	"smtpHost": "smtphost.test.com",
+	"smtpUser": "javabot@test.com",
+	"smtpPassword": "javabot",
 	"channels": [
 		"#javabot"
 	],
