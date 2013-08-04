@@ -79,8 +79,7 @@ public class Channel {
 		ArrayList<String> lines = new ArrayList<String>();
 		try {
 			BufferedReader br = new BufferedReader(
-					new FileReader(path_ + blackListFile_
-							));
+					new FileReader(path_ + blackListFile_));
 			
 			String line = br.readLine();
 			while (line != null){
@@ -89,11 +88,7 @@ public class Channel {
 			}
 			br.close();
 		} catch (Exception ex) {
-			try {
-				throw new IRCException(ex);
-			} catch (IRCException e) {
-				e.printStackTrace();
-			}
+				new IRCException(ex);
 		}
 		return lines;
 	}
@@ -191,12 +186,7 @@ public class Channel {
 						irc.sendPrivmsg(inMessage.getUser(), helpString);
 					}
 				} catch (Exception ex) {
-					ex.printStackTrace();
-					try {
-						throw new IRCException(ex);
-					} catch (IRCException e) {
-						e.printStackTrace();
-					}
+					new IRCException(ex);
 				}
 			}
 		}
@@ -215,11 +205,7 @@ public class Channel {
 				try {
 					plugins_.get(i).onJoin(inJoin);
 				} catch (Exception ex) {
-					try {
-						throw new IRCException(ex);
-					} catch (IRCException e) {
-						e.printStackTrace();
-					}
+					new IRCException(ex);
 				}
 			}
 		}
@@ -238,11 +224,7 @@ public class Channel {
 				try {
 					plugins_.get(i).onQuit(inQuit);
 				} catch (Exception ex) {
-					try {
-						throw new IRCException(ex);
-					} catch (IRCException e) {
-						e.printStackTrace();
-					}
+					new IRCException(ex);
 				}
 			}
 		}
@@ -260,11 +242,7 @@ public class Channel {
 				try {
 					plugins_.get(i).onKick(inKick);
 				} catch (Exception ex) {
-					try {
-						throw new IRCException(ex);
-					} catch (IRCException e) {
-						e.printStackTrace();
-					}
+					new IRCException(ex);
 				}
 			}
 		}
@@ -283,11 +261,7 @@ public class Channel {
 			try {
 				plugins_.get(i).rawInput(inStr);
 			} catch (Exception ex) {
-				try {
-					throw new IRCException(ex);
-				} catch (IRCException e) {
-					e.printStackTrace();
-				}
+				new IRCException(ex);
 			}
 		}
 	}
