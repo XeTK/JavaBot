@@ -35,11 +35,7 @@ public class PrivMsg {
 					try {
 						plugins_.get(i).onMessage(inMessage);
 					} catch (Exception ex) {
-						try {
-							throw new IRCException(ex);
-						} catch (IRCException e) {
-							e.printStackTrace();
-						}
+						new IRCException(ex);
 					}
 				}
 			}
