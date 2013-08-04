@@ -1,4 +1,4 @@
-package plugin.admin.issue;
+package plugin.admin.gitissue;
 
 import java.util.List;
 

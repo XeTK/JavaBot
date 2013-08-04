@@ -1,4 +1,4 @@
-package plugin.admin.issue;
+package plugin.admin.gitissue;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,7 +24,7 @@ import core.utils.IRCException;
  *
  * @author Tom Leaman (tom@tomleaman.co.uk)
  */
-public class Issue extends Plugin {
+public class GitIssue extends Plugin {
 
 	private static final String AUTH_TOKEN_FILE = "auth_token";
 	private static final String GITHUB_URL = "https://api.github.com";
@@ -37,7 +37,7 @@ public class Issue extends Plugin {
 	private String authToken;
 	private boolean isLoaded = false;
 
-	public Issue() {
+	public GitIssue() {
 		try {
 			authToken = loadAuthToken(AUTH_TOKEN_FILE);
 		} catch (FileNotFoundException e) {
