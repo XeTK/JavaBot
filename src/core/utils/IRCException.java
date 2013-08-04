@@ -40,6 +40,7 @@ public class IRCException extends Exception {
 			for (int i = 0; i < admins.length; i++) {
 				irc.sendPrivmsg(admins[i], msg);
 			}
+			ex.printStackTrace();
 		} catch (IRCException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

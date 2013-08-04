@@ -126,7 +126,7 @@ public class Sed extends Plugin {
 
 					reply += "%s meant: %s";
 					try {
-					  text = text.replaceAll(search, replacement);
+					  text = text.replace(search, replacement);
           } catch (StringIndexOutOfBoundsException e) {
             throw new SedException(e.getMessage());
           }
