@@ -98,7 +98,14 @@ public class UserStatistics extends Plugin {
 	}
 
 	public void onRaw(String inStr){
-
+		if (userList != null) {
+			try {
+				JSON.save(dbFile_, userList);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public String getHelpString() {
