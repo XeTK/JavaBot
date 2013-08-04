@@ -2,6 +2,7 @@ package plugin.stats.user;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import core.Channel;
 import core.event.Join;
@@ -25,25 +26,36 @@ public class UserStatistics extends Plugin {
 	private final IRC irc_ = IRC.getInstance();
 
 	private String dbFile_ = new String();
+	
+	private Channel channel_;
+	
+	private UserList userList;
 
 	public void onCreate(Channel inChannel) throws Exception {
+		this.channel_ = inChannel;
 		dbFile_ = inChannel.getPath() + DB_FILE;
-		if (new File(dbFile_).exists())
-			UserList.setInstance((UserList) JSON.load(dbFile_, UserList.class));
-		else
-			JSON.save(dbFile_, UserList.getInstance());
+		if (new File(dbFile_).exists()){
+			UserList temp = (UserList) channel_.getPlugin(UserList.class);
+			ArrayList<Plugin> tempList = channel_.getPlugins();
+			tempList.remove(temp);
+			userList = (UserList) JSON.load(dbFile_, UserList.class);
+			tempList.add(userList);
+			channel_.setPlugins_(tempList);
+		} else {
+			if (userList == null)
+				userList = (UserList) channel_.getPlugin(UserList.class);
+			JSON.save(dbFile_, userList);
+		}
 	}
 
 	public void onMessage(Message inMessage) throws IRCException, IOException {
 		if (!inMessage.isPrivMsg()) {
-			JSON.save(dbFile_, UserList.getInstance());
-			UserList.getInstance().msgSent(inMessage);
+			userList.msgSent(inMessage);
 		}
 	}
 
 	public void onJoin(Join inJoin) throws Exception {
-		JSON.save(dbFile_, UserList.getInstance());
-		User user = UserList.getInstance().getUser(inJoin.getUser());
+		User user = userList.getUser(inJoin.getUser());
 		if (user != null) {
 			user.incjoins(inJoin.getHost());
 			String msg = String.format(USER_JOINED,
@@ -60,9 +72,8 @@ public class UserStatistics extends Plugin {
 	}
 
 	public void onQuit(Quit in_quit) throws Exception {
-		JSON.save(dbFile_, UserList.getInstance());
 
-		User userOBJ = UserList.getInstance().getUser(in_quit.getUser());
+		User userOBJ = userList.getUser(in_quit.getUser());
 		if (userOBJ != null) {
 			userOBJ.incQuits();
 			String msg = String.format(USER_QUIT,
@@ -75,7 +86,7 @@ public class UserStatistics extends Plugin {
 	public void onKick(Kick in_kick) throws Exception {
 		IRC irc = IRC.getInstance();
 
-		User userOBJ = UserList.getInstance().getUser(in_kick.getKicked());
+		User userOBJ = userList.getUser(in_kick.getKicked());
 		if (userOBJ != null) {
 			userOBJ.incKicks();
 
@@ -86,6 +97,17 @@ public class UserStatistics extends Plugin {
 		}
 	}
 
+	public void onRaw(String inStr){
+		if (userList != null) {
+			try {
+				JSON.save(dbFile_, userList);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public String getHelpString() {
 		return "USERS: \n"
 				+ "\tThis class does not have any commands.";

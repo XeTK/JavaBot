@@ -55,8 +55,10 @@ public class ChannelStatistics extends Plugin {
 
 	private Day today_;
 	private Options options_;
+	private Channel channel_;
 
 	public void onCreate(Channel inChannel) throws Exception {
+		this.channel_ = inChannel;
 		channelName_ = inChannel.getChannelName();
 		savePath_ = inChannel.getPath() + LOG_PATH;
 
@@ -139,7 +141,7 @@ public class ChannelStatistics extends Plugin {
 			if (message.charAt(message.length() - 1) == ' ')
 				message = message.substring(0, message.length() - 1);
 
-			UserList uuserList = UserList.getInstance();
+			UserList uuserList = ((UserList) channel_.getPlugin(UserList.class));
 
 			if (today_ == null)
 				today_ = new Day();
