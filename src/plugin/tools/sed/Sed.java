@@ -127,9 +127,9 @@ public class Sed extends Plugin {
 					reply += "%s meant: %s";
 					try {
 					  text = text.replace(search, replacement);
-          } catch (StringIndexOutOfBoundsException e) {
-            throw new SedException(e.getMessage());
-          }
+                                        } catch (StringIndexOutOfBoundsException e) {
+                                          throw new SedException(e.getMessage());
+                                        }
 					irc_.sendPrivmsg(channel,
 							String.format(reply, tempMessage.getUser(), text));
 					break;
