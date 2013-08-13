@@ -96,10 +96,7 @@ public class Reminder extends Plugin {
 						for (int i = 0; i < reminders.length; i++) {
 							irc.sendPrivmsg(channel, reminders[i]);
 						}
-					} else {
-						irc.sendPrivmsg(channel, user
-								+ ": Your host has changed...");
-					}
+					} 
 				}
 			}
 			JSON.save(cfgFile_, remindersList_);
