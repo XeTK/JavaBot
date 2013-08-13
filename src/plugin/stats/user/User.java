@@ -94,11 +94,6 @@ public class User {
 			isDirty_ = true;
 		else
 			isDirty_ = false;
-
-		if (!this.host_.equals(host)) {
-			this.host_ = host;
-			isDirty_ = true;
-		}
 	}
 
 	/**
