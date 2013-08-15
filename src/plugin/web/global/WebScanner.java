@@ -16,7 +16,7 @@ public class WebScanner extends Plugin{
 	public void onMessage(Message inMessage) throws Exception {
 		Matcher m = Pattern
 				.compile(
-						"(http(?:s)?://(?:www.)?[\\w\\d]*.[\\w]*[./][\\w\\d//?/=-]*)",
+						"(http(?:s)?://(?:www.)?[\\w\\d]*.[\\w]*[./][\\.\\w\\d//?/=-]*)",
 						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(
 						inMessage.getMessage());
 		Matcher yt = Pattern
@@ -31,27 +31,31 @@ public class WebScanner extends Plugin{
 					inMessage.getMessage());
 		
 		if (m.find()&&!yt.find()&&!img.find()) {
+			System.out.println(m.group());
 			URL myUrl = new URL(m.group(1));
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					myUrl.openStream()));
-
-			String line, title = "";
-
-			while ((line = in.readLine()) != null) {
-
-				m = Pattern.compile("<title>(.*)</title>",
-						Pattern.CASE_INSENSITIVE | Pattern.DOTALL)
-						.matcher(line);
-				if (m.find())
-					title = m.group(1);
+			if (myUrl != null){
+				InputStreamReader isr = new InputStreamReader(
+						myUrl.openStream());
+				BufferedReader in = new BufferedReader(isr);
+	
+				String line, title = "";
+	
+				while ((line = in.readLine()) != null) {
+	
+					m = Pattern.compile("<title>(.*)</title>",
+							Pattern.CASE_INSENSITIVE | Pattern.DOTALL)
+							.matcher(line);
+					if (m.find())
+						title = m.group(1);
+				}
+				if (!title.isEmpty()) {
+					IRC irc = IRC.getInstance();
+					String link = Colour.colour("[LINK]", Colour.YELLOW, Colour.BLUE);
+					irc.sendPrivmsg(inMessage.getChannel(), link + " '" + title + "'");	
+				}
+				
+				in.close();
 			}
-			if (!title.isEmpty()) {
-				IRC irc = IRC.getInstance();
-				String link = Colour.colour("[LINK]", Colour.YELLOW, Colour.BLUE);
-				irc.sendPrivmsg(inMessage.getChannel(), link + " '" + title + "'");	
-			}
-			
-			in.close();
 		}
 	}
 
