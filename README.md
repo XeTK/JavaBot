@@ -72,9 +72,9 @@ and should compile for Java6 and above.
 Plugins - All plugins should be placed in `src/` and must use the Plugin interface, any additional classes must
 be put under package `addon.*pluginname*`.
 
-#Special thanks 
+#Special thanks
 
-Thanks to SoftlySplinter, ssherar and bugsduggan for there input into the design and plugins
+Thanks to SoftlySplinter, ssherar and bugsduggan for their input into the design and plugins
 
 #Available commands
 
