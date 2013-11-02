@@ -43,6 +43,7 @@ public class Core {
 								try {
 									irc.sendServer("QUIT Kill issued by OS");
 									irc.closeConnection();
+									System.exit(1);
 								} catch (IOException e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
