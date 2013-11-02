@@ -1,5 +1,6 @@
 package core;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,6 +33,26 @@ public class Core {
 	 *             if there is an error we throw it up to the JVM.
 	 */
 	public Core() throws Exception {
+		
+        Runtime.getRuntime().addShutdownHook(
+        	new Thread(){
+				            @Override
+				            public void run(){
+				                System.out.println("JavaBot is shutting down.");
+				        		IRC irc = IRC.getInstance();
+								try {
+									irc.sendServer("QUIT Kill issued by OS");
+									irc.closeConnection();
+								} catch (IOException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								} catch (IRCException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+				            }
+				        });
+        
 		// When the application first loads it needs to connect and open the
 		// connection to the server
 		connect();
