@@ -38,44 +38,43 @@ public class Rep extends Plugin {
 				message = message.substring(0, message.length() - 1);
 
 			IRC irc = IRC.getInstance();
-			if (message
-					.matches("(^[a-zA-Z0-9]*)[\\s\\+-]([-\\+])[\\=\\s]*([\\d]*)")) {
-				Matcher r = Pattern.compile(
-						"(^[a-zA-Z0-9]*)[\\s\\+-]([-\\+])[\\=\\s]*([\\d]*)",
-						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(
-						message);
-				if (r.find()) {
-					String item = r.group(1);
-					String type = r.group(2);
-					String ammount = r.group(3);
+			
+			Matcher r = Pattern.compile(
+					"([\\w\\d]*)(?:[\\s])?([+|-])(?:[+|-|=])?(?:[\\s]([\\d]*))?",
+					Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(
+					message);
+			
+			
+			if (r.find()) {
 
-					if (!inMessage.getUser().equalsIgnoreCase(item))
-					{
-						if (!type.equals("")) {
-							int iAmmount = 0;
+				String item = r.group(1);
+				String type = r.group(2);
+				String ammount = r.group(3);
+				
+				if (!inMessage.getUser().equalsIgnoreCase(item))
+				{
+					int iAmmount = 0;
 
-							if (type.equals("++")) {
-								iAmmount = 1;
-							} else if (type.equals("--")) {
-								iAmmount = -1;
-							} else {
-								type = type.trim();
-								ammount = ammount.trim();
-								if (type.equals("+"))
-									iAmmount = Integer.valueOf(ammount);
-								else
-									iAmmount = Integer.valueOf(type + ammount);
-							}
-							if (iAmmount > 100 || iAmmount < -100) {
-								irc.sendPrivmsg(channel,
-										"You cant do that its to much rep...");
-							} else {
-								Reputation tempRep = repList_.getRep(item);
-								tempRep.modRep(iAmmount);
-								irc.sendPrivmsg(channel, item + ": Rep = "
-										+ tempRep.getRep() + "!");
-							}
-						}
+					if (type.equals("+") && r.group(3) == null) {
+						iAmmount = 1;
+					} else if (type.equals("-") && r.group(3) == null) {
+						iAmmount = -1;
+					} else {
+						type = type.trim();
+						ammount = ammount.trim();
+						if (type.equals("+"))
+							iAmmount = Integer.valueOf(ammount);
+						else
+							iAmmount = Integer.valueOf(type + ammount);
+					}
+					if (iAmmount > 100 || iAmmount < -100) {
+						irc.sendPrivmsg(channel,
+								"You cant do that its to much rep...");
+					} else {
+						Reputation tempRep = repList_.getRep(item);
+						tempRep.modRep(iAmmount);
+						irc.sendPrivmsg(channel, item + ": Rep = "
+								+ tempRep.getRep() + "!");
 					}
 				}
 			} else if (message.matches(RegexFormatter.format("rep",RegexFormatter.REG_NICK))) {
