@@ -25,6 +25,26 @@ public class Core {
 	// Keep a list of all the channels we are currently connected to.
 	private ArrayList<Channel> channels_ = new ArrayList<Channel>();
 
+	public void killBot(){
+		IRC irc = IRC.getInstance();
+		try {
+			irc.sendServer("QUIT Something wants this process dead...");
+			for (Channel channel: channels_) {
+				System.out.println("Stopping thread for channel : " + channel.getChannelName());
+				channel.getTimeThread().interrupt();
+			}
+			irc.closeConnection();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IRCException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.exit(0);
+	}
+	
 	/**
 	 * This is the start point for the application after it has been launched,
 	 * this is where we end up after we have gone past the static context.
@@ -33,26 +53,6 @@ public class Core {
 	 *             if there is an error we throw it up to the JVM.
 	 */
 	public Core() throws Exception {
-		
-        Runtime.getRuntime().addShutdownHook(
-        	new Thread(){
-				            @Override
-				            public void run(){
-				                System.out.println("JavaBot is shutting down.");
-				        		IRC irc = IRC.getInstance();
-								try {
-									irc.sendServer("QUIT Kill issued by OS");
-									irc.closeConnection();
-									System.exit(1);
-								} catch (IOException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								} catch (IRCException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-				            }
-				        });
         
 		// When the application first loads it needs to connect and open the
 		// connection to the server

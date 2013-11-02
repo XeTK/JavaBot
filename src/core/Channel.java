@@ -288,5 +288,10 @@ public class Channel {
 	public void setPlugins_(ArrayList<Plugin> plugins_) {
 		this.plugins_ = plugins_;
 	}
+	public TimeThread getTimeThread() {
+		return timeThread_;
+	}
+	
+	
 	
 }

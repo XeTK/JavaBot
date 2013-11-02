@@ -86,7 +86,7 @@ public class Admin extends Plugin {
 				String msg = String.format(TXT_PART, str[1]);
 				irc.sendActionMsg(channel, msg);
 			} else if (message.matches(REG_QUIT)) {
-				irc.sendServer("QUIT " + TXT_QUIT);
+				irc.closeConnection();
 				System.exit(0);
 			} else if (message.matches(REG_NICK)) {
 				String str[] = message.split(" ");

@@ -32,7 +32,6 @@ public class Lyrics extends Plugin {
 						} else {
 							irc.sendPrivmsg(inMessage.getChannel(), cur);
 						}
-						System.out.println("'" + cur + "'");
 					}
 				} else {
 					irc.sendPrivmsg(inMessage.getChannel(), "But " + inMessage.getUser() + " I've already sung!");

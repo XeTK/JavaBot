@@ -16,9 +16,19 @@ public class Start {
 	 * @throws Exception
 	 *             if we have an early exception it is thrown up to the JVM.
 	 */
+	private static Core core_;
+	
 	public static void main(String[] args) throws Exception {
-		// We don't need to keep track of the object we just let it run.
-		new Core();
+        Runtime.getRuntime().addShutdownHook(
+            	new Thread(){
+    				            @Override
+    				            public void run(){
+    				                System.out.println("JavaBot is shutting down.");
+    				                core_.killBot();
+    				                this.interrupt();
+    				            }
+    				        });
+        core_ = new Core();
 	}
 
 }
