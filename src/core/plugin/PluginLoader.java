@@ -68,11 +68,12 @@ public class PluginLoader extends ClassLoader {
 				c = defineClass(className, classbytes, 0, length);
 			}
 
-			// Resolve the class, don't know why doesn't work without it
-			resolveClass(c);
+
 			// Check the class has loaded correctly and has the correct number
 			// of methods.
 			if (c.isAnnotationPresent(IsPlugin.class)) {
+				// Resolve the class, don't know why doesn't work without it
+				resolveClass(c);
 				IsPlugin annotation = c.getAnnotation(IsPlugin.class);
 				if(annotation.autoload()) {
 					return c.newInstance();

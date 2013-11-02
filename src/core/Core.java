@@ -76,12 +76,12 @@ public class Core {
 		// Connect to all the channels that are stored within the details file
 		for (int i = 0; i < details.getChannels().length; i++) {
 			// Get the channels identifier.
-			String chan_name = details.getChannels()[i];
+			String chanName = details.getChannels()[i];
 			// Send join command to the server.
-			irc.sendServer("JOIN " + chan_name);
+			irc.sendServer("JOIN " + chanName);
 			// Add the channel to are list of connected channels to make sure
 			// its tracked.
-			channels_.add(new Channel(chan_name));
+			channels_.add(new Channel(chanName));
 		}
 	}
 
@@ -206,7 +206,27 @@ public class Core {
 						.matcher(output);
 
 				if (m.find()) {
-					irc.sendServer("JOIN " + m.group(4));
+					// Get the channels identifier.
+					String chanName = m.group(4);
+					
+					boolean chanNotIn = false;
+					
+					for (Channel channel: channels_) {
+						if (channel.getChannelName().equals(chanName)) {
+							chanNotIn = true;
+							break;
+						}
+					}
+					
+						
+					if (!chanNotIn) {
+						// Send join command to the server.
+						irc.sendServer("JOIN " + chanName);
+						// Add the channel to are list of connected channels to make sure
+						// its tracked.
+						channels_.add(new Channel(chanName));
+					}
+					
 					continue;
 				}
 
@@ -254,7 +274,7 @@ public class Core {
 				}
 
 				// On Quit
-				m = Pattern.compile(":(.*)!(.*@.*) PART (#.*)",
+				m = Pattern.compile(":(.*)!(.*@.*)\\s(QUIT|PART)(?:\\s(#[\\w\\d]*))?\\s:(.*)",
 						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(
 						output);
 
