@@ -51,6 +51,7 @@ public class UserStatistics extends Plugin {
 	public void onMessage(Message inMessage) throws IRCException, IOException {
 		if (!inMessage.isPrivMsg()) {
 			userList.msgSent(inMessage);
+			JSON.save(dbFile_, userList);
 		}
 	}
 
