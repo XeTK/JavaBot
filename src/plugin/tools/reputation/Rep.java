@@ -40,7 +40,7 @@ public class Rep extends Plugin {
 			IRC irc = IRC.getInstance();
 			
 			Matcher r = Pattern.compile(
-					"^([\\w\\d]*)(?:[\\s])?([+|-])(?:[+|-|=])?(?:[\\s]([\\d]*))?",
+					"^([\\w\\d]*)(?:[\\s])?([+|-])(?:[+|-|=])?(?:[\\s]([\\d]*))?\\r",
 					Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(
 					message);
 			
