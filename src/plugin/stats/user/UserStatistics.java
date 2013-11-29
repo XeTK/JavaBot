@@ -19,9 +19,9 @@ public class UserStatistics extends Plugin {
 	private final String DB_FILE = "Users.json";
 
 	private final String NEW_USER = "Hello %s and welcome! Don't break things!";
-	private final String USER_JOINED = "%s Has joined %s times";
-	private final String USER_QUIT = "%s Has quit %s times";
-	private final String USER_KICKED = "%s Has be kicked %s times";
+	private final String USER_JOINED = "%s has joined %s times";
+	private final String USER_QUIT = "%s has quit %s times";
+	private final String USER_KICKED = "%s has been kicked %s times";
 
 	private final IRC irc_ = IRC.getInstance();
 
