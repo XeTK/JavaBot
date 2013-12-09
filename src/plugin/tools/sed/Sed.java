@@ -115,8 +115,11 @@ public class Sed extends Plugin {
 				}
 
 				m = Pattern.compile(search,
-						Pattern.CASE_INSENSITIVE | Pattern.DOTALL)
-						.matcher(text);
+					Pattern.CASE_INSENSITIVE)
+					.matcher(text);
+					
+				// Use StringBuffer to hold message String for replacement
+				StringBuffer sb = new StringBuffer();
 
 				if (m.find()) {
 					String reply = new String();
@@ -126,14 +129,22 @@ public class Sed extends Plugin {
 
 					reply += "%s meant: %s";
 					try {
-					  text = text.replaceAll(search, replacement);
-                                        } catch (StringIndexOutOfBoundsException e) {
-                                          throw new SedException(e.getMessage());
-                                        }
+						// Use Matcher class to make replacement
+						// This preserves modifiers used in Pattern compilation
+						m.appendReplacement(sb, replacement);
+						
+					} catch (StringIndexOutOfBoundsException e) {
+						throw new SedException(e.getMessage());
+					}
+					// Append remainder of StringBuffer to the match.
+					m.appendTail(sb);
+					text = sb.toString();
+					
 					irc_.sendPrivmsg(channel,
-							String.format(reply, tempMessage.getUser(), text));
+						String.format(reply, tempMessage.getUser(), text));
 					break;
 				}
+
 			}
 
 		} else {
