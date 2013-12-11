@@ -80,7 +80,7 @@ public class Sed extends Plugin {
 		// ([^/]+) captures the search string
 		// ([^/]*) captures the replacement
 		Pattern sedFinder = Pattern
-				.compile("^(?:([\\w]+): )?s/([^/]+)/([^/]*)/?");
+				.compile("^(?:([\\w]+): )?s/((?:(?<=\\\\)/|[^/])+)/((?:(?<=\\\\)/|[^/])*)/?");
 		Matcher m = sedFinder.matcher(message);
 
 		// it's sed time, baby
