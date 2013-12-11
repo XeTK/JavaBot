@@ -49,7 +49,15 @@ public class PluginLoader extends ClassLoader {
 			// java will load the class.
 			className = className.replace('/', '.');
 			
-			return this.loadClass(className).newInstance(); /*
+			Class<?> klass = loadClass(className);
+			
+			if (klass.isAnnotationPresent(IsPlugin.class)) {
+				IsPlugin annotation = klass.getAnnotation(IsPlugin.class);
+				if(annotation.autoload()) {
+					return klass.newInstance(); 
+				}
+			}
+			/*
 
 			// Check if the class has already been loaded if it has then we
 			// don't need todo anything.
