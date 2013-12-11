@@ -3,18 +3,20 @@ package plugin.stats.user;
 import java.util.ArrayList;
 
 import core.event.Message;
-import core.plugin.Plugin;
 
-/**
+/**s
  * This Class encapsulate users objects and also interacts with them.
  * 
  * @author Tom Rosier(XeTK)
  */
-public class UserList extends Plugin {
-
+public class UserList {
+	
 	// Keep a list of the users that are members of the channel
 	private ArrayList<User> users_ = new ArrayList<User>();
 
+	
+	public UserList uL = this;
+	
 	/**
 	 * This returns the user object for a given username.
 	 * 
@@ -142,9 +144,4 @@ public class UserList extends Plugin {
 			users_.get(i).removeQuote(message);
 	}
 
-	@Override
-	public String getHelpString() {
-		// TODO Auto-generated method stub
-		return "";
-	}
 }

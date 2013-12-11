@@ -71,12 +71,13 @@ public class PluginCore {
 					 * loaded correctly.
 					 */
 					Object pf = new PluginLoader().loadClassObj(file);
-					if (pf instanceof Plugin) {
+					System.out.println(pf);
+					//if (pf instanceof Plugin) {
 						// If the plugin was loaded correctly then it is finaly
 						// added to the list and is returned to the channel.
 						if (pf != null)
 							inPtr.add((Plugin) pf);
-					}
+					//}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

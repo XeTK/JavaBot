@@ -92,9 +92,12 @@ public class Channel {
 		}
 		return lines;
 	}
-	public Object getPlugin(Class<?> classdef){
+	public Plugin getPlugin(Class<?> classdef){
 		for (Plugin plugin: plugins_) {
-			if (plugin.getClass().equals(classdef)){
+			
+			//if (plugin.getClass().equals(classdef)){
+			//if (plugin.getClass().isAssignableFrom(classdef)) {
+			if (plugin.getClass().getName().equals(classdef.getName())) {
 				return plugin;
 			}
 		}
@@ -142,6 +145,10 @@ public class Channel {
 		// Assign this channel with a fresh list of plugins that we can now
 		// manipulate.
 		this.plugins_ = vettedList(PluginCore.loadPlugins());
+		
+		for (Plugin plug: plugins_)
+			System.out.println(plug);
+		
 
 		String loadedMsg = "\u001B[33mPlugins Loaded: %s";
 

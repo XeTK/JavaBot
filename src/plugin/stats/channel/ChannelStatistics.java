@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 import plugin.stats.channel.data.Day;
 import plugin.stats.channel.data.Hour;
 import plugin.stats.user.UserList;
+import plugin.stats.user.UserListLoader;
 import core.Channel;
 import core.event.Join;
 import core.event.Kick;
@@ -141,7 +142,7 @@ public class ChannelStatistics extends Plugin {
 			if (message.charAt(message.length() - 1) == ' ')
 				message = message.substring(0, message.length() - 1);
 
-			UserList uuserList = ((UserList) channel_.getPlugin(UserList.class));
+			UserList uuserList = ((UserListLoader) channel_.getPlugin(UserListLoader.class)).getUserList();
 
 			if (today_ == null)
 				today_ = new Day();

@@ -20,14 +20,15 @@ public class Start {
 	
 	public static void main(String[] args) throws Exception {
         Runtime.getRuntime().addShutdownHook(
-            	new Thread(){
-    				            @Override
-    				            public void run(){
-    				                System.out.println("JavaBot is shutting down.");
-    				                core_.killBot();
-    				                this.interrupt();
-    				            }
-    				        });
+        		new Thread(){
+					            @Override
+					            public void run(){
+					                System.out.println("JavaBot is shutting down.");
+					                core_.killBot();
+					                this.interrupt();
+					            }
+	    	    }
+        );
         core_ = new Core();
 	}
 

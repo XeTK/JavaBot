@@ -32,6 +32,7 @@ public class PluginLoader extends ClassLoader {
 		// If the file doesn't have .class as a ending then we discard is
 		// straight away.
 		if (fileName.endsWith(".class")) {
+
 			// Remove the extension from the file path.
 			fileName = fileName.substring(0, fileName.indexOf('.'));
 
@@ -42,10 +43,13 @@ public class PluginLoader extends ClassLoader {
 
 			// Remove non essential part of the path.
 			String className = fileName.replace(programRoot, "");
+			
 
 			// Replace the '/' left in the classname with have with '.' so that
 			// java will load the class.
 			className = className.replace('/', '.');
+			
+			return this.loadClass(className).newInstance(); /*
 
 			// Check if the class has already been loaded if it has then we
 			// don't need todo anything.
@@ -78,7 +82,7 @@ public class PluginLoader extends ClassLoader {
 				if(annotation.autoload()) {
 					return c.newInstance();
 				}
-			}
+			}*/
 		}
 		// And if we can't load we return null so there is a status to say if it
 		// hasn't loaded.

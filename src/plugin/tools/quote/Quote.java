@@ -5,6 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import plugin.stats.user.UserList;
+import plugin.stats.user.UserListLoader;
 import core.Channel;
 import core.event.Join;
 import core.event.Message;
@@ -36,11 +37,9 @@ public class Quote extends Plugin {
 
 	private final IRC irc_ = IRC.getInstance();
 	private UserList userList_;
-	private Channel channel_;
 
 	public void onCreate(Channel inChannel) throws Exception {
-		this.channel_ = inChannel;
-		this.userList_ = (UserList) channel_.getPlugin(UserList.class);
+		this.userList_ = ((UserListLoader) inChannel.getPlugin(UserListLoader.class)).getUserList();
 	}
 
 	public void onMessage(Message inMessage) throws Exception {
