@@ -146,9 +146,6 @@ public class Channel {
 		// manipulate.
 		this.plugins_ = vettedList(PluginCore.loadPlugins());
 		
-		for (Plugin plug: plugins_)
-			System.out.println(plug);
-		
 
 		String loadedMsg = "\u001B[33mPlugins Loaded: %s";
 
