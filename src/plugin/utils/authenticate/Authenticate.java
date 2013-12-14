@@ -13,7 +13,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 import plugin.stats.user.User;
-import plugin.stats.user.UserList;
+import plugin.stats.user.UserListLoader;
 import core.Channel;
 import core.event.Join;
 import core.event.Kick;
@@ -37,7 +37,7 @@ public class Authenticate extends Plugin {
 		IRC irc = IRC.getInstance();
 
 		if (inMessage.isPrivMsg()) {
-			User user = ((UserList) channel_.getPlugin(UserList.class)).getUser(inMessage.getUser());
+			User user = (((UserListLoader) channel_.getPlugin(UserListLoader.class)).getUserList()).getUser(inMessage.getUser());
 			if (user != null) {
 				if (inMessage.getMessage().matches("LOGIN .*")) {
 					if (!authUsers_.contains(user)) {
@@ -132,7 +132,7 @@ public class Authenticate extends Plugin {
 
 	public void onJoin(Join inJoin) throws Exception {
 		IRC irc = IRC.getInstance();
-		User user = ((UserList) channel_.getPlugin(UserList.class)).getUser(inJoin.getUser());
+		User user = (((UserListLoader) channel_.getPlugin(UserListLoader.class)).getUserList()).getUser(inJoin.getUser());
 		if (user != null)
 			if (!authUsers_.contains(user))
 				if (user.getEmail() != null && !user.getEmail().isEmpty())
@@ -140,13 +140,13 @@ public class Authenticate extends Plugin {
 	}
 
 	public void onQuit(Quit inQuit) throws Exception {
-		User user = ((UserList) channel_.getPlugin(UserList.class)).getUser(inQuit.getUser());
+		User user = (((UserListLoader) channel_.getPlugin(UserListLoader.class)).getUserList()).getUser(inQuit.getUser());
 		authUsers_.remove(user);
 	}
 
 	@Override
 	public void onKick(Kick inKick) throws Exception {
-		User user = ((UserList) channel_.getPlugin(UserList.class)).getUser(inKick.getKicked());
+		User user = (((UserListLoader) channel_.getPlugin(UserListLoader.class)).getUserList()).getUser(inKick.getKicked());
 		authUsers_.remove(user);
 	}
 

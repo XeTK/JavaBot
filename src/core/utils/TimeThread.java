@@ -27,6 +27,7 @@ public class TimeThread extends Thread {
 
 				super.sleep(1000);
 			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -34,8 +35,8 @@ public class TimeThread extends Thread {
 	/**
 	 * This takes in the plugins for a specific channel and adds them to its own
 	 * separate time thread, this is to help with having channel isolation.
-	 * @param plugins
-	 *            this is the list of plugins tied to a specific channel.
+	 * 
+	 * @param plugins this is the list of plugins tied to a specific channel.
 	 */
 	public TimeThread(ArrayList<Plugin> plugins) {
 		this.plugins = plugins;

@@ -27,15 +27,12 @@ public class IRCException extends Exception {
 	{
 		try {
 			IRC irc = IRC.getInstance();
-			// This sends any exceptions to the admins of the bot so they are 
-			//aware if there is a problem.
-	
+			
 			String[] admins = Details.getInstance().getAdmins();
-			// Send the exception to all the admins that are registered within 
-			// the details file.
+			// Send the exception to all the admins that are registered within the details file.
 			
 			String stack = Arrays.toString(super.getStackTrace());
-			String msg = super.toString() + ", " + stack;
+			String msg   = super.toString() + ", " + stack;
 			
 			for (int i = 0; i < admins.length; i++) {
 				irc.sendPrivmsg(admins[i], msg);

@@ -16,6 +16,7 @@ import core.plugin.PluginCore;
 import core.utils.Details;
 import core.utils.IRC;
 import core.utils.IRCException;
+import core.utils.RegexFormatter;
 import core.utils.TimeThread;
 
 /**
@@ -26,39 +27,46 @@ import core.utils.TimeThread;
  * @author Tom Rosier(XeTK)
  */
 public class Channel {
+	
+	private final String CMD_HELP       = "help";
+	
+	private final String TXT_LOADED     = "\u001B[33mPlugins Loaded: %s";
+	private final String TXT_NOT_LOADED = "\u001B[33mPlugins Not Loaded: %s";
+	
+	private final String REG_GET_SERVER = "(?:[\\w\\d]*\\.)?([\\w\\d]*)\\..*";
 
-	private String path_ = "servers/%s/%s/";
+	// Keep the channel name & plugins save so they can be accessed later.
+	private String       channelName_;
+	private String       serverName_;
+	
+	private String       path_          = "servers/%s/%s/";
 	private final String blackListFile_ = "BlackListed.txt";
 	
-	// Keep the channel name & plugins save so they can be accessed later.
-	private String channelName_;
-	private String serverName_;
+	
 	private ArrayList<Plugin> plugins_;
+	
 	private TimeThread timeThread_;
 
 	/**
-	 * Set the class up on creation, as we don't want to change theses details
-	 * later.
+	 * Set the class up on creation, as we don't want to change theses details later.
 	 * 
-	 * @param channelName
-	 *            this is the channels name, it uniquely identifies the channel.
-	 * @throws Exception
-	 *             if there was an error then we need to throw an exception.
+	 * @param  channelName this is the channels name, it uniquely identifies the channel.
+	 * @throws Exception if there was an error then we need to throw an exception.
 	 */
 	public Channel(String channelName) throws Exception {
 		// Set our channel unique identifier.
-		this.channelName_ = channelName;
+		this.channelName_   = channelName;
 
-		String server = Details.getInstance().getServer();
+		// Strip special characters
+		String cleanChannel = channelName.replace("#", "");
+		String server       = Details.getInstance().getServer();
 
-		Matcher m = Pattern.compile("(?:[\\w\\d]*\\.)?([\\w\\d]*)\\..*",
-				Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(server);
+		Matcher m = Pattern.compile(REG_GET_SERVER,Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(server);
 
 		if (m.matches())
 			this.serverName_ = m.group(1);
 
-		// Strip special charectors
-		String cleanChannel = channelName.replace("#", "");
+
 
 		path_ = String.format(path_, serverName_, cleanChannel);
 
@@ -78,30 +86,34 @@ public class Channel {
 	private ArrayList<String> blackListedPlugins(){
 		ArrayList<String> lines = new ArrayList<String>();
 		try {
-			BufferedReader br = new BufferedReader(
-					new FileReader(path_ + blackListFile_));
+			BufferedReader br = new BufferedReader(new FileReader(path_ + blackListFile_));
 			
 			String line = br.readLine();
+			
 			while (line != null){
 			    lines.add(line);
 			    line = br.readLine();
 			}
+			
 			br.close();
 		} catch (Exception ex) {
 				new IRCException(ex);
 		}
 		return lines;
 	}
-	public Object getPlugin(Class<?> classdef){
+	public Plugin getPlugin(Class<?> classdef){
 		for (Plugin plugin: plugins_) {
+			
 			if (plugin.getClass().equals(classdef)){
+			//if (plugin.getClass().isAssignableFrom(classdef)) {
+			//if (plugin.getClass().getName().equals(classdef.getName())) {
 				return plugin;
 			}
 		}
 		return null;
 	}
 	private ArrayList<Plugin> vettedList(ArrayList<Plugin> plugins){
-		ArrayList<Plugin> vetted = new ArrayList<Plugin>();
+		ArrayList<Plugin> vetted      = new ArrayList<Plugin>();
 		ArrayList<String> blackListed = blackListedPlugins();
 		
 		for (int i = 0; i < plugins.size();i++){
@@ -123,9 +135,12 @@ public class Channel {
 	
 	public String notLoaded(){
 		String temp = new String();
+		
 		ArrayList<String> blackListed = blackListedPlugins();
+		
 		for (int i = 0; i < blackListed.size();i++)
 			temp += blackListed.get(i) + ", ";
+		
 		if (!temp.isEmpty())
 			return "[" + temp.substring(0, temp.length() -2) + "]";
 		else
@@ -135,28 +150,24 @@ public class Channel {
 	/**
 	 * Have this in a seperate method so that we can quickly reload the plugins.
 	 * 
-	 * @throws Exception
-	 *             this is if we have any issues loading the plugins
+	 * @throws Exception this is if we have any issues loading the plugins
 	 */
 	public void loadPlugins() throws Exception {
-		// Assign this channel with a fresh list of plugins that we can now
-		// manipulate.
+		// Assign this channel with a fresh list of plugins that we can now manipulate.
 		this.plugins_ = vettedList(PluginCore.loadPlugins());
 
-		String loadedMsg = "\u001B[33mPlugins Loaded: %s";
-
-		System.out.println(String.format(loadedMsg,
-				PluginCore.loadedPlugins(plugins_)));
-		System.out.println("\u001B[33mPlugins Not Loaded: " + notLoaded());
+		System.out.println(String.format(TXT_LOADED,PluginCore.loadedPlugins(plugins_)));
+		
+		System.out.println(String.format(TXT_NOT_LOADED,notLoaded()));
 
 		// Call onCreate for each plugin to set them up ready for use.
 		for (int i = 0; i < plugins_.size(); i++)
 			plugins_.get(i).onCreate(this);
 
-		// Create a new TimeThread for our class, this will carry out actions on
-		// set times.
+		// Create a new TimeThread for our class, this will carry out actions on set times.
 		if (timeThread_ != null)
 			this.timeThread_.interrupt();
+		
 		this.timeThread_ = new TimeThread(plugins_);
 
 		this.timeThread_.start();
@@ -165,19 +176,18 @@ public class Channel {
 	/**
 	 * Handle the onMessage actions for each plugins under this method.
 	 * 
-	 * @param inMessage
-	 *            this is the message object passed in from the core of the
-	 *            program.
+	 * @param inMessage this is the message object passed in from the core of the program.
 	 */
 	public void onMessage(Message inMessage) {
+		
 		IRC irc = IRC.getInstance();
+		
 		// Double check that the message is actually for this class.
 		if (inMessage.getChannel().equalsIgnoreCase(channelName_)) {
 			for (int i = 0; i < plugins_.size(); i++) {
 				try {
-					// If we are not asking for the help string then continue as
-					// per normal
-					if (!inMessage.getMessage().matches("^\\.help")) {
+					// If we are not asking for the help string then continue as per normal
+					if (!inMessage.getMessage().matches(RegexFormatter.format(CMD_HELP))) {
 						plugins_.get(i).onMessage(inMessage);
 					} else {
 						// Get the help string for the plugin we are working on
@@ -195,9 +205,7 @@ public class Channel {
 	/**
 	 * Handle all the onJoin commands for each plugin that is loaded.
 	 * 
-	 * @param in_join
-	 *            this is the information object with the information about the
-	 *            user that has joined.
+	 * @param in_join this is the information object with the information about the user that has joined.
 	 */
 	public void onJoin(Join inJoin) {
 		if (inJoin.getChannel().equalsIgnoreCase(channelName_)) {
@@ -212,11 +220,9 @@ public class Channel {
 	}
 
 	/**
-	 * For ever user that quits we need to call the onQuit method for all the
-	 * plugins.
+	 * For ever user that quits we need to call the onQuit method for all the plugins.
 	 * 
-	 * @param inQuit
-	 *            this is the information about the user that has quit.
+	 * @param inQuit this is the information about the user that has quit.
 	 */
 	public void onQuit(Quit inQuit) {
 		if (inQuit.getChannel().equalsIgnoreCase(channelName_)) {
@@ -233,8 +239,7 @@ public class Channel {
 	/**
 	 * If a user is kicked then we call the onKick method within each plugin.
 	 * 
-	 * @param inKick
-	 *            this is the information about the user that has been kicked.
+	 * @param inKick this is the information about the user that has been kicked.
 	 */
 	public void onKick(Kick inKick) {
 		if (inKick.getChannel().equalsIgnoreCase(channelName_)) {
@@ -253,8 +258,7 @@ public class Channel {
 	 * plugins, this sends the raw server strings to the plugin to be
 	 * manipulated if need be.
 	 * 
-	 * @param inStr
-	 *            this is the raw input data from the server.
+	 * @param inStr this is the raw input data from the server.
 	 */
 	public void onRaw(String inStr) {
 		for (int i = 0; i < plugins_.size(); i++) {

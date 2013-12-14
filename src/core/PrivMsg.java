@@ -15,17 +15,14 @@ public class PrivMsg {
 	public PrivMsg(String userName) throws Exception {
 		this.userName_ = userName;
 
-		// Assign this channel with a fresh list of plugins that we can now
-		// manipulate.
+		// Assign this channel with a fresh list of plugins that we can now manipulate.
 		this.plugins_ = PluginCore.loadPlugins();
 	}
 
 	/**
 	 * Handle the onMessage actions for each plugins under this method.
 	 * 
-	 * @param inMessage
-	 *            this is the message object passed in from the core of the
-	 *            program.
+	 * @param inMessage this is the message object passed in from the core of the program.
 	 */
 	public void onMessage(Message inMessage) {
 		if (inMessage.isPrivMsg()) {

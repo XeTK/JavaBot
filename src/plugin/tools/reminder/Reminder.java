@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 
 import plugin.stats.user.User;
 import plugin.stats.user.UserList;
+import plugin.stats.user.UserListLoader;
 import core.Channel;
 import core.event.Message;
 import core.plugin.Plugin;
@@ -48,7 +49,7 @@ public class Reminder extends Plugin {
 	public void onMessage(Message inMessage) throws Exception {
 		if (!inMessage.isPrivMsg()) {
 			IRC irc = IRC.getInstance();
-			UserList userList = (UserList) channel_.getPlugin(UserList.class);
+			UserList userList = ((UserListLoader) channel_.getPlugin(UserListLoader.class)).getUserList();
 
 			String user = inMessage.getUser();
 			String channel = inMessage.getChannel();
