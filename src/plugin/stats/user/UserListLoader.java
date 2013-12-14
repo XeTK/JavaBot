@@ -11,18 +11,28 @@ public class UserListLoader extends Plugin{
 
 	private String dbFile_ = new String();
 	
-	private UserList userList_ = new UserList();
+	private UserList userList_;
 	
 	public void onCreate(Channel inChannel) throws Exception {
+		
 		dbFile_ = inChannel.getPath() + DB_FILE;
+		
 		if (new File(dbFile_).exists()){	
-			if (userList_ == null) {
-				userList_ = (UserList) JSON.load(dbFile_, UserList.class);
-			}
-		} else {
+			userList_ = (UserList) JSON.load(dbFile_, UserList.class);
+		} 
+		
+		if (userList_ == null) {
+			userList_ = new UserList();
 			JSON.save(dbFile_, userList_);
 		}
 	}
+	
+	public void rawInput(String inStr) throws Exception 
+	{
+		if (userList_ != null && dbFile_.isEmpty() == false)
+			JSON.save(dbFile_, userList_);
+	}
+	
 	public UserList getUserList(){
 		return userList_;
 	}

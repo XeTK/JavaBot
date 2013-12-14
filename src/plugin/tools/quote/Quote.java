@@ -40,6 +40,7 @@ public class Quote extends Plugin {
 
 	public void onCreate(Channel inChannel) throws Exception {
 		this.userList_ = ((UserListLoader) inChannel.getPlugin(UserListLoader.class)).getUserList();
+		System.out.println("UserList --> " + userList_);
 	}
 
 	public void onMessage(Message inMessage) throws Exception {

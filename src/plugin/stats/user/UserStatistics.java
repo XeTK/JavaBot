@@ -12,7 +12,6 @@ import plugin.stats.user.UserListLoader;
 import core.utils.Details;
 import core.utils.IRC;
 import core.utils.IRCException;
-import core.utils.JSON;
 
 public class UserStatistics extends Plugin {
 
@@ -22,8 +21,6 @@ public class UserStatistics extends Plugin {
 	private final String USER_KICKED = "%s has been kicked %s times";
 
 	private final IRC irc_ = IRC.getInstance();
-
-	private String dbFile_ = new String();
 	
 	private UserList userList;
 
@@ -34,7 +31,6 @@ public class UserStatistics extends Plugin {
 	public void onMessage(Message inMessage) throws IRCException, IOException {
 		if (!inMessage.isPrivMsg()) {
 			userList.msgSent(inMessage);
-			JSON.save(dbFile_, userList);
 		}
 	}
 
@@ -78,17 +74,6 @@ public class UserStatistics extends Plugin {
 					in_kick.getKicked(), userOBJ.getKicks());
 					
 			irc.sendPrivmsg(in_kick.getChannel(), msg);
-		}
-	}
-
-	public void onRaw(String inStr){
-		if (userList != null) {
-			try {
-				JSON.save(dbFile_, userList);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 	}
 	

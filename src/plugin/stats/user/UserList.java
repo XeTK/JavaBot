@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import core.event.Message;
 
-/**s
+/**
  * This Class encapsulate users objects and also interacts with them.
  * 
  * @author Tom Rosier(XeTK)
@@ -14,8 +14,6 @@ public class UserList {
 	// Keep a list of the users that are members of the channel
 	private ArrayList<User> users_ = new ArrayList<User>();
 
-	
-	public UserList uL = this;
 	
 	/**
 	 * This returns the user object for a given username.

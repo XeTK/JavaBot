@@ -1,8 +1,6 @@
 package core.plugin;
 
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 
 /**
  * This is the method for loading each plugin into the program, it was based of

@@ -78,14 +78,15 @@ public class Channel {
 	private ArrayList<String> blackListedPlugins(){
 		ArrayList<String> lines = new ArrayList<String>();
 		try {
-			BufferedReader br = new BufferedReader(
-					new FileReader(path_ + blackListFile_));
+			BufferedReader br = new BufferedReader(new FileReader(path_ + blackListFile_));
 			
 			String line = br.readLine();
+			
 			while (line != null){
 			    lines.add(line);
 			    line = br.readLine();
 			}
+			
 			br.close();
 		} catch (Exception ex) {
 				new IRCException(ex);
@@ -95,16 +96,16 @@ public class Channel {
 	public Plugin getPlugin(Class<?> classdef){
 		for (Plugin plugin: plugins_) {
 			
-			//if (plugin.getClass().equals(classdef)){
+			if (plugin.getClass().equals(classdef)){
 			//if (plugin.getClass().isAssignableFrom(classdef)) {
-			if (plugin.getClass().getName().equals(classdef.getName())) {
+			//if (plugin.getClass().getName().equals(classdef.getName())) {
 				return plugin;
 			}
 		}
 		return null;
 	}
 	private ArrayList<Plugin> vettedList(ArrayList<Plugin> plugins){
-		ArrayList<Plugin> vetted = new ArrayList<Plugin>();
+		ArrayList<Plugin> vetted      = new ArrayList<Plugin>();
 		ArrayList<String> blackListed = blackListedPlugins();
 		
 		for (int i = 0; i < plugins.size();i++){
@@ -126,9 +127,12 @@ public class Channel {
 	
 	public String notLoaded(){
 		String temp = new String();
+		
 		ArrayList<String> blackListed = blackListedPlugins();
+		
 		for (int i = 0; i < blackListed.size();i++)
 			temp += blackListed.get(i) + ", ";
+		
 		if (!temp.isEmpty())
 			return "[" + temp.substring(0, temp.length() -2) + "]";
 		else
@@ -151,6 +155,7 @@ public class Channel {
 
 		System.out.println(String.format(loadedMsg,
 				PluginCore.loadedPlugins(plugins_)));
+		
 		System.out.println("\u001B[33mPlugins Not Loaded: " + notLoaded());
 
 		// Call onCreate for each plugin to set them up ready for use.
@@ -161,6 +166,7 @@ public class Channel {
 		// set times.
 		if (timeThread_ != null)
 			this.timeThread_.interrupt();
+		
 		this.timeThread_ = new TimeThread(plugins_);
 
 		this.timeThread_.start();
