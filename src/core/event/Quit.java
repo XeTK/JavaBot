@@ -3,8 +3,7 @@ package core.event;
 import java.util.regex.Matcher;
 
 /**
- * This is a quit object, it contains all the relevant information for when a
- * user is kicked.
+ * This is a quit object, it contains all the relevant information for when a user is kicked.
  * 
  * @author Tom Rosier(XeTK)
  */
@@ -17,11 +16,9 @@ public class Quit {
 	private String message_  = new String();
 
 	/**
-	 * Default constructor takes in are Regex matcher and turn it into the
-	 * relevant strings
+	 * Default constructor takes in are Regex matcher and turn it into the relevant strings
 	 * 
-	 * @param m
-	 *            this is the Regex passed into the constructor
+	 * @param m this is the Regex passed into the constructor
 	 */
 	public Quit(Matcher m) {
 		user_        = m.group(1);

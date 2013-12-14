@@ -12,6 +12,8 @@ import java.util.Arrays;
  */
 public class PluginCore {
 	
+	private final static String TXT_PLUGIN_DIR = "Plugin Directory %s";
+	
 	/**
 	 * This returns a ArrayList of plugins that can then be used by channels. 
 	 * It loads them from the class directory of the program.
@@ -31,7 +33,7 @@ public class PluginCore {
 		
 		File dir = new File(pluginDir);// System.getProperty("user.dir"));
 		
-		System.out.println("Plugin Directory: " + pluginDir);
+		System.out.println(String.format(TXT_PLUGIN_DIR ,pluginDir));
 		
 		// If the directory exists then it is infact a Directory then we can  start loading plugins.
 
@@ -73,8 +75,10 @@ public class PluginCore {
 					Object pf = new PluginLoader().loadClassObj(file);
 					
 					if (pf instanceof Plugin) {
-						// If the plugin was loaded correctly then it is finaly
-						// added to the list and is returned to the channel.
+						/*
+						 *  If the plugin was loaded correctly then it is finaly
+						 *  added to the list and is returned to the channel.
+						 */
 						if (pf != null)
 							inPtr.add((Plugin) pf);
 					}
