@@ -16,8 +16,8 @@ import java.io.PrintWriter;
  */
 public class IRC {
 	
-	private final String TXT_INBOUND           = "\u001B[31m-> ";
-	private final String TXT_OUTBOUND          = "\u001B[34m<- ";
+	private final String TXT_INBOUND           = "\u001B[31m-> %s";
+	private final String TXT_OUTBOUND          = "\u001B[34m<- %s";
 	
 	private final String TXT_EXC_NULL_INSTANCE = "IRC class has not yet been declared";
 	private final String TXT_EXC_NULL_SOCKET   = "Remote Socket has not been opened";
