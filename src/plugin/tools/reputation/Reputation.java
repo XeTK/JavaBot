@@ -6,16 +6,15 @@ package plugin.tools.reputation;
  * @author Tom Rosier (XeTK)
  */
 public class Reputation {
-	private int rep_ = 0;
+	private int    rep_  = 0;
 	private String item_ = new String();
 
 	/**
 	 * Define are object and starting reputation on creation of the object.
 	 * 
-	 * @param item
-	 *            this is the real life object we want to model
-	 * @param startRep
-	 *            this is are start number of the reputation.
+	 * @param item this is the real life object we want to model
+	 * 
+	 * @param startRep this is are start number of the reputation.
 	 */
 	public Reputation(String item, int startRep) {
 		this.rep_ = startRep;
@@ -25,8 +24,7 @@ public class Reputation {
 	/**
 	 * Directly edit the reputation by a +/- and an amount.
 	 * 
-	 * @param ammount
-	 *            the amount that should be decremented or incremented.
+	 * @param ammount the amount that should be decremented or incremented.
 	 */
 	public void modRep(int ammount) {
 		rep_ += ammount;

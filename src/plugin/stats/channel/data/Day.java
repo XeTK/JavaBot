@@ -17,12 +17,10 @@ public class Day {
 	/**
 	 * Increment the message sent for the current hour
 	 * 
-	 * @param user
-	 *            this is the user that incremented the counter
+	 * @param user this is the user that incremented the counter
 	 */
 	public void incMsgSent(String user) {
-		// Get the current hour object then increment the counter for messages
-		// sent
+		// Get the current hour object then increment the counter for messages sent
 		getHour().incMsgSent(user);
 	}
 

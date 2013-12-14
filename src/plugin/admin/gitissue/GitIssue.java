@@ -27,9 +27,9 @@ import core.utils.IRCException;
 public class GitIssue extends Plugin {
 
 	private static final String AUTH_TOKEN_FILE = "auth_token";
-	private static final String GITHUB_URL = "https://api.github.com";
-	private static final String REPO_OWNER = "XeTK";
-	private static final String REPO_NAME = "JavaBot";
+	private static final String GITHUB_URL      = "https://api.github.com";
+	private static final String REPO_OWNER      = "XeTK";
+	private static final String REPO_NAME       = "JavaBot";
 
 	private Details details = Details.getInstance();
 	private IRC irc = IRC.getInstance();

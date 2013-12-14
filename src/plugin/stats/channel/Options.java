@@ -9,7 +9,7 @@ package plugin.stats.channel;
  */
 public class Options {
 	// Global variables with a default value of false to disable the options.
-	private boolean dayStats_= false;
+	private boolean dayStats_  = false;
 	private boolean hourStats_ = false;
 
 	// Getters

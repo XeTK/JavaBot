@@ -10,13 +10,13 @@ import core.utils.IRC;
 
 public class Counters extends Plugin {
 
-	private static int creates_ = 0;
-	private static int times_ = 0;
+	private static int creates_  = 0;
+	private static int times_    = 0;
 	private static int messages_ = 0;
-	private static int joins_ = 0;
-	private static int quits_ = 0;
-	private static int kicks_ = 0;
-	private static int raws_ = 0;
+	private static int joins_    = 0;
+	private static int quits_    = 0;
+	private static int kicks_    = 0;
+	private static int raws_     = 0;
 	
 	public void onCreate(Channel inChannel) throws Exception {
 		creates_++;
@@ -55,10 +55,8 @@ public class Counters extends Plugin {
 	}
 	private String printDebug()
 	{
-		String text = "| %s Creates | %s Times | %s Joins | %s Quits | " +
-				" %s Messages | %s Kicks | %s Raws |";
-		text = String.format(text, 
-				creates_,times_,joins_,quits_,messages_,kicks_,raws_);
+		String text = "| %s Creates | %s Times | %s Joins | %s Quits | %s Messages | %s Kicks | %s Raws |";
+		text = String.format(text, creates_,times_,joins_,quits_,messages_,kicks_,raws_);
 		return text;
 	}
 

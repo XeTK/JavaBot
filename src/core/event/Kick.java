@@ -17,8 +17,6 @@ public class Kick {
 
 	/**
 	 * Default constructor that takes in are Regex and parses it out into various strings.
-	 * 
-	 * @param m
 	 */
 	public Kick(Matcher m) {
 		kicker_  = m.group(1);

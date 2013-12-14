@@ -16,8 +16,8 @@ public class RepList {
 	 * This gets and returns the reputation of a specific item, and if the item
 	 * does not exists it creates it and adds it to the list.
 	 * 
-	 * @param item
-	 *            this is the real life object we are giving reputation to.
+	 * @param item this is the real life object we are giving reputation to.
+	 * 
 	 * @return this is the object storing the reputation and real life object.
 	 */
 	public Reputation getRep(String item) {

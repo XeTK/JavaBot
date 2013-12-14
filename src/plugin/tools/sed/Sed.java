@@ -156,8 +156,8 @@ public class Sed extends Plugin {
 	/**
 	 * Identifies ACTION messages.
 	 * 
-	 * @param msg
-	 *            The message string
+	 * @param msg The message string
+	 * 
 	 * @return true if msg is an ACTION message
 	 */
 	private boolean isActionMessage(final String msg) {
@@ -168,10 +168,8 @@ public class Sed extends Plugin {
 	/**
 	 * Converts an ACTION message into a friendlier form.
 	 * 
-	 * @param msg
-	 *            The message string
-	 * @param user
-	 *            The speaker
+	 * @param  msg  The message string
+	 * @param  user The speaker
 	 * @return The modified message string
 	 */
 	private String processActionMessage(final String msg, final String user) {
@@ -184,16 +182,14 @@ public class Sed extends Plugin {
 		newMsg = newMsg.substring(0, newMsg.length() - 1);
 
 		// format for output
-		newMsg = newMsg.replace("ACTION",
-				Colour.colour("* " + user, Colour.MAGENTA));
+		newMsg = newMsg.replace("ACTION", Colour.colour("* " + user, Colour.MAGENTA));
 		return newMsg;
 	}
 
 	/**
 	 * Adds a message object to the cache.
 	 * 
-	 * @param msg
-	 *            The message object
+	 * @param msg The message object
 	 */
 	private void addToCache(final Message msg) {
 		String userName = msg.getUser();
@@ -209,8 +205,8 @@ public class Sed extends Plugin {
 	/**
 	 * Stack of messages from a single user.
 	 * 
-	 * @param userName
-	 *            The name of the user
+	 * @param userName The name of the user
+	 * 
 	 * @return The user's cache
 	 */
 	private Stack<Message> getUserCache(final String userName) {
@@ -224,22 +220,17 @@ public class Sed extends Plugin {
 	/**
 	 * Dumps entire cache into query window.
 	 * 
-	 * @param target
-	 *            The username of the requester
-	 * @param channel
-	 *            The channel originating the request
-	 * @throws Exception
-	 *             Inherited badness from core
+	 * @param target  The username of the requester
+	 * @param channel The channel originating the request
+	 * @throws Exception Inherited badness from core
 	 */
-	private void dumpCache(final String target, final String channel)
-			throws Exception {
+	private void dumpCache(final String target, final String channel) throws Exception {
 		irc_.sendPrivmsg(target, "sed cache for " + channel);
 		for (String user : cache_.keySet()) {
 			Stack<Message> userCache = getUserCache(user);
 
 			irc_.sendPrivmsg(target, " ");
-			irc_.sendPrivmsg(target, user + ": " + userCache.size() + "/"
-					+ CACHE_SIZE);
+			irc_.sendPrivmsg(target, user + ": " + userCache.size() + "/" + CACHE_SIZE);
 			for (Message msg : userCache) {
 				irc_.sendPrivmsg(target, "\"" + msg.getMessage() + "\"");
 			}
@@ -249,15 +240,13 @@ public class Sed extends Plugin {
 	/**
 	 * Drops the entire sed cache and reinstantiates cache.
 	 * 
-	 * @param target
-	 *            The username of the requester
-	 * @param channel
-	 *            The channel originating the request
-	 * @throws Exception
-	 *             Inherited badness from core
+	 * @param target The username of the requester
+	 * 
+	 * @param channel The channel originating the request
+	 * 
+	 * @throws Exception Inherited badness from core
 	 */
-	private void dropCache(final String target, final String channel)
-			throws Exception {
+	private void dropCache(final String target, final String channel) throws Exception {
 		cache_ = new HashMap<String, Stack<Message>>();
 		irc_.sendPrivmsg(target, "dropped sed cache for " + channel);
 	}

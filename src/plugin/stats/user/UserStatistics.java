@@ -15,9 +15,9 @@ import core.utils.IRCException;
 
 public class UserStatistics extends Plugin {
 
-	private final String NEW_USER = "Hello %s and welcome! Don't break things!";
+	private final String NEW_USER    = "Hello %s and welcome! Don't break things!";
 	private final String USER_JOINED = "%s has joined %s times";
-	private final String USER_QUIT = "%s has quit %s times";
+	private final String USER_QUIT   = "%s has quit %s times";
 	private final String USER_KICKED = "%s has been kicked %s times";
 
 	private final IRC irc_ = IRC.getInstance();
@@ -38,8 +38,7 @@ public class UserStatistics extends Plugin {
 		User user = userList.getUser(inJoin.getUser());
 		if (user != null) {
 			user.incjoins(inJoin.getHost());
-			String msg = String.format(USER_JOINED,
-					inJoin.getUser(),user.getJoins());
+			String msg = String.format(USER_JOINED, inJoin.getUser(),user.getJoins());
 			
 			irc_.sendPrivmsg(inJoin.getChannel(), msg);
 		} else {
@@ -56,8 +55,7 @@ public class UserStatistics extends Plugin {
 		User userOBJ = userList.getUser(in_quit.getUser());
 		if (userOBJ != null) {
 			userOBJ.incQuits();
-			String msg = String.format(USER_QUIT,
-					in_quit.getUser(), userOBJ.getQuits());
+			String msg = String.format(USER_QUIT, in_quit.getUser(), userOBJ.getQuits());
 			
 			irc_.sendPrivmsg(in_quit.getChannel(), msg);		
 		}
@@ -70,8 +68,7 @@ public class UserStatistics extends Plugin {
 		if (userOBJ != null) {
 			userOBJ.incKicks();
 
-			String msg = String.format(USER_KICKED, 
-					in_kick.getKicked(), userOBJ.getKicks());
+			String msg = String.format(USER_KICKED, in_kick.getKicked(), userOBJ.getKicks());
 					
 			irc.sendPrivmsg(in_kick.getChannel(), msg);
 		}
