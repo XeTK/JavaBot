@@ -2,13 +2,13 @@ package plugin.tools.reputation;
 
 import java.io.File;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import core.Channel;
 import core.event.Message;
 import core.plugin.Plugin;
 import core.utils.IRC;
 import core.utils.JSON;
+import core.utils.Regex;
 import core.utils.RegexFormatter;
 
 public class Rep extends Plugin {
@@ -32,17 +32,13 @@ public class Rep extends Plugin {
 			String channel = inMessage.getChannel();
 			String message = inMessage.getMessage();
 
-			// Message .Trim
 
 			if (message.charAt(message.length() - 1) == ' ')
 				message = message.substring(0, message.length() - 1);
 
 			IRC irc = IRC.getInstance();
 			
-			Matcher r = Pattern.compile(
-					"^([\\w\\d]*)(?:[\\s])?([+|-])(?:[+|-|=])?(?:[\\s]([\\d]*))?\\r",
-					Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(
-					message);
+			Matcher r = Regex.getMatcher("^([\\w\\d]*)(?:[\\s])?([+|-])(?:[+|-|=])?(?:[\\s]([\\d]*))?\\r", message);
 			
 			
 			if (r.find()) {
@@ -68,13 +64,11 @@ public class Rep extends Plugin {
 							iAmmount = Integer.valueOf(type + ammount);
 					}
 					if (iAmmount > 100 || iAmmount < -100) {
-						irc.sendPrivmsg(channel,
-								"You cant do that its to much rep...");
+						irc.sendPrivmsg(channel,"You cant do that its to much rep...");
 					} else {
 						Reputation tempRep = repList_.getRep(item);
 						tempRep.modRep(iAmmount);
-						irc.sendPrivmsg(channel, item + ": Rep = "
-								+ tempRep.getRep() + "!");
+						irc.sendPrivmsg(channel, item + ": Rep = " + tempRep.getRep() + "!");
 					}
 				}
 			} else if (message.matches(RegexFormatter.format("rep",RegexFormatter.REG_NICK))) {

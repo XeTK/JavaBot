@@ -7,11 +7,11 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import core.event.Message;
 import core.plugin.Plugin;
 import core.utils.IRC;
+import core.utils.Regex;
 
 
 public class Lyrics extends Plugin {
@@ -40,10 +40,7 @@ public class Lyrics extends Plugin {
 				irc.sendActionMsg(inMessage.getChannel(), "Cant remember any songs right now :(");
 			}
 		} else {
-			Matcher m = Pattern.compile(
-							"(https?://(?:www\\.)?youtu.?be(?:.com)?/(?:v/)?(?:watch\\?v=)?-?.*)",
-							Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(
-							inMessage.getMessage());
+			Matcher m = Regex.getMatcher("(https?://(?:www\\.)?youtu.?be(?:.com)?/(?:v/)?(?:watch\\?v=)?-?.*)", inMessage.getMessage());
 			if (m.find()) {
 				URL myUrl = new URL(m.group(1));
 				BufferedReader in = new BufferedReader(new InputStreamReader(
@@ -54,9 +51,7 @@ public class Lyrics extends Plugin {
 				
 				while ((line = in.readLine()) != null) {
 	
-					m = Pattern.compile("<title>(.*)</title>",
-							Pattern.CASE_INSENSITIVE | Pattern.DOTALL)
-							.matcher(line);
+					m = Regex.getMatcher("<title>(.*)</title>", line);
 					if (m.find())
 						title = m.group(1);
 	
@@ -67,10 +62,7 @@ public class Lyrics extends Plugin {
 					title = title.replace(" - YouTube", "");
 					title = title.toLowerCase();
 					System.out.println(title);
-					m = Pattern.compile(
-								"([\\d\\w\\s&]*)(?:\\s)?[:-](?:\\s)?([\\w\\s\\d&]*)",
-								Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(
-								title);
+					m = Regex.getMatcher("([\\d\\w\\s&]*)(?:\\s)?[:-](?:\\s)?([\\w\\s\\d&]*)", title);
 					if (m.find()) {
 						String url = "http://www.lyrics.com/";
 						url += m.group(2).trim().replaceAll("\\s", "-");

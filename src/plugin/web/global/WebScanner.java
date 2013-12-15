@@ -4,47 +4,32 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import core.event.Message;
 import core.plugin.Plugin;
 import core.utils.Colour;
 import core.utils.IRC;
+import core.utils.Regex;
 
 public class WebScanner extends Plugin{
 
 	public void onMessage(Message inMessage) throws Exception {
-		Matcher m = Pattern
-				.compile(
-						"(http(?:s)?://(?:www.)?[\\w\\d]*.[\\w]*[./][\\.\\w\\d//?/=-]*)",
-						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(
-						inMessage.getMessage());
-		Matcher yt = Pattern
-				.compile(
-						"(https?://(?:www\\.)?youtu.?be(?:.com)?/(?:v/)?(?:watch\\?v=)?-?.*)",
-						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(
-						inMessage.getMessage());
-		Matcher img = Pattern
-				.compile(
-					"(http://(?:www.)?imgur.com/((?:gallery/)?).*)",
-					Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(
-					inMessage.getMessage());
+		Matcher m = Regex.getMatcher("(http(?:s)?://(?:www.)?[\\w\\d]*.[\\w]*[./][\\.\\w\\d//?/=-]*)", inMessage.getMessage());
+		Matcher yt = Regex.getMatcher("(https?://(?:www\\.)?youtu.?be(?:.com)?/(?:v/)?(?:watch\\?v=)?-?.*)",inMessage.getMessage());
+		Matcher img = Regex.getMatcher("(http://(?:www.)?imgur.com/((?:gallery/)?).*)", inMessage.getMessage());
 		
 		if (m.find()&&!yt.find()&&!img.find()) {
 			System.out.println(m.group());
 			URL myUrl = new URL(m.group(1));
 			if (myUrl != null){
-				InputStreamReader isr = new InputStreamReader(
-						myUrl.openStream());
+				InputStreamReader isr = new InputStreamReader(myUrl.openStream());
 				BufferedReader in = new BufferedReader(isr);
 	
 				String line, title = "";
 	
 				while ((line = in.readLine()) != null) {
 	
-					m = Pattern.compile("<title>(.*)</title>",
-							Pattern.CASE_INSENSITIVE | Pattern.DOTALL)
-							.matcher(line);
+					m = Regex.getMatcher("<title>(.*)</title>", line);
 					if (m.find())
 						title = m.group(1);
 				}

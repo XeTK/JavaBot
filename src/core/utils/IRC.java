@@ -103,14 +103,17 @@ public class IRC {
 	 * @param message this is the message.
 	 */
 	public void sendPrivmsg(String channel, String message) throws IRCException, IOException {
-		String[] lines = message.split("\n");
-		
-		for (int i = 0; i < lines.length; i++) {
-			String[] subLines = breakLongLines(lines[i]);
+		if (message != null)
+		{
+			String[] lines = message.split("\n");
 			
-			for (int j = 0; j < subLines.length; j++) {
-				String msg = subLines[j].replace("\t", "     ");
-				sendServer("PRIVMSG " + channel + " :" + msg);
+			for (int i = 0; i < lines.length; i++) {
+				String[] subLines = breakLongLines(lines[i]);
+				
+				for (int j = 0; j < subLines.length; j++) {
+					String msg = subLines[j].replace("\t", "     ");
+					sendServer("PRIVMSG " + channel + " :" + msg);
+				}
 			}
 		}
 	}

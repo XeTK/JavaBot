@@ -12,6 +12,7 @@ import core.event.Quit;
 import core.utils.Details;
 import core.utils.IRC;
 import core.utils.IRCException;
+import core.utils.Regex;
 
 /**
  * This is the core execution point of the program, this handles all messages &
@@ -167,11 +168,7 @@ public class Core {
 				 *  Check if the output from the server matches a valid IRC channel action. 
 				 *  Either a PART|JOIN|PRIVMSG|KICk
 				 */
-				m = Pattern
-						.compile(
-								REG_ALL_CMD,
-								Pattern.CASE_INSENSITIVE | Pattern.DOTALL)
-						.matcher(output);
+				m = Regex.getMatcher(REG_ALL_CMD, output);
 
 				// If the message is a IRC channel message then we can check if it has been registered with the channels.
 				if (m.find()) {
@@ -223,11 +220,7 @@ public class Core {
 					channels_.get(i).onRaw(output);
 
 				// Process Invites
-				m = Pattern
-						.compile(REG_INVITE
-								,
-								Pattern.CASE_INSENSITIVE | Pattern.DOTALL)
-						.matcher(output);
+				m = Regex.getMatcher(REG_INVITE, output);
 
 				if (m.find()) {
 					// Get the channels identifier.
@@ -266,9 +259,7 @@ public class Core {
 				 */
 				
 				// On Message
-				m = Pattern.compile(REG_MESSAGE,
-						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(
-						output);
+				m = Regex.getMatcher(REG_MESSAGE, output);
 
 				if (m.find()) {
 					Message message = new Message(m);
@@ -283,9 +274,7 @@ public class Core {
 				}
 
 				// On Join
-				m = Pattern.compile(REG_JOIN,
-						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(
-						output);
+				m = Regex.getMatcher(REG_JOIN, output);
 
 				if (m.find()) {
 					Join join = new Join(m);
@@ -297,9 +286,7 @@ public class Core {
 				}
 
 				// On Quit
-				m = Pattern.compile(REG_PART,
-						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(
-						output);
+				m = Regex.getMatcher(REG_PART, output);
 
 				if (m.find()) {
 					Quit quit = new Quit(m);
@@ -309,9 +296,7 @@ public class Core {
 				}
 
 				// On Kick
-				m = Pattern.compile(REG_KICK,
-						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(
-						output);
+				m = Regex.getMatcher(REG_KICK, output);
 
 				if (m.find()) {
 					Kick kick = new Kick(m);

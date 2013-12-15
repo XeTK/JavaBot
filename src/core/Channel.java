@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import core.event.Join;
 import core.event.Kick;
@@ -16,6 +15,7 @@ import core.plugin.PluginCore;
 import core.utils.Details;
 import core.utils.IRC;
 import core.utils.IRCException;
+import core.utils.Regex;
 import core.utils.RegexFormatter;
 import core.utils.TimeThread;
 
@@ -61,7 +61,7 @@ public class Channel {
 		String cleanChannel = channelName.replace("#", "");
 		String server       = Details.getInstance().getServer();
 
-		Matcher m = Pattern.compile(REG_GET_SERVER,Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(server);
+		Matcher m = Regex.getMatcher(REG_GET_SERVER, server);
 
 		if (m.matches())
 			this.serverName_ = m.group(1);

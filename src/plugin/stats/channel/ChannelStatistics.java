@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import plugin.stats.channel.data.Day;
 import plugin.stats.channel.data.Hour;
@@ -20,48 +19,40 @@ import core.plugin.Plugin;
 import core.utils.IRC;
 import core.utils.IRCException;
 import core.utils.JSON;
+import core.utils.Regex;
 import core.utils.RegexFormatter;
 
 public class ChannelStatistics extends Plugin {
-	private final String OPTION_PATH = "options/Stat_options.json";
-	private final String LOG_PATH = "logs/%s.json";
+	private final String OPTION_PATH    = "options/Stat_options.json";
+	private final String LOG_PATH       = "logs/%s.json";
 
-	private final String STAT_MSG = "Handled %s Messages, %s users joined, "
-			+ "%s users quit, %s users kicked in the last %s!";
+	private final String STAT_MSG       = "Handled %s Messages, %s users joined, %s users quit, %s users kicked in the last %s!";
 
-	private final String STAT_HOUR = "%s in last hour: %s";
-	private final String STAT_DAY = "%s today: %s";
+	private final String STAT_HOUR      = "%s in last hour: %s";
+	private final String STAT_DAY       = "%s today: %s";
 	private final String MSG_LASTONLINE = "%s was last online %s";
-	private final String MSG_MSGSSENT = "%s has sent %s messages";
+	private final String MSG_MSGSSENT   = "%s has sent %s messages";
 
 	// Regex's
-	private final String RGX_STAT = RegexFormatter.format("stats\\s(hour|day)\\s(msgsent|joins|quits|kicks)");
-	private final String RGX_TIME = "([0-2][0-9]):([0-5][0-9]):([0-5][0-9])";
-	private final String RGX_MSGSENT = RegexFormatter.format("msgsent",RegexFormatter.REG_NICK);
+	private final String RGX_STAT       = RegexFormatter.format("stats\\s(hour|day)\\s(msgsent|joins|quits|kicks)");
+	private final String RGX_TIME       = "([0-2][0-9]):([0-5][0-9]):([0-5][0-9])";
+	private final String RGX_MSGSENT    = RegexFormatter.format("msgsent",RegexFormatter.REG_NICK);
 	private final String RGX_LASTONLINE = RegexFormatter.format("lastonline",RegexFormatter.REG_NICK);
-
-	private final Pattern DOT_STAT = Pattern.compile(RGX_STAT,
-			Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-	private final Pattern PTN_TIME = Pattern.compile(RGX_TIME,
-			Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-	private final Pattern DOT_MSGSENT = Pattern.compile(RGX_MSGSENT,
-			Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-	private final Pattern DOT_LASTONLINE = Pattern.compile(RGX_LASTONLINE,
-			Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+	
 	private final IRC irc = IRC.getInstance();
 
-	private String savePath_ = new String();
-	private String optPath_ = new String();
+	private String savePath_    = new String();
+	private String optPath_     = new String();
 	private String channelName_ = new String();
 
-	private Day today_;
+	private Day     today_;
 	private Options options_;
 	private Channel channel_;
 
 	public void onCreate(Channel inChannel) throws Exception {
-		this.channel_ = inChannel;
-		channelName_ = inChannel.getChannelName();
-		savePath_ = inChannel.getPath() + LOG_PATH;
+		this.channel_     = inChannel;
+		this.channelName_ = inChannel.getChannelName();
+		this.savePath_    = inChannel.getPath() + LOG_PATH;
 
 		String time = new SimpleDateFormat("yyyyMMdd").format(new Date());
 
@@ -74,18 +65,21 @@ public class ChannelStatistics extends Plugin {
 
 		if (new File(optPath_).exists())
 			options_ = (Options) JSON.load(optPath_, Options.class);
-		else
-			JSON.save(optPath_, new Options());
+		
+		if (options_ == null) {
+			options_ = new Options();
+			JSON.save(optPath_, options_);
+		}
 	}
 
 	public void onTime() throws Exception {
 		String time = new SimpleDateFormat("HH:mm:ss").format(new Date());
 
-		Matcher m = PTN_TIME.matcher(time);
+		Matcher m = Regex.getMatcher(RGX_TIME,time);
 		if (m.find()) {
 			String hour = m.group(1);
-			String min = m.group(2);
-			String sec = m.group(3);
+			String min  = m.group(2);
+			String sec  = m.group(3);
 
 			if (options_.isHourStats() && min.equals("59") && sec.equals("59")
 					&& today_.getHour().getMsgSent() != 0
@@ -135,7 +129,7 @@ public class ChannelStatistics extends Plugin {
 		if (!inMessage.isPrivMsg()) {
 			String message = inMessage.getMessage();
 			String channel = inMessage.getChannel();
-			String user = inMessage.getUser();
+			String user    = inMessage.getUser();
 
 			// Message.Trim
 
@@ -151,7 +145,7 @@ public class ChannelStatistics extends Plugin {
 
 			Matcher m;
 
-			m = DOT_MSGSENT.matcher(message);
+			m = Regex.getMatcher(RGX_MSGSENT, message);
 			if (m.matches()) {
 				String tempUser = m.group(1);
 				long msgSent = uuserList.getUser(tempUser).getMsgSent();
@@ -159,7 +153,7 @@ public class ChannelStatistics extends Plugin {
 				irc.sendPrivmsg(channel, msg);
 			}
 
-			m = DOT_LASTONLINE.matcher(message);
+			Regex.getMatcher(RGX_LASTONLINE, message);
 			if (m.matches()) {
 				String tempUser = m.group(1);
 				Date lastOnline = uuserList.getUser(tempUser).getLastOnline();
@@ -169,7 +163,7 @@ public class ChannelStatistics extends Plugin {
 				irc.sendPrivmsg(channel, msg);
 			}
 
-			m = DOT_STAT.matcher(message);
+			m = Regex.getMatcher(RGX_STAT, message);
 			if (m.find()) {
 				String duration = m.group(1);
 				String cmd = m.group(2);

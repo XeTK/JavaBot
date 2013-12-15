@@ -3,7 +3,6 @@ package plugin.tools.stringresponse;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.Random;
 
 import core.Channel;
@@ -12,6 +11,7 @@ import core.plugin.Plugin;
 import core.utils.Details;
 import core.utils.IRC;
 import core.utils.JSON;
+import core.utils.Regex;
 import core.utils.RegexFormatter;
 
 public class StringResponse extends Plugin {
@@ -20,9 +20,6 @@ public class StringResponse extends Plugin {
 	private final String NEW_RESPONSE = "Added new Response";
 
 	private final String RGX_RESPONSE = RegexFormatter.format("response\\s(.*)//(.*)");
-
-	private final Pattern DOT_RESPONSE = Pattern.compile(RGX_RESPONSE,
-			Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
 	private String responsesPath_ = new String();
 
@@ -41,8 +38,7 @@ public class StringResponse extends Plugin {
 		 * create a new file to stop us having a null pointer.
 		 */
 		if (new File(responsesPath_).exists())
-			responseList_ = (ResponseList) JSON.load(responsesPath_,
-					ResponseList.class);
+			responseList_ = (ResponseList) JSON.load(responsesPath_, ResponseList.class);
 		else
 			JSON.save(responsesPath_, new ResponseList());
 
@@ -101,7 +97,7 @@ public class StringResponse extends Plugin {
 				 * we want to add a new response, .response (Regex Here),
 				 * [Responses]... .response .* ,helloworld, blah
 				 */
-				Matcher m = DOT_RESPONSE.matcher(inMessage.getMessage());
+				Matcher m = Regex.getMatcher(RGX_RESPONSE, inMessage.getMessage());
 
 				// If the message matches the regex.
 				if (m.find()) {

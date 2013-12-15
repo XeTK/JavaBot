@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import plugin.stats.user.User;
 import plugin.stats.user.UserList;
@@ -17,6 +16,7 @@ import core.plugin.Plugin;
 import core.utils.IRC;
 import core.utils.IRCException;
 import core.utils.JSON;
+import core.utils.Regex;
 
 public class Reminder extends Plugin {
 	private final String CONFIG_FILE_LOCATION = "Reminders.json";
@@ -57,19 +57,14 @@ public class Reminder extends Plugin {
 
 			Matcher m;
 
-			m = Pattern.compile(
-					"\\.remind\\s([a-zA-Z0-9]*)\\s([a-zA-Z\\w\\d\\s]*)",
-					Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
+			m = Regex.getMatcher("\\.remind\\s([a-zA-Z0-9]*)\\s([a-zA-Z\\w\\d\\s]*)", message);
 			if (m.find()) {
-				userList.addReminder(m.group(1), m.group(1) + ": " + user
-						+ " Said to you earlier " + m.group(2));
+				userList.addReminder(m.group(1), m.group(1) + ": " + user + " Said to you earlier " + m.group(2));
 
-				irc.sendPrivmsg(channel, user + ": I will remind " + m.group(1)
-						+ " next time they are here.");
+				irc.sendPrivmsg(channel, user + ": I will remind " + m.group(1) + " next time they are here.");
 			}
 
-			m = Pattern.compile("^\\.reminder\\s([\\d//:]*) ([\\d:]*)(.*)",
-					Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(message);
+			m = Regex.getMatcher("^\\.reminder\\s([\\d//:]*) ([\\d:]*)(.*)", message);
 
 			if (m.find()) {
 				String date = m.group(1);
@@ -80,12 +75,12 @@ public class Reminder extends Plugin {
 				if (date.matches("([0-3][0-9]/[0-1][0-9]/20[1-9][0-9])"))
 					date += " " + m.group(2);
 				else
-					date = new SimpleDateFormat("dd/MM/yyyy")
-							.format(new Date()) + " " + m.group(1);
+					date = new SimpleDateFormat("dd/MM/yyyy").format(new Date()) + " " + m.group(1);
 
-				eventTime = new SimpleDateFormat("dd/MM/yyyy HH:mm",
-						Locale.ENGLISH).parse(date);
+				eventTime = new SimpleDateFormat("dd/MM/yyyy HH:mm",Locale.ENGLISH).parse(date);
+				
 				remindersList_.addReminder(reminder, eventTime);
+				
 				irc.sendPrivmsg(channel, user + ": Reminder Added.");
 			}
 

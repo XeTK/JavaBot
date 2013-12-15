@@ -12,6 +12,7 @@ import core.plugin.PluginCore;
 import core.utils.Colour;
 import core.utils.Details;
 import core.utils.IRC;
+import core.utils.Regex;
 import core.utils.RegexFormatter;
 
 /**
@@ -23,29 +24,26 @@ import core.utils.RegexFormatter;
 public class Admin extends Plugin {
 	private Channel uchannel_;
 	
-	private final String REG_JOIN = RegexFormatter.format("join", 
-			RegexFormatter.REG_CHAN);
-	private final String REG_PART = RegexFormatter.format("part", 
-			RegexFormatter.REG_CHAN);
-	private final String REG_NICK = RegexFormatter.format("nick", 
-			RegexFormatter.REG_NICK);
+	private final String REG_JOIN = RegexFormatter.format("join", RegexFormatter.REG_CHAN);
+	private final String REG_PART = RegexFormatter.format("part", RegexFormatter.REG_CHAN);
+	private final String REG_NICK = RegexFormatter.format("nick", RegexFormatter.REG_NICK);
 	
-	private final String REG_QUIT = RegexFormatter.format("quit");
-	private final String REG_CMD = RegexFormatter.format("cmd (.*)");
-	private final String REG_EXCEPTION = RegexFormatter.format("exception");
-	private final String REG_GIT_PULL = RegexFormatter.format("gitpull");
-	private final String REG_RELOAD = RegexFormatter.format("reload");
-	private final String REG_LOADED = RegexFormatter.format("loaded");
+	private final String REG_QUIT       = RegexFormatter.format("quit");
+	private final String REG_CMD        = RegexFormatter.format("cmd (.*)");
+	private final String REG_EXCEPTION  = RegexFormatter.format("exception");
+	private final String REG_GIT_PULL   = RegexFormatter.format("gitpull");
+	private final String REG_RELOAD     = RegexFormatter.format("reload");
+	private final String REG_LOADED     = RegexFormatter.format("loaded");
 	private final String REG_NOT_LOADED = RegexFormatter.format("notloaded");
 	
 	private final String TXT_NOT_LOADED = "plugins not loaded: %s";
-	private final String TXT_LOADED = "plugins loaded: %s";
-	private final String TXT_RELOAD = "reloading plugins!";
-	private final String TXT_GIT_PULL = "reloading from git!";
-	private final String TXT_EXCEPTION = "Exception Thrown.";
-	private final String TXT_QUIT = "GoodBye";
-	private final String TXT_JOIN = "joined %s";
-	private final String TXT_PART = "left %s";
+	private final String TXT_LOADED     = "plugins loaded: %s";
+	private final String TXT_RELOAD     = "reloading plugins!";
+	private final String TXT_GIT_PULL   = "reloading from git!";
+	private final String TXT_EXCEPTION  = "Exception Thrown.";
+	private final String TXT_QUIT       = "GoodBye";
+	private final String TXT_JOIN       = "joined %s";
+	private final String TXT_PART       = "left %s";
 
 	private IRC irc = IRC.getInstance();
 
@@ -59,13 +57,12 @@ public class Admin extends Plugin {
 	 */
 	public void onMessage(Message inMessage) throws Exception {
 
-		// Get the details for the bot so we can check if the user issuing the
-		// command is a admin.
+		// Get the details for the bot so we can check if the user issuing the command is a admin.
 		Details details = Details.getInstance();
 
 		// Information about the message that is sent.
 		String message = inMessage.getMessage();
-		String user = inMessage.getUser();
+		String user    = inMessage.getUser();
 		String channel = inMessage.getChannel();
 		
 		// Check if the user is an admin and is aloud to issues theses commands.
@@ -92,9 +89,7 @@ public class Admin extends Plugin {
 				String str[] = message.split(" ");
 				irc.sendServer("NICK " + str[1]);
 			} else if (message.matches(REG_CMD)) {
-				Matcher p = Pattern.compile(REG_CMD,
-						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(
-						message);
+				Matcher p = Regex.getMatcher(REG_CMD, message);
 
 				if (p.find())
 					irc.sendServer(p.group(1));
@@ -106,9 +101,7 @@ public class Admin extends Plugin {
 				irc.sendActionMsg(channel, msg);
 				String pid = ManagementFactory.getRuntimeMXBean().getName();
 				String[] ids = pid.split("@");
-				Runtime.getRuntime()
-						.exec(new String[] { "/bin/bash", "-c",
-								"./git.sh " + ids[0] });
+				Runtime.getRuntime().exec(new String[] { "/bin/bash", "-c", "./git.sh " + ids[0] });
 				
 			} else if (message.matches(REG_RELOAD)) {
 				String msg = Colour.colour(TXT_RELOAD, Colour.RED);
@@ -135,8 +128,7 @@ public class Admin extends Plugin {
 
 	public void onJoin(Join inJoin) throws Exception {
 		IRC irc = IRC.getInstance();
-		irc.sendServer("MODE " + inJoin.getChannel() + " +v "
-				+ inJoin.getUser());
+		irc.sendServer("MODE " + inJoin.getChannel() + " +v " + inJoin.getUser());
 	}
 
 	public String getHelpString() {

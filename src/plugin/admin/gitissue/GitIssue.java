@@ -41,8 +41,7 @@ public class GitIssue extends Plugin {
 		try {
 			authToken = loadAuthToken(AUTH_TOKEN_FILE);
 		} catch (FileNotFoundException e) {
-			System.err
-					.println("No auth token file found in " + AUTH_TOKEN_FILE);
+			System.err.println("No auth token file found in " + AUTH_TOKEN_FILE);
 			System.err.println("Issue plugin failed to load");
 			return;
 		}
@@ -73,8 +72,7 @@ public class GitIssue extends Plugin {
 		if (!isLoaded)
 			return;
 
-		if (message.getMessage().startsWith(".bug ")
-				&& details.isAdmin(message.getUser()))
+		if (message.getMessage().startsWith(".bug ") && details.isAdmin(message.getUser()))
 			createIssue(message);
 	}
 
@@ -88,8 +86,7 @@ public class GitIssue extends Plugin {
 		// Should remove ".bug " from the start of the message
 		String issueTitle = message.getMessage().substring(5);
 		if (issueTitle.length() <= 0) {
-			irc.sendPrivmsg(message.getChannel(), message.getUser() + ": "
-					+ getHelpString());
+			irc.sendPrivmsg(message.getChannel(), message.getUser() + ": " + getHelpString());
 		}
 		String issueBody = ":octocat: This message was generated automatically by "
 				+ message.getUser()
@@ -101,30 +98,27 @@ public class GitIssue extends Plugin {
 				+ ",\"labels\":[\"bug\", \"unconfirmed\"]}";
 
 		try {
-			URL endPoint = new URL(GITHUB_URL + "/repos/" + REPO_OWNER + "/"
-					+ REPO_NAME + "/issues");
-			HttpsURLConnection conn = (HttpsURLConnection) endPoint
-					.openConnection();
+			URL endPoint = new URL(GITHUB_URL + "/repos/" + REPO_OWNER + "/" + REPO_NAME + "/issues");
+			HttpsURLConnection conn = (HttpsURLConnection) endPoint.openConnection();
 
 			conn.setDoOutput(true);
 			conn.setRequestMethod("POST");
 			conn.setRequestProperty("Authorization", "token " + authToken);
-			conn.setRequestProperty("Content-Type",
-					"application/x-www-form-urlencoded");
+			conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 			conn.getOutputStream().write(jsonContent.getBytes("UTF-8"));
 
 			int responseCode = conn.getResponseCode();
 			// FIXME This exception cannot be raised from within this class
 			// I think the custom class loader is doing odd things!
 			if (responseCode >= 400) {
-				throw new IssueException("Failed to create issue ("
-						+ responseCode + ").");
+				throw new IssueException("Failed to create issue (" + responseCode + ").");
 			}
 
 			StringBuffer response = new StringBuffer();
 			String line = null;
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					conn.getInputStream()));
+			
+			BufferedReader in = new BufferedReader(new InputStreamReader( conn.getInputStream()));
+			
 			while ((line = in.readLine()) != null) {
 				response.append(line);
 			}
@@ -132,11 +126,8 @@ public class GitIssue extends Plugin {
 
 			// send issue url to user
 			Gson parser = new Gson();
-			IssueResponse responseData = (IssueResponse) parser.fromJson(
-					response.toString(), IssueResponse.class);
-			irc.sendPrivmsg(message.getChannel(), message.getUser() + ": "
-					+ "Issue #" + responseData.getNumber() + " created: "
-					+ responseData.getHtmlUrl());
+			IssueResponse responseData = (IssueResponse) parser.fromJson(response.toString(), IssueResponse.class);
+			irc.sendPrivmsg(message.getChannel(), message.getUser() + ": " + "Issue #" + responseData.getNumber() + " created: " + responseData.getHtmlUrl());
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

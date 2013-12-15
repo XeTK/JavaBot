@@ -79,8 +79,7 @@ public class Sed extends Plugin {
 		// )? makes the group optional
 		// ([^/]+) captures the search string
 		// ([^/]*) captures the replacement
-		Pattern sedFinder = Pattern
-				.compile("^(?:([\\w]+): )?s/((?:(?<=\\\\)/|[^/])+)/((?:(?<=\\\\)/|[^/])*)/?");
+		Pattern sedFinder = Pattern.compile("^(?:([\\w]+): )?s/((?:(?<=\\\\)/|[^/])+)/((?:(?<=\\\\)/|[^/])*)/?");
 		Matcher m = sedFinder.matcher(message);
 
 		// it's sed time, baby
@@ -114,9 +113,7 @@ public class Sed extends Plugin {
 					text = processActionMessage(text, tempMessage.getUser());
 				}
 
-				m = Pattern.compile(search,
-					Pattern.CASE_INSENSITIVE)
-					.matcher(text);
+				m = Pattern.compile(search, Pattern.CASE_INSENSITIVE).matcher(text);
 					
 				// Use StringBuffer to hold message String for replacement
 				StringBuffer sb = new StringBuffer();
@@ -161,8 +158,7 @@ public class Sed extends Plugin {
 	 * @return true if msg is an ACTION message
 	 */
 	private boolean isActionMessage(final String msg) {
-		return msg.startsWith(ASCII_SOH + "ACTION")
-				&& msg.endsWith(Character.toString(ASCII_SOH));
+		return msg.startsWith(ASCII_SOH + "ACTION") && msg.endsWith(Character.toString(ASCII_SOH));
 	}
 
 	/**

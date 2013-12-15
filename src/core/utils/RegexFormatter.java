@@ -20,7 +20,7 @@ public enum RegexFormatter {
 	
 	public static String format(String command, RegexFormatter type)
 	{
-		return String.format("^\\.%s (%s)$", command,type.regex);
+		return String.format("^\\.%s (%s)$", command, type.regex);
 	}
 	public static String format(String command)
 	{
