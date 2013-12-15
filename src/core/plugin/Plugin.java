@@ -5,6 +5,7 @@ import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
+import core.menu.MenuItem;
 
 /**
  * This is the abstract class that all the plugins extend from.
@@ -34,6 +35,8 @@ public abstract class Plugin {
 	public void onKick(Kick inKick) throws Exception {}
 
 	public void rawInput(String inStr) throws Exception {}
+	
+	public abstract void getMenuItems(MenuItem rootItem);
 
 	/**
 	 * The string displayed by .help message

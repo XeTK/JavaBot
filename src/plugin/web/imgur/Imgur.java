@@ -6,6 +6,7 @@ import java.net.URL;
 import java.util.regex.Matcher;
 
 import core.event.Message;
+import core.menu.MenuItem;
 import core.plugin.Plugin;
 import core.utils.Colour;
 import core.utils.IRC;
@@ -79,5 +80,9 @@ public class Imgur extends Plugin {
 	public String getHelpString() {
 		return "IMGUR:\n"
 				+ "\t<URL> - This will pharse Imgur links\n";
+	}
+
+	@Override
+	public void getMenuItems(MenuItem rootItem) {
 	}
 }

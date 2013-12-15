@@ -7,6 +7,7 @@ import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
+import core.menu.MenuItem;
 import core.plugin.Plugin;
 import plugin.stats.user.UserListLoader;
 import core.utils.Details;
@@ -77,5 +78,9 @@ public class UserStatistics extends Plugin {
 	public String getHelpString() {
 		return "USERS: \n"
 				+ "\tThis class does not have any commands.";
+	}
+
+	@Override
+	public void getMenuItems(MenuItem rootItem) {
 	}
 }

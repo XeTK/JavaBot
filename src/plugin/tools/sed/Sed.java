@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 import java.util.Stack;
 
 import core.event.Message;
+import core.menu.MenuItem;
 import core.plugin.Plugin;
 import core.utils.Colour;
 import core.utils.Details;
@@ -261,5 +262,9 @@ public class Sed extends Plugin {
     }
 
   }
+
+	@Override
+	public void getMenuItems(MenuItem rootItem) {
+	}
 
 }

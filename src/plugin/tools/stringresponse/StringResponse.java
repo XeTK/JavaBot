@@ -7,6 +7,7 @@ import java.util.Random;
 
 import core.Channel;
 import core.event.Message;
+import core.menu.MenuItem;
 import core.plugin.Plugin;
 import core.utils.Details;
 import core.utils.IRC;
@@ -133,5 +134,9 @@ public class StringResponse extends Plugin {
 	public String getHelpString() {
 		return "RESPONSE: \n"
 				+ "\t.response <regex here>//<text here>/{0} <bot name>/{1} <channel user>\n";
+	}
+
+	@Override
+	public void getMenuItems(MenuItem rootItem) {
 	}
 }

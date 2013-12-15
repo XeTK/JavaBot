@@ -12,6 +12,7 @@ import plugin.stats.user.UserList;
 import plugin.stats.user.UserListLoader;
 import core.Channel;
 import core.event.Message;
+import core.menu.MenuItem;
 import core.plugin.Plugin;
 import core.utils.IRC;
 import core.utils.IRCException;
@@ -104,6 +105,10 @@ public class Reminder extends Plugin {
 				+ "\t.reminder <username> <Message> - leave a message for another member\n"
 				+ "\t.reminder 00:00 <Message> - Leave reminder for the channel to view later today\n"
 				+ "\t.reminder 01/01/1970 00:00 <Message> Leave a reminder for the future on a different date\n";
+	}
+
+	@Override
+	public void getMenuItems(MenuItem rootItem) {
 	}
 
 }

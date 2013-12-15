@@ -3,6 +3,7 @@ package core;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 
@@ -10,8 +11,13 @@ import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
+import core.menu.MenuItem;
+import core.menu.MenuNav;
+import core.menu.UserLoc;
+import core.menu.UserLocHandle;
 import core.plugin.Plugin;
 import core.plugin.PluginCore;
+import core.utils.Colour;
 import core.utils.Details;
 import core.utils.IRC;
 import core.utils.IRCException;
@@ -32,8 +38,10 @@ public class Channel {
 	
 	private final String TXT_LOADED     = "\u001B[33mPlugins Loaded: %s";
 	private final String TXT_NOT_LOADED = "\u001B[33mPlugins Not Loaded: %s";
+	private final String TXT_MENU_CMD   = Details.getInstance().getNickName() + ": ";
 	
 	private final String REG_GET_SERVER = "(?:[\\w\\d]*\\.)?([\\w\\d]*)\\..*";
+	private final String REG_MENU_CMD   = "./([a-zA-Z]*)(?:\\s(.*))?";
 
 	// Keep the channel name & plugins save so they can be accessed later.
 	private String       channelName_;
@@ -42,11 +50,79 @@ public class Channel {
 	private String       path_          = "servers/%s/%s/";
 	private final String blackListFile_ = "BlackListed.txt";
 	
+	private IRC irc = IRC.getInstance();
 	
 	private ArrayList<Plugin> plugins_;
 	
 	private TimeThread timeThread_;
-
+	
+	private UserLocHandle uLH;
+	
+	private void buildMenu() {
+		MenuItem root = new MenuItem("ROOT", null, 0);
+		int index = 0;
+		for (Plugin plugin: plugins_) {
+			MenuItem pluginRoot = new MenuItem(plugin.name(), root, index);
+			plugin.getMenuItems(pluginRoot);
+			root.addChild(pluginRoot);
+			index++;
+		}
+		uLH = new UserLocHandle(root);
+	}
+	
+	private void handleMenu(Message inMessage) {
+		try {
+			String menuCMD = inMessage.getMessage().replace(TXT_MENU_CMD, "");
+			MenuItem cL = null;
+			UserLoc uL = uLH.getUser(inMessage.getUser());
+			if (menuCMD.endsWith("cd ../")){
+				cL = MenuNav.preLevel(uL);
+			} else if (menuCMD.endsWith("cd /")){
+				cL = MenuNav.returnToRoot(uL);
+			} else if (menuCMD.endsWith("ls")) {
+				cL = uL.getCurLoc();
+				String cmdDir = new String();
+				ArrayList<MenuItem> children = uL.getCurLoc().getChildren();
+				
+				for (MenuItem child : children) {
+					cmdDir += "|| " + child.getNodeName() + " ";
+				}
+				
+				cmdDir += "|| ";
+				cmdDir = Colour.colour(cmdDir, Colour.GREEN, Colour.BLUE);
+				
+				irc.sendPrivmsg(inMessage.getChannel(), cmdDir);
+			} else if (menuCMD.endsWith("pwd")) {
+				cL = uL.getCurLoc();
+				irc.sendPrivmsg(inMessage.getChannel(), "Cur Menu : " + cL.getNodeName());
+			} else {
+				ArrayList<MenuItem> children = uL.getCurLoc().getChildren();
+				System.out.println(String.format("'%s'",menuCMD));
+				Matcher m = Regex.getMatcher(REG_MENU_CMD, menuCMD);
+				
+				if (m.find()) {
+					System.out.println(m.group(1));
+					String pluginName = m.group(1).toLowerCase();
+					String args       = m.group(2);
+					
+					for (MenuItem child : children) {
+						if (child.getNodeName().toLowerCase().equals(pluginName)) {
+							MenuNav.selectNode(uL, child.getNodeNumber(), args);
+						}
+					}
+				}
+				cL = uL.getCurLoc();
+			}
+		} catch (IRCException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
 	/**
 	 * Set the class up on creation, as we don't want to change theses details later.
 	 * 
@@ -83,6 +159,7 @@ public class Channel {
 		// Load the plugins
 		loadPlugins();
 	}
+	
 	private ArrayList<String> blackListedPlugins(){
 		ArrayList<String> lines = new ArrayList<String>();
 		try {
@@ -101,6 +178,7 @@ public class Channel {
 		}
 		return lines;
 	}
+	
 	public Plugin getPlugin(Class<?> classdef){
 		for (Plugin plugin: plugins_) {
 			
@@ -112,6 +190,7 @@ public class Channel {
 		}
 		return null;
 	}
+	
 	private ArrayList<Plugin> vettedList(ArrayList<Plugin> plugins){
 		ArrayList<Plugin> vetted      = new ArrayList<Plugin>();
 		ArrayList<String> blackListed = blackListedPlugins();
@@ -159,6 +238,8 @@ public class Channel {
 		System.out.println(String.format(TXT_LOADED,PluginCore.loadedPlugins(plugins_)));
 		
 		System.out.println(String.format(TXT_NOT_LOADED,notLoaded()));
+		
+		buildMenu();
 
 		// Call onCreate for each plugin to set them up ready for use.
 		for (int i = 0; i < plugins_.size(); i++)
@@ -180,23 +261,25 @@ public class Channel {
 	 */
 	public void onMessage(Message inMessage) {
 		
-		IRC irc = IRC.getInstance();
-		
 		// Double check that the message is actually for this class.
 		if (inMessage.getChannel().equalsIgnoreCase(channelName_)) {
-			for (int i = 0; i < plugins_.size(); i++) {
-				try {
-					// If we are not asking for the help string then continue as per normal
-					if (!inMessage.getMessage().matches(RegexFormatter.format(CMD_HELP))) {
-						plugins_.get(i).onMessage(inMessage);
-					} else {
-						// Get the help string for the plugin we are working on
-						String helpString = plugins_.get(i).getHelpString();
-						// Send the help string to the user that asled for it.
-						irc.sendPrivmsg(inMessage.getUser(), helpString);
+			if (inMessage.getMessage().startsWith(TXT_MENU_CMD)) {
+				handleMenu(inMessage);
+			} else {
+				for (int i = 0; i < plugins_.size(); i++) {
+					try {
+						// If we are not asking for the help string then continue as per normal
+						if (!inMessage.getMessage().matches(RegexFormatter.format(CMD_HELP))) {
+							plugins_.get(i).onMessage(inMessage);
+						} else {
+							// Get the help string for the plugin we are working on
+							String helpString = plugins_.get(i).getHelpString();
+							// Send the help string to the user that asled for it.
+							irc.sendPrivmsg(inMessage.getUser(), helpString);
+						}
+					} catch (Exception ex) {
+						new IRCException(ex);
 					}
-				} catch (Exception ex) {
-					new IRCException(ex);
 				}
 			}
 		}

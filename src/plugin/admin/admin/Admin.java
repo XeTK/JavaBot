@@ -1,19 +1,15 @@
 package plugin.admin.admin;
 
 import java.lang.management.ManagementFactory;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import core.Channel;
 import core.event.Join;
-import core.event.Message;
+import core.menu.AuthGroup;
+import core.menu.MenuItem;
 import core.plugin.Plugin;
 import core.plugin.PluginCore;
 import core.utils.Colour;
-import core.utils.Details;
 import core.utils.IRC;
-import core.utils.Regex;
-import core.utils.RegexFormatter;
 
 /**
  * Handles admin tasks - joining channels - bot nick change - start/stop bot -
@@ -22,19 +18,18 @@ import core.utils.RegexFormatter;
  * @author Tom Rosier(XeTK)
  */
 public class Admin extends Plugin {
-	private Channel uchannel_;
+	private Channel channel_;
 	
-	private final String REG_JOIN = RegexFormatter.format("join", RegexFormatter.REG_CHAN);
-	private final String REG_PART = RegexFormatter.format("part", RegexFormatter.REG_CHAN);
-	private final String REG_NICK = RegexFormatter.format("nick", RegexFormatter.REG_NICK);
-	
-	private final String REG_QUIT       = RegexFormatter.format("quit");
-	private final String REG_CMD        = RegexFormatter.format("cmd (.*)");
-	private final String REG_EXCEPTION  = RegexFormatter.format("exception");
-	private final String REG_GIT_PULL   = RegexFormatter.format("gitpull");
-	private final String REG_RELOAD     = RegexFormatter.format("reload");
-	private final String REG_LOADED     = RegexFormatter.format("loaded");
-	private final String REG_NOT_LOADED = RegexFormatter.format("notloaded");
+	private final String CMD_JOIN       = "join";
+	private final String CMD_PART       = "part";
+	private final String CMD_NICK       = "nick";
+	private final String CMD_QUIT       = "quit";
+	private final String CMD_CMD        = "cmd";
+	private final String CMD_EXCEPTION  = "exception";
+	private final String CMD_GIT_PULL   = "gitpull";
+	private final String CMD_RELOAD     = "reload";
+	private final String CMD_LOADED     = "loaded";
+	private final String CMD_NOT_LOADED = "notloaded";
 	
 	private final String TXT_NOT_LOADED = "plugins not loaded: %s";
 	private final String TXT_LOADED     = "plugins loaded: %s";
@@ -48,82 +43,7 @@ public class Admin extends Plugin {
 	private IRC irc = IRC.getInstance();
 
 	public void onCreate(Channel inChannel) throws Exception {
-		this.uchannel_ = inChannel;
-	}
-
-	/**
-	 * Process the new message and check if it is bound to a specific admin
-	 * command.
-	 */
-	public void onMessage(Message inMessage) throws Exception {
-
-		// Get the details for the bot so we can check if the user issuing the command is a admin.
-		Details details = Details.getInstance();
-
-		// Information about the message that is sent.
-		String message = inMessage.getMessage();
-		String user    = inMessage.getUser();
-		String channel = inMessage.getChannel();
-		
-		// Check if the user is an admin and is aloud to issues theses commands.
-		if (details.isAdmin(user)) {
-			// Remove padding at the end of message. To stop any issues.
-			if (message.charAt(message.length() - 1) == ' ')
-				message = message.substring(0, message.length() - 1);
-
-			// If we want to join a channel then we access this command.
-			if (message.matches(REG_JOIN)) {
-				String str[] = message.split(" ");
-				irc.sendServer("JOIN " + str[1]);
-				String msg = String.format(TXT_JOIN, str[1]);
-				irc.sendActionMsg(channel, msg);
-			} else if (message.matches(REG_PART)) {
-				String str[] = message.split(" ");
-				irc.sendServer("PART " + str[1]);
-				String msg = String.format(TXT_PART, str[1]);
-				irc.sendActionMsg(channel, msg);
-			} else if (message.matches(REG_QUIT)) {
-				irc.closeConnection();
-				System.exit(0);
-			} else if (message.matches(REG_NICK)) {
-				String str[] = message.split(" ");
-				irc.sendServer("NICK " + str[1]);
-			} else if (message.matches(REG_CMD)) {
-				Matcher p = Regex.getMatcher(REG_CMD, message);
-
-				if (p.find())
-					irc.sendServer(p.group(1));
-			} else if (message.matches(REG_EXCEPTION)) {
-				irc.sendPrivmsg(channel, TXT_EXCEPTION); 
-				throw new Exception(); 
-			} else if (message.matches(REG_GIT_PULL)) {
-				String msg = Colour.colour(TXT_GIT_PULL, Colour.RED, Colour.WHITE);
-				irc.sendActionMsg(channel, msg);
-				String pid = ManagementFactory.getRuntimeMXBean().getName();
-				String[] ids = pid.split("@");
-				Runtime.getRuntime().exec(new String[] { "/bin/bash", "-c", "./git.sh " + ids[0] });
-				
-			} else if (message.matches(REG_RELOAD)) {
-				String msg = Colour.colour(TXT_RELOAD, Colour.RED);
-				irc.sendActionMsg(channel, msg);
-				uchannel_.loadPlugins();
-			}
-		}
-		if (!inMessage.isPrivMsg()){
-			if (message.matches(REG_LOADED)) {
-				String loaded = PluginCore.loadedPlugins(uchannel_.getPlugins());
-				loaded = Colour.colour(loaded, Colour.GREEN, Colour.BLACK);
-
-				String msg = String.format(TXT_LOADED, loaded);
-				irc.sendActionMsg(channel, msg);
-			} else if (message.matches(REG_NOT_LOADED)) {
-				String notLoaded = uchannel_.notLoaded();
-				notLoaded = Colour.colour(notLoaded, Colour.RED, Colour.WHITE);
-				
-				String msg = String.format(TXT_NOT_LOADED, notLoaded);
-				irc.sendActionMsg(channel, msg);
-			}
-		}
+		this.channel_ = inChannel;
 	}
 
 	public void onJoin(Join inJoin) throws Exception {
@@ -143,5 +63,165 @@ public class Admin extends Plugin {
 				+ "\t.gitpull - Pulls from git and reloads the bot\n"
 				+ "\t.exception - This tests that admins can get exception notifications\n"
 				+ "\t.cmd <raw irc message> - Admin command to execute commands directly on the irc server\n";
+	}
+
+	@Override
+	public void getMenuItems(MenuItem rootItem) {
+		MenuItem pluginRoot = rootItem;
+		
+		MenuItem adminJoin = new MenuItem(CMD_JOIN, rootItem, 1, AuthGroup.ADMIN){
+			@Override
+			public void onExecution(String args) { 
+				try {
+					irc.sendServer("JOIN " + args);
+					String msg = String.format(TXT_JOIN, args);
+					irc.sendActionMsg(channel_.getChannelName(), msg);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		};
+
+		pluginRoot.addChild(adminJoin);
+		
+		MenuItem adminPart = new MenuItem(CMD_PART, rootItem, 2, AuthGroup.ADMIN){
+			@Override
+			public void onExecution(String args) { 
+				try {
+					irc.sendServer("PART " + args);
+					String msg = String.format(TXT_PART, args);
+					irc.sendActionMsg(channel_.getChannelName(), msg);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		};
+
+		pluginRoot.addChild(adminPart);
+		
+		MenuItem adminQuit = new MenuItem(CMD_QUIT, rootItem, 3, AuthGroup.ADMIN){
+			@Override
+			public void onExecution(String args) { 
+				try {
+					String msg = String.format(TXT_QUIT, args);
+					irc.sendActionMsg(channel_.getChannelName(), msg);
+					irc.sendServer("QUIT " + args);
+					irc.closeConnection();
+					System.exit(0);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		};
+
+		pluginRoot.addChild(adminQuit);
+		
+		MenuItem adminNick = new MenuItem(CMD_NICK, rootItem, 4, AuthGroup.ADMIN){
+			@Override
+			public void onExecution(String args) { 
+				try {
+					irc.sendServer("NICK " + args);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		};
+
+		pluginRoot.addChild(adminNick);
+		
+		MenuItem adminCMD = new MenuItem(CMD_CMD, rootItem, 5, AuthGroup.ADMIN){
+			@Override
+			public void onExecution(String args) { 
+				try {
+					irc.sendServer(args);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		};
+
+		pluginRoot.addChild(adminCMD);
+		
+		MenuItem adminException = new MenuItem(CMD_EXCEPTION, rootItem, 6, AuthGroup.ADMIN){
+			@Override
+			public void onExecution(String args) { 
+				try {
+					irc.sendPrivmsg(channel_.getChannelName(), TXT_EXCEPTION); 
+					throw new Exception(); 
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		};
+
+		pluginRoot.addChild(adminException);
+		
+		MenuItem adminGIT = new MenuItem(CMD_GIT_PULL, rootItem, 7, AuthGroup.ADMIN){
+			@Override
+			public void onExecution(String args) { 
+				try {
+					String msg = Colour.colour(TXT_GIT_PULL, Colour.RED, Colour.WHITE);
+					irc.sendActionMsg(channel_.getChannelName(), msg);
+					String pid = ManagementFactory.getRuntimeMXBean().getName();
+					String[] ids = pid.split("@");
+					Runtime.getRuntime().exec(new String[] { "/bin/bash", "-c", "./git.sh " + ids[0] });
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		};
+
+		pluginRoot.addChild(adminGIT);
+		
+		MenuItem adminReload = new MenuItem(CMD_RELOAD, rootItem, 8, AuthGroup.ADMIN){
+			@Override
+			public void onExecution(String args) { 
+				try {
+					String msg = Colour.colour(TXT_RELOAD, Colour.RED);
+					irc.sendActionMsg(channel_.getChannelName(), msg);
+					channel_.loadPlugins();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		};
+
+		pluginRoot.addChild(adminReload);
+		
+		MenuItem adminLoaded = new MenuItem(CMD_LOADED, rootItem, 9, AuthGroup.NONE){
+			@Override
+			public void onExecution(String args) { 
+				try {
+					String loaded = PluginCore.loadedPlugins(channel_.getPlugins());
+					loaded = Colour.colour(loaded, Colour.GREEN, Colour.BLACK);
+
+					String msg = String.format(TXT_LOADED, loaded);
+					irc.sendActionMsg(channel_.getChannelName(), msg);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		};
+
+		pluginRoot.addChild(adminLoaded);
+		
+		MenuItem adminNotLoaded = new MenuItem(CMD_NOT_LOADED, rootItem, 10, AuthGroup.NONE){
+			@Override
+			public void onExecution(String args) { 
+				try {
+					String notLoaded = channel_.notLoaded();
+					notLoaded = Colour.colour(notLoaded, Colour.RED, Colour.WHITE);
+					
+					String msg = String.format(TXT_NOT_LOADED, notLoaded);
+					irc.sendActionMsg(channel_.getChannelName(), msg);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		};
+
+		pluginRoot.addChild(adminNotLoaded);
+		
+		rootItem = pluginRoot;
 	}
 }

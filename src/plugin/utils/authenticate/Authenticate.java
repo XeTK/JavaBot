@@ -18,6 +18,7 @@ import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
+import core.menu.MenuItem;
 import core.plugin.Plugin;
 import core.utils.EMail;
 import core.utils.IRC;
@@ -169,5 +170,8 @@ public class Authenticate extends Plugin {
 				+ "\tREGISTER <EMAIL> <PASSWORD> - Use this to register with the bot\n"
 				+ "\tLOGOUT - This will unauthenticate you with the bot\n"
 				+ "\tRECOVER - TO BE COMPLETED\n";
+	}
+	@Override
+	public void getMenuItems(MenuItem rootItem) {
 	}
 }
