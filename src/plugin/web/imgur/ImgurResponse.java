@@ -1,7 +1,5 @@
 package plugin.web.imgur;
 
-import java.util.List;
-
 /*
  * This holds data returned from an Imgur request.
  */
@@ -13,9 +11,13 @@ public class ImgurResponse {
 
 		String title;
 		String type;
+		String error;
+		String description;
 		int views;
 		int ups;
 		int downs;
+		int height;
+		int width;
 		boolean nsfw;
 
 		public DataSet() {
@@ -49,5 +51,13 @@ public class ImgurResponse {
 	public boolean isNsfw() {
 		return data.nsfw;
 	}
-
+	public String getError(){
+		return data.error;
+	}
+	public String getDesc() {
+		return data.description;
+	}
+	public String getRes() {
+		return "[" + data.width + "x" + data.height + "]";
+	}
 }
