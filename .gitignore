@@ -13,3 +13,4 @@ libs/*
 *.properties
 *.txt
 servers/*
+imgur_creds
