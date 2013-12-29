@@ -74,10 +74,11 @@ public class Channel {
 		try {
 			Matcher m = Regex.getMatcher(TXT_MENU_CMD, inMessage.getMessage());
 			if (m.matches()) {
-				if (m.group(1).startsWith(Details.getInstance().getNickName())) {
+				Details details = Details.getInstance();
+				MenuItem cL = null;
+				UserLoc uL = uLH.getUser(inMessage.getUser());
+				if (m.group(1).startsWith(details.getNickName())) {
 					String menuCMD = m.group(2);
-					MenuItem cL = null;
-					UserLoc uL = uLH.getUser(inMessage.getUser());
 					if (menuCMD.endsWith("back") || menuCMD.endsWith("b")){
 						cL = MenuNav.preLevel(uL);
 					} else if (menuCMD.endsWith("root") || menuCMD.endsWith("r")){
@@ -100,11 +101,9 @@ public class Channel {
 						irc.sendPrivmsg(inMessage.getChannel(), "Cur Menu : " + cL.getNodeName());
 					} else {
 						ArrayList<MenuItem> children = uL.getCurLoc().getChildren();
-						System.out.println(String.format("'%s'",menuCMD));
 						m = Regex.getMatcher(REG_MENU_CMD, menuCMD);
 						
 						if (m.find()) {
-							System.out.println(m.group(1));
 							String pluginName = m.group(1).toLowerCase();
 							String args       = m.group(2);
 							
@@ -116,8 +115,26 @@ public class Channel {
 						}
 						cL = uL.getCurLoc();
 					}
-				} else if (m.group(1).equals(Details.getInstance().getCMDPrefix())) {
-					System.out.println("Channel Regex : " +TXT_MENU_CMD);
+				} else if (m.group(1).startsWith("" + details.getCMDPrefix())) {
+					String menuCMD = m.group(2);
+					if (menuCMD.contains("" + details.getCmdSeperator())) {
+						String[] cmds = menuCMD.split("" + details.getCmdSeperator());
+						for (String cmd : cmds) {
+							ArrayList<MenuItem> children = uL.getCurLoc().getChildren();
+							m = Regex.getMatcher(REG_MENU_CMD, cmd);
+							
+							if (m.find()) {
+								String pluginName = m.group(1).toLowerCase();
+								String args       = m.group(2);
+								
+								for (MenuItem child : children) {
+									if (child.getNodeName().toLowerCase().equals(pluginName)) {
+										MenuNav.selectNode(uL, child.getNodeNumber(), args);
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 		} catch (IRCException e) {
