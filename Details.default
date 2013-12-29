@@ -1,6 +1,8 @@
 {
 	"server": "irc.test.com",
 	"port": 6667,
+	"cmdPrefix":".",
+        "cmdSeperator":"/",
 	"botNickName": "JavaBot",
 	"smtpEmail": "javabot@test.com",
 	"smtpHost": "smtphost.test.com",
