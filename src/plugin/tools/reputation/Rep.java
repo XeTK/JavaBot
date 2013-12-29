@@ -5,6 +5,7 @@ import java.util.regex.Matcher;
 
 import core.Channel;
 import core.event.Message;
+import core.menu.MenuItem;
 import core.plugin.Plugin;
 import core.utils.IRC;
 import core.utils.JSON;
@@ -86,6 +87,10 @@ public class Rep extends Plugin {
 				+ "\t.rep <Item> - view the reputation of a item\n"
 				+ "\t<Item>--/++ - increment or decrement the rep of a item /\n"
 				+ "\t<Item> +/- <Ammount> - increment or decrement the rep of a set item by a set amount\n";
+	}
+
+	@Override
+	public void getMenuItems(MenuItem rootItem) {
 	}
 
 }

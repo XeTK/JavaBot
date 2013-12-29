@@ -6,6 +6,7 @@ import java.net.URL;
 import java.util.regex.Matcher;
 
 import core.event.Message;
+import core.menu.MenuItem;
 import core.plugin.Plugin;
 import core.utils.Colour;
 import core.utils.IRC;
@@ -65,5 +66,9 @@ public class Youtube extends Plugin {
 	public String getHelpString() {
 		return "YOUTUBE:\n"
 				+ "\t<URL> - This will pharse YouTube links for there stats\n";
+	}
+
+	@Override
+	public void getMenuItems(MenuItem rootItem) {
 	}
 }

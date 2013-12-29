@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 
 import core.event.Message;
+import core.menu.MenuItem;
 import core.plugin.Plugin;
 import core.utils.IRC;
 import core.utils.Regex;
@@ -120,5 +121,9 @@ public class Lyrics extends Plugin {
 			}
 		}
 		return str.trim();
+	}
+
+	@Override
+	public void getMenuItems(MenuItem rootItem) {
 	}
 }

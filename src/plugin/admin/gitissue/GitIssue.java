@@ -14,6 +14,7 @@ import javax.net.ssl.HttpsURLConnection;
 import com.google.gson.Gson;
 
 import core.event.Message;
+import core.menu.MenuItem;
 import core.plugin.Plugin;
 import core.utils.Details;
 import core.utils.IRC;
@@ -146,6 +147,11 @@ public class GitIssue extends Plugin {
 		public IssueException(String msg) {
 			super(msg);
 		}
+	}
+
+	@Override
+	public void getMenuItems(MenuItem rootItem) {
+
 	}
 
 }

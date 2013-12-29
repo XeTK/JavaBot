@@ -8,6 +8,7 @@ import plugin.stats.user.UserListLoader;
 import core.Channel;
 import core.event.Join;
 import core.event.Message;
+import core.menu.MenuItem;
 import core.plugin.Plugin;
 import core.utils.IRC;
 import core.utils.Regex;
@@ -94,5 +95,9 @@ public class Quote extends Plugin {
 				+ "\t.quote <item> - returns a random quote for that item\n"
 				+ "\t.quoteadd <item> <message> - will add a new quote to the appropriate item\n"
 				+ "\t.quotedel <message> - will remove the message from the libary of quotes\n";
+	}
+
+	@Override
+	public void getMenuItems(MenuItem rootItem) {
 	}
 }

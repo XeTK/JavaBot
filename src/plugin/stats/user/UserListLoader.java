@@ -3,6 +3,7 @@ package plugin.stats.user;
 import java.io.File;
 
 import core.Channel;
+import core.menu.MenuItem;
 import core.plugin.Plugin;
 import core.utils.JSON;
 
@@ -41,5 +42,9 @@ public class UserListLoader extends Plugin{
 	public String getHelpString() {
 		// TODO Auto-generated method stub
 		return "";
+	}
+
+	@Override
+	public void getMenuItems(MenuItem rootItem) {
 	}
 }

@@ -5,6 +5,7 @@ import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
+import core.menu.MenuItem;
 import core.plugin.Plugin;
 import core.utils.IRC;
 
@@ -58,6 +59,10 @@ public class Counters extends Plugin {
 		String text = "| %s Creates | %s Times | %s Joins | %s Quits | %s Messages | %s Kicks | %s Raws |";
 		text = String.format(text, creates_,times_,joins_,quits_,messages_,kicks_,raws_);
 		return text;
+	}
+
+	@Override
+	public void getMenuItems(MenuItem rootItem) {
 	}
 
 }

@@ -15,6 +15,7 @@ import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
+import core.menu.MenuItem;
 import core.plugin.Plugin;
 import core.utils.IRC;
 import core.utils.IRCException;
@@ -236,5 +237,9 @@ public class ChannelStatistics extends Plugin {
 				+ "\t.lastonline <username> - check when a member was last active\n"
 				+ "\t.msgsent <username> - check how many messages a user has sent globaly within the channel\n"
 				+ "\t.stats (hour|day) (msgsent|joins|quits|kicks) - get stats for that given time frame\n";
+	}
+
+	@Override
+	public void getMenuItems(MenuItem rootItem) {
 	}
 }
