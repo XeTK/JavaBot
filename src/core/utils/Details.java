@@ -20,6 +20,7 @@ public class Details {
 	private int      port         = 6667;
 
 	private char     cmdPrefix    = '.';
+	private char     cmdSeperator = '/';
 	
 	private String   server       = "127.0.0.1";
 	private String   botNickName  = "JavaBot";
@@ -103,6 +104,11 @@ public class Details {
 	}
 	public char getCMDPrefix() {
 		return cmdPrefix;
+	}
+	
+
+	public char getCmdSeperator() {
+		return cmdSeperator;
 	}
 
 	public String[] getChannels() {

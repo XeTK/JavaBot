@@ -38,10 +38,10 @@ public class Channel {
 	
 	private final String TXT_LOADED     = "\u001B[33mPlugins Loaded: %s";
 	private final String TXT_NOT_LOADED = "\u001B[33mPlugins Not Loaded: %s";
-	private final String TXT_MENU_CMD   = Details.getInstance().getNickName() + ": ";
+	private final String TXT_MENU_CMD   = "(" + Details.getInstance().getNickName() + ":\\s|" + Details.getInstance().getCMDPrefix() +  ")(.*)";
 	
 	private final String REG_GET_SERVER = "(?:[\\w\\d]*\\.)?([\\w\\d]*)\\..*";
-	private final String REG_MENU_CMD   = "./([a-zA-Z]*)(?:\\s(.*))?";
+	private final String REG_MENU_CMD   = "([a-zA-Z]*)(?:\\s(.*))?";
 
 	// Keep the channel name & plugins save so they can be accessed later.
 	private String       channelName_;
@@ -72,46 +72,53 @@ public class Channel {
 	
 	private void handleMenu(Message inMessage) {
 		try {
-			String menuCMD = inMessage.getMessage().replace(TXT_MENU_CMD, "");
-			MenuItem cL = null;
-			UserLoc uL = uLH.getUser(inMessage.getUser());
-			if (menuCMD.endsWith("cd ../")){
-				cL = MenuNav.preLevel(uL);
-			} else if (menuCMD.endsWith("cd /")){
-				cL = MenuNav.returnToRoot(uL);
-			} else if (menuCMD.endsWith("ls")) {
-				cL = uL.getCurLoc();
-				String cmdDir = new String();
-				ArrayList<MenuItem> children = uL.getCurLoc().getChildren();
-				
-				for (MenuItem child : children) {
-					cmdDir += "|| " + child.getNodeName() + " ";
-				}
-				
-				cmdDir += "|| ";
-				cmdDir = Colour.colour(cmdDir, Colour.GREEN, Colour.BLUE);
-				
-				irc.sendPrivmsg(inMessage.getChannel(), cmdDir);
-			} else if (menuCMD.endsWith("pwd")) {
-				cL = uL.getCurLoc();
-				irc.sendPrivmsg(inMessage.getChannel(), "Cur Menu : " + cL.getNodeName());
-			} else {
-				ArrayList<MenuItem> children = uL.getCurLoc().getChildren();
-				System.out.println(String.format("'%s'",menuCMD));
-				Matcher m = Regex.getMatcher(REG_MENU_CMD, menuCMD);
-				
-				if (m.find()) {
-					System.out.println(m.group(1));
-					String pluginName = m.group(1).toLowerCase();
-					String args       = m.group(2);
-					
-					for (MenuItem child : children) {
-						if (child.getNodeName().toLowerCase().equals(pluginName)) {
-							MenuNav.selectNode(uL, child.getNodeNumber(), args);
+			Matcher m = Regex.getMatcher(TXT_MENU_CMD, inMessage.getMessage());
+			if (m.matches()) {
+				if (m.group(1).startsWith(Details.getInstance().getNickName())) {
+					String menuCMD = m.group(2);
+					MenuItem cL = null;
+					UserLoc uL = uLH.getUser(inMessage.getUser());
+					if (menuCMD.endsWith("back") || menuCMD.endsWith("b")){
+						cL = MenuNav.preLevel(uL);
+					} else if (menuCMD.endsWith("root") || menuCMD.endsWith("r")){
+						cL = MenuNav.returnToRoot(uL);
+					} else if (menuCMD.endsWith("list") || menuCMD.endsWith("l")) {
+						cL = uL.getCurLoc();
+						String cmdDir = new String();
+						ArrayList<MenuItem> children = uL.getCurLoc().getChildren();
+						
+						for (MenuItem child : children) {
+							cmdDir += "|| " + child.getNodeName() + " ";
 						}
+						
+						cmdDir += "|| ";
+						cmdDir = Colour.colour(cmdDir, Colour.GREEN, Colour.BLUE);
+						
+						irc.sendPrivmsg(inMessage.getChannel(), cmdDir);
+					} else if (menuCMD.endsWith("location") || menuCMD.endsWith("p")) {
+						cL = uL.getCurLoc();
+						irc.sendPrivmsg(inMessage.getChannel(), "Cur Menu : " + cL.getNodeName());
+					} else {
+						ArrayList<MenuItem> children = uL.getCurLoc().getChildren();
+						System.out.println(String.format("'%s'",menuCMD));
+						m = Regex.getMatcher(REG_MENU_CMD, menuCMD);
+						
+						if (m.find()) {
+							System.out.println(m.group(1));
+							String pluginName = m.group(1).toLowerCase();
+							String args       = m.group(2);
+							
+							for (MenuItem child : children) {
+								if (child.getNodeName().toLowerCase().equals(pluginName)) {
+									MenuNav.selectNode(uL, child.getNodeNumber(), args);
+								}
+							}
+						}
+						cL = uL.getCurLoc();
 					}
+				} else if (m.group(1).equals(Details.getInstance().getCMDPrefix())) {
+					System.out.println("Channel Regex : " +TXT_MENU_CMD);
 				}
-				cL = uL.getCurLoc();
 			}
 		} catch (IRCException e) {
 			// TODO Auto-generated catch block
@@ -141,8 +148,6 @@ public class Channel {
 
 		if (m.matches())
 			this.serverName_ = m.group(1);
-
-
 
 		path_ = String.format(path_, serverName_, cleanChannel);
 
@@ -263,7 +268,7 @@ public class Channel {
 		
 		// Double check that the message is actually for this class.
 		if (inMessage.getChannel().equalsIgnoreCase(channelName_)) {
-			if (inMessage.getMessage().startsWith(TXT_MENU_CMD)) {
+			if (inMessage.getMessage().matches(TXT_MENU_CMD)) {
 				handleMenu(inMessage);
 			} else {
 				for (int i = 0; i < plugins_.size(); i++) {

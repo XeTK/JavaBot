@@ -3,7 +3,6 @@ package core;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import core.event.Join;
 import core.event.Kick;

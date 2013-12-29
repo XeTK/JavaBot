@@ -63,7 +63,8 @@ public class JSON {
 
 		// Check if the file exists and the path is there else create it.
 		if (!filePath.exists()) {
-			filePath.getParentFile().mkdirs();
+			if (filePath.getParentFile() != null)
+				filePath.getParentFile().mkdirs();
 			filePath.createNewFile();
 		} else {
 			filePath.delete();
