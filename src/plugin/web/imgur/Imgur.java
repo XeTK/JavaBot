@@ -16,6 +16,7 @@ import javax.net.ssl.HttpsURLConnection;
 import com.google.gson.Gson;
 
 import core.event.Message;
+import core.menu.MenuItem;
 import core.plugin.Plugin;
 import core.utils.IRC;
 import core.utils.Regex;
@@ -154,6 +155,12 @@ public class Imgur extends Plugin {
 	public String getHelpString() {
 		return "IMGUR:\n"
 				+ "\t<URL> - This will parse Imgur links\n";
+	}
+
+	@Override
+	public void getMenuItems(MenuItem rootItem) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
