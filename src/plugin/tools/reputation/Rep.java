@@ -39,7 +39,7 @@ public class Rep extends Plugin {
 
 			IRC irc = IRC.getInstance();
 			
-			Matcher r = Regex.getMatcher("^([\\w\\d]+)\\s?([+-])(?:\\2|=\\s?(\\d+))", message);
+			Matcher r = Regex.getMatcher("^(\\w+)\\s?([+-])(?:\\2|=\\s?(\\d+))", message);
 			
 			if (r.find()) {
 
