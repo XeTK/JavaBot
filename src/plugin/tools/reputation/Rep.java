@@ -39,8 +39,7 @@ public class Rep extends Plugin {
 
 			IRC irc = IRC.getInstance();
 			
-			Matcher r = Regex.getMatcher("^([\\w\\d]*)(?:[\\s])?([+|-])(?:[+|-|=])?(?:[\\s]([\\d]*))?", message);
-			
+			Matcher r = Regex.getMatcher("^([\\w\\d]+)\\s?([+-])(?:\\2|=\\s?(\\d+))", message);
 			
 			if (r.find()) {
 
@@ -65,11 +64,11 @@ public class Rep extends Plugin {
 							iAmmount = Integer.valueOf(type + ammount);
 					}
 					if (iAmmount > 100 || iAmmount < -100) {
-						irc.sendPrivmsg(channel,"You cant do that its to much rep...");
+						irc.sendPrivmsg(channel,"You can't do that, it's too much rep...");
 					} else {
 						Reputation tempRep = repList_.getRep(item);
 						tempRep.modRep(iAmmount);
-						irc.sendPrivmsg(channel, item + ": Rep = " + tempRep.getRep() + "!");
+						irc.sendPrivmsg(channel, item + ": Rep = " + tempRep.getRep());
 					}
 				}
 			} else if (message.matches(RegexFormatter.format("rep",RegexFormatter.REG_NICK))) {
