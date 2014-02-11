@@ -95,7 +95,8 @@ public class IRC {
 		
 		String tmp = instr + "\r\n";
 		
-		strBuf = tmp;
+		if (tmp.startsWith("PRIVMSG"))
+			strBuf = tmp;
 		
 		outToServer_.write(tmp);
 		outToServer_.flush();
