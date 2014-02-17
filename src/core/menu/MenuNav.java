@@ -26,7 +26,7 @@ public class MenuNav {
 		return temp;
 	}
 	
-	public static MenuItem selectNode(UserLoc user, int nodeNumber, String args) {
+	public static MenuItem selectNode(UserLoc user, int nodeNumber) {
 		MenuItem temp = user.getCurLoc();		
 		ArrayList<MenuItem> nodes = temp.getChildren();
 		
@@ -38,21 +38,38 @@ public class MenuNav {
 				}
 			}
 		}
-		
-		if (temp.getChildren().size() == 0) {
-			if (temp.getAuth() == AuthGroup.ADMIN) {
+				
+		return temp;
+	}
+
+	public static void executeNode(MenuItem node, UserLoc user, String args) {
+		if (node.getChildren().size() == 0) {
+			if (node.getAuth() == AuthGroup.ADMIN) {
 				if (Details.getInstance().isAdmin(user.getUsername())) {
-					temp.onExecution(args);
+					node.onExecution(args);
 				}
-			} else if (temp.getAuth() == AuthGroup.NONE) {
-				temp.onExecution(args);
+			} else if (node.getAuth() == AuthGroup.NONE) {
+				node.onExecution(args);
 			}
 			//returnToRoot(user);
 		} else {
-			user.setCurLoc(temp);
+			user.setCurLoc(node);
 		}
-		
-		return user.getCurLoc();
 	}
-
+	public static String helpNode(MenuItem node, UserLoc user) {
+		String tempHelp = new String();
+		if (node.getChildren().size() == 0) {
+			if (node.getAuth() == AuthGroup.ADMIN) {
+				if (Details.getInstance().isAdmin(user.getUsername())) {
+					tempHelp = node.onHelp();
+				}
+			} else if (node.getAuth() == AuthGroup.NONE) {
+				tempHelp = node.onHelp();
+			}
+			//returnToRoot(user);
+		} else {
+			user.setCurLoc(node);
+		}
+		return tempHelp;
+	}
 }

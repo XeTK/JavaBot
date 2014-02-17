@@ -51,20 +51,6 @@ public class Admin extends Plugin {
 		irc.sendServer("MODE " + inJoin.getChannel() + " +v " + inJoin.getUser());
 	}
 
-	public String getHelpString() {
-		return "ADMIN: \n" 
-				+ "\t.join <channel> - Join Channel\n"
-				+ "\t.part <channel> - Part Channel\n"
-				+ "\t.quit - Kill Bot : \n"
-				+ "\t.nick <nickname> - Change bot's Nick\n"
-				+ "\t.loaded - Returns list of loaded plugins\n"
-				+ "\t.notloaded - Returns list of plugins not loaded\n"
-				+ "\t.reload - Reloads plugins from local directory without restarting the bot\n"
-				+ "\t.gitpull - Pulls from git and reloads the bot\n"
-				+ "\t.exception - This tests that admins can get exception notifications\n"
-				+ "\t.cmd <raw irc message> - Admin command to execute commands directly on the irc server\n";
-	}
-
 	@Override
 	public void getMenuItems(MenuItem rootItem) {
 		MenuItem pluginRoot = rootItem;
@@ -80,6 +66,10 @@ public class Admin extends Plugin {
 					ex.printStackTrace();
 				}
 			}
+			@Override
+			public String onHelp() {
+				return "join <channel> - Join Channel";
+			}
 		};
 
 		pluginRoot.addChild(adminJoin);
@@ -94,6 +84,10 @@ public class Admin extends Plugin {
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
+			}
+			@Override
+			public String onHelp() {
+				return "part <channel> - Part Channel";
 			}
 		};
 
@@ -112,6 +106,10 @@ public class Admin extends Plugin {
 					ex.printStackTrace();
 				}
 			}
+			@Override
+			public String onHelp() {
+				return "quit - Kills Bot";
+			}
 		};
 
 		pluginRoot.addChild(adminQuit);
@@ -124,6 +122,10 @@ public class Admin extends Plugin {
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
+			}
+			@Override
+			public String onHelp() {
+				return "nick <nickname> - Change bot's Nick";
 			}
 		};
 
@@ -138,6 +140,10 @@ public class Admin extends Plugin {
 					ex.printStackTrace();
 				}
 			}
+			@Override
+			public String onHelp() {
+				return "cmd <raw irc message> - Admin command to execute commands directly on the irc server";
+			}
 		};
 
 		pluginRoot.addChild(adminCMD);
@@ -151,6 +157,10 @@ public class Admin extends Plugin {
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
+			}
+			@Override
+			public String onHelp() {
+				return "exception - This tests that admins can get exception notifications";
 			}
 		};
 
@@ -169,6 +179,10 @@ public class Admin extends Plugin {
 					ex.printStackTrace();
 				}
 			}
+			@Override
+			public String onHelp() {
+				return "gitpull - Pulls from git and reloads the bot";
+			}
 		};
 
 		pluginRoot.addChild(adminGIT);
@@ -183,6 +197,10 @@ public class Admin extends Plugin {
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
+			}
+			@Override
+			public String onHelp() {
+				return "reload - Reloads plugins from local directory without restarting the bot";
 			}
 		};
 
@@ -201,6 +219,10 @@ public class Admin extends Plugin {
 					ex.printStackTrace();
 				}
 			}
+			@Override
+			public String onHelp() {
+				return "loaded - Returns list of loaded plugins";
+			}
 		};
 
 		pluginRoot.addChild(adminLoaded);
@@ -217,6 +239,10 @@ public class Admin extends Plugin {
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
+			}
+			@Override
+			public String onHelp() {
+				return "notloaded - Returns list of plugins not loaded";
 			}
 		};
 

@@ -34,11 +34,10 @@ import core.utils.TimeThread;
  */
 public class Channel {
 	
-	private final String CMD_HELP       = "help";
 	
 	private final String TXT_LOADED     = "\u001B[33mPlugins Loaded: %s";
 	private final String TXT_NOT_LOADED = "\u001B[33mPlugins Not Loaded: %s";
-	private final String TXT_MENU_CMD   = "(" + Details.getInstance().getNickName() + ":\\s|" + Details.getInstance().getCMDPrefix() +  ")(.*)";
+	private final String TXT_MENU_CMD   = "(" + Details.getInstance().getNickName() + ":\\s|\\?|" + Details.getInstance().getCMDPrefix() +  ")(.*)";
 	
 	private final String REG_GET_SERVER = "(?:[\\w\\d]*\\.)?([\\w\\d]*)\\..*";
 	private final String REG_MENU_CMD   = "([a-zA-Z]*)(?:\\s(.*))?";
@@ -77,6 +76,7 @@ public class Channel {
 				Details details = Details.getInstance();
 				MenuItem cL = null;
 				UserLoc uL = uLH.getUser(inMessage.getUser());
+				
 				if (m.group(1).startsWith(details.getNickName())) {
 					String menuCMD = m.group(2);
 					if (menuCMD.endsWith("back") || menuCMD.endsWith("b")){
@@ -109,18 +109,27 @@ public class Channel {
 							
 							for (MenuItem child : children) {
 								if (child.getNodeName().toLowerCase().equals(pluginName)) {
-									MenuNav.selectNode(uL, child.getNodeNumber(), args);
+									MenuItem tNode = MenuNav.selectNode(uL, child.getNodeNumber());
+									if (args != null && args.equals("?")) {
+										String helpText = MenuNav.helpNode(tNode, uL);
+										irc.sendPrivmsg(inMessage.getChannel(),helpText);
+									} else {
+										MenuNav.executeNode(tNode, uL, args);
+									}
+									break;
 								}
 							}
 						}
 						cL = uL.getCurLoc();
 					}
-				} else if (m.group(1).startsWith("" + details.getCMDPrefix())) {
+				} else if (m.group(1).startsWith("" + details.getCMDPrefix()) || m.group(1).startsWith("?")) {
 					String menuCMD = m.group(2);
 					if (menuCMD.contains("" + details.getCmdSeperator())) {
 						String[] cmds = menuCMD.split("" + details.getCmdSeperator());
+						char cmdPrefix = m.group(1).charAt(0);
 						for (String cmd : cmds) {
 							ArrayList<MenuItem> children = uL.getCurLoc().getChildren();
+
 							m = Regex.getMatcher(REG_MENU_CMD, cmd);
 							
 							if (m.find()) {
@@ -129,13 +138,20 @@ public class Channel {
 								
 								for (MenuItem child : children) {
 									if (child.getNodeName().toLowerCase().equals(pluginName)) {
-										MenuNav.selectNode(uL, child.getNodeNumber(), args);
+										MenuItem tNode = MenuNav.selectNode(uL, child.getNodeNumber());
+										if (cmdPrefix == '?') {
+											String helpText = MenuNav.helpNode(tNode, uL);
+											irc.sendPrivmsg(inMessage.getChannel(),helpText);
+										} else {
+											MenuNav.executeNode(tNode, uL, args);
+										}
+										break;
 									}
 								}
 							}
 						}
 					}
-				}
+				} 
 			}
 		} catch (IRCException e) {
 			// TODO Auto-generated catch block
@@ -290,15 +306,7 @@ public class Channel {
 			} else {
 				for (int i = 0; i < plugins_.size(); i++) {
 					try {
-						// If we are not asking for the help string then continue as per normal
-						if (!inMessage.getMessage().matches(RegexFormatter.format(CMD_HELP))) {
-							plugins_.get(i).onMessage(inMessage);
-						} else {
-							// Get the help string for the plugin we are working on
-							String helpString = plugins_.get(i).getHelpString();
-							// Send the help string to the user that asled for it.
-							irc.sendPrivmsg(inMessage.getUser(), helpString);
-						}
+						plugins_.get(i).onMessage(inMessage);
 					} catch (Exception ex) {
 						new IRCException(ex);
 					}

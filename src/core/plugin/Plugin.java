@@ -38,9 +38,4 @@ public abstract class Plugin {
 	
 	public abstract void getMenuItems(MenuItem rootItem);
 
-	/**
-	 * The string displayed by .help message
-	 */
-	public abstract String getHelpString();
-
 }

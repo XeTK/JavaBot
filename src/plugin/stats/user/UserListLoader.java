@@ -37,12 +37,6 @@ public class UserListLoader extends Plugin{
 	public UserList getUserList(){
 		return userList_;
 	}
-	
-	@Override
-	public String getHelpString() {
-		// TODO Auto-generated method stub
-		return "";
-	}
 
 	@Override
 	public void getMenuItems(MenuItem rootItem) {

@@ -24,6 +24,8 @@ public class MenuItem {
 	
 	public void onExecution(String args) { System.out.println("Test Line");}
 	
+	public String onHelp() { return "Place Holder";}
+	
 	public void addChild(MenuItem child) {
 		children_.add(child);
 	}
