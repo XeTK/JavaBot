@@ -33,6 +33,8 @@ public class IRC {
 	private PrintWriter    outToServer_;
 	private BufferedReader inFromServer_;
 	private Socket         clientSocket_;
+	
+	private String         strBuf = new String();
 
 	/**
 	 * To comply with the singleton pattern we return the instance of the object, 
@@ -90,7 +92,14 @@ public class IRC {
 	 */
 	public void sendServer(String instr) throws IRCException, IOException {
 		checkConnection();
-		outToServer_.write(instr + "\r\n");
+		
+		String tmp = instr + "\r\n";
+		
+		if (tmp.startsWith("PRIVMSG")) {
+			String botNick = Details.getInstance().getNickName();
+			strBuf = ":" + botNick + "!" + botNick.toLowerCase() + "@localhost " + tmp;
+		}
+		outToServer_.write(tmp);
 		outToServer_.flush();
 		System.out.println(String.format(TXT_OUTBOUND,instr));
 	}
@@ -139,7 +148,13 @@ public class IRC {
 	 */
 	public String getFromServer() throws IRCException, IOException {
 		checkConnection();
-		String out = inFromServer_.readLine();
+		String out;
+		if (strBuf.isEmpty()) {
+			out = inFromServer_.readLine();
+		} else { 
+			out = strBuf;
+			strBuf = new String();
+		}
 		System.out.println(String.format(TXT_INBOUND, out));
 		return out;
 	}

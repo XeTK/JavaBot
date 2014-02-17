@@ -22,9 +22,9 @@ public class MenuItem {
 		this.auth        = auth;
 	}
 	
-	public void onExecution(String args) { System.out.println("Test Line");}
+	public void onExecution(String args, String username) { System.out.println("Test Line");}
 	
-	public String onHelp() { return "Place Holder";}
+	public String onHelp() { return "Place Holder " + nodeName_ ;}
 	
 	public void addChild(MenuItem child) {
 		children_.add(child);

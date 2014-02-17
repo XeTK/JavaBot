@@ -25,7 +25,13 @@ import core.utils.IRC;
 import core.utils.Regex;
 
 public class Authenticate extends Plugin {
-	private final String keyPath_ = "key.txt";
+
+	@Override
+	public void getMenuItems(MenuItem rootItem) {
+		// TODO Auto-generated method stub
+		
+	}
+/*	private final String keyPath_ = "key.txt";
 
 	private AuthenticatedUsers authUsers_ = AuthenticatedUsers.getInstance();
 
@@ -173,5 +179,5 @@ public class Authenticate extends Plugin {
 	}
 	@Override
 	public void getMenuItems(MenuItem rootItem) {
-	}
+	}*/
 }

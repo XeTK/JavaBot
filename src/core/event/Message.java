@@ -39,6 +39,13 @@ public class Message {
 			channel_   = user_;
 		}
 	}
+	public Message(String username, String channel, String message) {
+		date_    = new Date();
+		
+		user_    = username;
+		channel_ = channel;
+		message_ = message;
+	}
 
 	// Getters
 	public Date getDate() {

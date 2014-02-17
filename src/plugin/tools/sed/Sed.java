@@ -6,7 +6,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Stack;
 
+import core.Channel;
 import core.event.Message;
+import core.menu.AuthGroup;
 import core.menu.MenuItem;
 import core.plugin.Plugin;
 import core.utils.Colour;
@@ -58,21 +60,16 @@ public class Sed extends Plugin {
 	 */
 	private Map<String, Stack<Message>> cache_ = new HashMap<String, Stack<Message>>();
 
+	private Channel channel_;
+	
+	public void onCreate(Channel inChannel) throws Exception {
+		this.channel_ = inChannel;
+	}
+	
 	public final void onMessage(final Message messageObj) throws Exception {
 		String message = messageObj.getMessage();
 		String channel = messageObj.getChannel();
 		String user = messageObj.getUser();
-
-		// debug commands
-		if (message.equals(".seddumpcache") && details_.isAdmin(user)) {
-			dumpCache(user, channel);
-			return;
-		}
-
-		if (message.equals(".seddropcache") && details_.isAdmin(user)) {
-			dropCache(user, channel);
-			return;
-		}
 
 		// set up sed finding regex
 		// (?: starts a non-capture group
@@ -140,6 +137,7 @@ public class Sed extends Plugin {
 					
 					irc_.sendPrivmsg(channel,
 						String.format(reply, tempMessage.getUser(), text));
+
 					break;
 				}
 
@@ -197,6 +195,11 @@ public class Sed extends Plugin {
 		if (cache_.get(userName).size() > CACHE_SIZE) {
 			cache_.get(userName).remove(0);
 		}
+	}
+	
+	public void addToCache(final String msg)  {
+		Message tMsg = new Message(details_.getNickName(), channel_.getChannelName(), msg);
+		addToCache(tMsg);
 	}
 
 	/**
@@ -263,8 +266,55 @@ public class Sed extends Plugin {
 
   }
 
+  
 	@Override
 	public void getMenuItems(MenuItem rootItem) {
+		/*MenuItem pluginRoot = new MenuItem(rootItem.getNodeName(), rootItem.getParentMI(), rootItem.getNodeNumber()) {
+			@Override
+			public String onHelp() {
+				return "\t[<username>: ]s/<search>/<replacement>/ - "
+						+ "e.g XeTK: s/(regex here)/hello/ is used to "
+						+ "replace the previous statement with hello";
+			}
+		};*/
+		MenuItem pluginRoot = rootItem;
+		
+		MenuItem sedDumpCache = new MenuItem("seddumpcache", rootItem, 1, AuthGroup.ADMIN){
+			@Override
+			public void onExecution(String args, String username) { 
+				try {
+					dumpCache(username, channel_.getChannelName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			@Override
+			public String onHelp() {
+				return "seddumpcache - dumps sed cache";
+			}
+		};
+
+		pluginRoot.addChild(sedDumpCache);
+		
+		MenuItem sedDropCache = new MenuItem("seddropcache", rootItem, 2, AuthGroup.ADMIN){
+			@Override
+			public void onExecution(String args, String username) { 
+				try {
+					dropCache(username, channel_.getChannelName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			@Override
+			public String onHelp() {
+				return "seddropcache - drops sed cache";
+			}
+		};
+
+		pluginRoot.addChild(sedDropCache);
+		rootItem = pluginRoot;
 	}
 
 }

@@ -57,7 +57,7 @@ public class Admin extends Plugin {
 		
 		MenuItem adminJoin = new MenuItem(CMD_JOIN, rootItem, 1, AuthGroup.ADMIN){
 			@Override
-			public void onExecution(String args) { 
+			public void onExecution(String args, String username) { 
 				try {
 					irc.sendServer("JOIN " + args);
 					String msg = String.format(TXT_JOIN, args);
@@ -76,7 +76,7 @@ public class Admin extends Plugin {
 		
 		MenuItem adminPart = new MenuItem(CMD_PART, rootItem, 2, AuthGroup.ADMIN){
 			@Override
-			public void onExecution(String args) { 
+			public void onExecution(String args, String username) { 
 				try {
 					irc.sendServer("PART " + args);
 					String msg = String.format(TXT_PART, args);
@@ -95,7 +95,7 @@ public class Admin extends Plugin {
 		
 		MenuItem adminQuit = new MenuItem(CMD_QUIT, rootItem, 3, AuthGroup.ADMIN){
 			@Override
-			public void onExecution(String args) { 
+			public void onExecution(String args, String username) { 
 				try {
 					String msg = String.format(TXT_QUIT, args);
 					irc.sendActionMsg(channel_.getChannelName(), msg);
@@ -116,7 +116,7 @@ public class Admin extends Plugin {
 		
 		MenuItem adminNick = new MenuItem(CMD_NICK, rootItem, 4, AuthGroup.ADMIN){
 			@Override
-			public void onExecution(String args) { 
+			public void onExecution(String args, String username) { 
 				try {
 					irc.sendServer("NICK " + args);
 				} catch (Exception ex) {
@@ -133,7 +133,7 @@ public class Admin extends Plugin {
 		
 		MenuItem adminCMD = new MenuItem(CMD_CMD, rootItem, 5, AuthGroup.ADMIN){
 			@Override
-			public void onExecution(String args) { 
+			public void onExecution(String args, String username) { 
 				try {
 					irc.sendServer(args);
 				} catch (Exception ex) {
@@ -150,7 +150,7 @@ public class Admin extends Plugin {
 		
 		MenuItem adminException = new MenuItem(CMD_EXCEPTION, rootItem, 6, AuthGroup.ADMIN){
 			@Override
-			public void onExecution(String args) { 
+			public void onExecution(String args, String username) { 
 				try {
 					irc.sendPrivmsg(channel_.getChannelName(), TXT_EXCEPTION); 
 					throw new Exception(); 
@@ -168,7 +168,7 @@ public class Admin extends Plugin {
 		
 		MenuItem adminGIT = new MenuItem(CMD_GIT_PULL, rootItem, 7, AuthGroup.ADMIN){
 			@Override
-			public void onExecution(String args) { 
+			public void onExecution(String args, String username) { 
 				try {
 					String msg = Colour.colour(TXT_GIT_PULL, Colour.RED, Colour.WHITE);
 					irc.sendActionMsg(channel_.getChannelName(), msg);
@@ -189,7 +189,7 @@ public class Admin extends Plugin {
 		
 		MenuItem adminReload = new MenuItem(CMD_RELOAD, rootItem, 8, AuthGroup.ADMIN){
 			@Override
-			public void onExecution(String args) { 
+			public void onExecution(String args, String username) { 
 				try {
 					String msg = Colour.colour(TXT_RELOAD, Colour.RED);
 					irc.sendActionMsg(channel_.getChannelName(), msg);
@@ -208,7 +208,7 @@ public class Admin extends Plugin {
 		
 		MenuItem adminLoaded = new MenuItem(CMD_LOADED, rootItem, 9, AuthGroup.NONE){
 			@Override
-			public void onExecution(String args) { 
+			public void onExecution(String args, String username) { 
 				try {
 					String loaded = PluginCore.loadedPlugins(channel_.getPlugins());
 					loaded = Colour.colour(loaded, Colour.GREEN, Colour.BLACK);
@@ -229,7 +229,7 @@ public class Admin extends Plugin {
 		
 		MenuItem adminNotLoaded = new MenuItem(CMD_NOT_LOADED, rootItem, 10, AuthGroup.NONE){
 			@Override
-			public void onExecution(String args) { 
+			public void onExecution(String args, String username) { 
 				try {
 					String notLoaded = channel_.notLoaded();
 					notLoaded = Colour.colour(notLoaded, Colour.RED, Colour.WHITE);

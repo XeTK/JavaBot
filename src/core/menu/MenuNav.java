@@ -46,10 +46,10 @@ public class MenuNav {
 		if (node.getChildren().size() == 0) {
 			if (node.getAuth() == AuthGroup.ADMIN) {
 				if (Details.getInstance().isAdmin(user.getUsername())) {
-					node.onExecution(args);
+					node.onExecution(args, user.getUsername());
 				}
 			} else if (node.getAuth() == AuthGroup.NONE) {
-				node.onExecution(args);
+				node.onExecution(args, user.getUsername());
 			}
 			//returnToRoot(user);
 		} else {
