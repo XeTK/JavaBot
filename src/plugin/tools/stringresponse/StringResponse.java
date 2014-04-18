@@ -13,14 +13,14 @@ import core.utils.Details;
 import core.utils.IRC;
 import core.utils.JSON;
 import core.utils.Regex;
-import core.utils.RegexFormatter;
+
 
 public class StringResponse extends Plugin {
 	private final String RESPONSE_PATH_LOCATION = "Response.json";
 
 	private final String NEW_RESPONSE = "Added new Response";
 
-	private final String RGX_RESPONSE = RegexFormatter.format("response\\s(.*)//(.*)");
+	private final String RGX_RESPONSE = ".response\\s(.*)//(.*)";
 
 	private String responsesPath_ = new String();
 

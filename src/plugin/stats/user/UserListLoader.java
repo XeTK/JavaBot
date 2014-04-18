@@ -15,8 +15,9 @@ public class UserListLoader extends Plugin{
 	private UserList userList_;
 	
 	public void onCreate(Channel inChannel) throws Exception {
+		super.onCreate(inChannel);
 		
-		dbFile_ = inChannel.getPath() + DB_FILE;
+		dbFile_ = channel_.getPath() + DB_FILE;
 		
 		if (new File(dbFile_).exists()){	
 			userList_ = (UserList) JSON.load(dbFile_, UserList.class);
@@ -40,5 +41,6 @@ public class UserListLoader extends Plugin{
 
 	@Override
 	public void getMenuItems(MenuItem rootItem) {
+		//No menu needed.
 	}
 }

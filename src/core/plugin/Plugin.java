@@ -6,6 +6,7 @@ import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
 import core.menu.MenuItem;
+import core.utils.IRC;
 
 /**
  * This is the abstract class that all the plugins extend from.
@@ -14,12 +15,17 @@ import core.menu.MenuItem;
  */
 @IsPlugin
 public abstract class Plugin {
+	protected Channel channel_;
+	
+	protected IRC irc = IRC.getInstance();
+
+	public void onCreate(Channel inChannel) throws Exception {
+		this.channel_ = inChannel;
+	}
 
 	public String name() {
 		return this.getClass().getSimpleName();
 	}
-
-	public void onCreate(Channel inChannel) throws Exception {}
 
 	public void onTime() throws Exception {}
 

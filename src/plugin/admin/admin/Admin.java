@@ -2,14 +2,12 @@ package plugin.admin.admin;
 
 import java.lang.management.ManagementFactory;
 
-import core.Channel;
 import core.event.Join;
 import core.menu.AuthGroup;
 import core.menu.MenuItem;
 import core.plugin.Plugin;
 import core.plugin.PluginCore;
 import core.utils.Colour;
-import core.utils.IRC;
 
 /**
  * Handles admin tasks - joining channels - bot nick change - start/stop bot -
@@ -18,7 +16,6 @@ import core.utils.IRC;
  * @author Tom Rosier(XeTK)
  */
 public class Admin extends Plugin {
-	private Channel channel_;
 	
 	private final String CMD_JOIN       = "join";
 	private final String CMD_PART       = "part";
@@ -30,24 +27,30 @@ public class Admin extends Plugin {
 	private final String CMD_RELOAD     = "reload";
 	private final String CMD_LOADED     = "loaded";
 	private final String CMD_NOT_LOADED = "notloaded";
-	
-	private final String TXT_NOT_LOADED = "plugins not loaded: %s";
-	private final String TXT_LOADED     = "plugins loaded: %s";
-	private final String TXT_RELOAD     = "reloading plugins!";
-	private final String TXT_GIT_PULL   = "reloading from git!";
-	private final String TXT_EXCEPTION  = "Exception Thrown.";
-	private final String TXT_QUIT       = "GoodBye";
+
+
 	private final String TXT_JOIN       = "joined %s";
 	private final String TXT_PART       = "left %s";
+	private final String TXT_QUIT       = "GoodBye";
+	private final String TXT_EXCEPTION  = "Exception Thrown.";
+	private final String TXT_GIT_PULL   = "reloading from git!";
+	private final String TXT_RELOAD     = "reloading plugins!";
+	private final String TXT_LOADED     = "plugins loaded: %s";
+	private final String TXT_NOT_LOADED = "plugins not loaded: %s";
 
-	private IRC irc = IRC.getInstance();
-
-	public void onCreate(Channel inChannel) throws Exception {
-		this.channel_ = inChannel;
-	}
+	
+	private final String HLP_JOIN       = String.format("%s <channel> - Join Channel", CMD_JOIN);
+	private final String HLP_PART       = String.format("%s <channel> - Part Channel", CMD_PART);
+	private final String HLP_NICK       = String.format("%s <nickname> - Change bot's Nick", CMD_NICK);
+	private final String HLP_QUIT       = String.format("%s - Kills Bot", CMD_QUIT);
+	private final String HLP_CMD        = String.format("%s <raw irc message> - Admin command to execute commands directly on the irc server", CMD_CMD);
+	private final String HLP_EXCEPTION  = String.format("%s - This tests that admins can get exception notifications", CMD_EXCEPTION);
+	private final String HLP_GIT_PULL   = String.format("%s - Pulls from git and reloads the bot", CMD_GIT_PULL);
+	private final String HLP_RELOAD     = String.format("%s - Reloads plugins from local directory without restarting the bot", CMD_RELOAD);
+	private final String HLP_LOADED     = String.format("%s - Returns list of loaded plugins", CMD_LOADED);
+	private final String HLP_NOT_LOADED = String.format("%s - Returns list of plugins not loaded", CMD_NOT_LOADED);
 
 	public void onJoin(Join inJoin) throws Exception {
-		IRC irc = IRC.getInstance();
 		irc.sendServer("MODE " + inJoin.getChannel() + " +v " + inJoin.getUser());
 	}
 
@@ -68,7 +71,7 @@ public class Admin extends Plugin {
 			}
 			@Override
 			public String onHelp() {
-				return "join <channel> - Join Channel";
+				return HLP_JOIN;
 			}
 		};
 
@@ -87,7 +90,7 @@ public class Admin extends Plugin {
 			}
 			@Override
 			public String onHelp() {
-				return "part <channel> - Part Channel";
+				return HLP_PART;
 			}
 		};
 
@@ -108,7 +111,7 @@ public class Admin extends Plugin {
 			}
 			@Override
 			public String onHelp() {
-				return "quit - Kills Bot";
+				return HLP_QUIT;
 			}
 		};
 
@@ -125,7 +128,7 @@ public class Admin extends Plugin {
 			}
 			@Override
 			public String onHelp() {
-				return "nick <nickname> - Change bot's Nick";
+				return HLP_NICK;
 			}
 		};
 
@@ -142,7 +145,7 @@ public class Admin extends Plugin {
 			}
 			@Override
 			public String onHelp() {
-				return "cmd <raw irc message> - Admin command to execute commands directly on the irc server";
+				return HLP_CMD;
 			}
 		};
 
@@ -160,7 +163,7 @@ public class Admin extends Plugin {
 			}
 			@Override
 			public String onHelp() {
-				return "exception - This tests that admins can get exception notifications";
+				return HLP_EXCEPTION;
 			}
 		};
 
@@ -181,7 +184,7 @@ public class Admin extends Plugin {
 			}
 			@Override
 			public String onHelp() {
-				return "gitpull - Pulls from git and reloads the bot";
+				return HLP_GIT_PULL;
 			}
 		};
 
@@ -200,7 +203,7 @@ public class Admin extends Plugin {
 			}
 			@Override
 			public String onHelp() {
-				return "reload - Reloads plugins from local directory without restarting the bot";
+				return HLP_RELOAD;
 			}
 		};
 
@@ -221,7 +224,7 @@ public class Admin extends Plugin {
 			}
 			@Override
 			public String onHelp() {
-				return "loaded - Returns list of loaded plugins";
+				return HLP_LOADED;
 			}
 		};
 
@@ -242,7 +245,7 @@ public class Admin extends Plugin {
 			}
 			@Override
 			public String onHelp() {
-				return "notloaded - Returns list of plugins not loaded";
+				return HLP_NOT_LOADED;
 			}
 		};
 

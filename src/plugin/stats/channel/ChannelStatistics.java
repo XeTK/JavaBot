@@ -35,10 +35,10 @@ public class ChannelStatistics extends Plugin {
 	private final String MSG_MSGSSENT   = "%s has sent %s messages";
 
 	// Regex's
-	private final String RGX_STAT       = RegexFormatter.format("stats\\s(hour|day)\\s(msgsent|joins|quits|kicks)");
+	private final String RGX_STAT       = ".stats\\s(hour|day)\\s(msgsent|joins|quits|kicks)";
 	private final String RGX_TIME       = "([0-2][0-9]):([0-5][0-9]):([0-5][0-9])";
-	private final String RGX_MSGSENT    = RegexFormatter.format("msgsent",RegexFormatter.REG_NICK);
-	private final String RGX_LASTONLINE = RegexFormatter.format("lastonline",RegexFormatter.REG_NICK);
+	private final String RGX_MSGSENT    = ".msgsent " + RegexFormatter.REG_NICK;
+	private final String RGX_LASTONLINE = ".lastonline " + RegexFormatter.REG_NICK;
 	
 	private final IRC irc = IRC.getInstance();
 

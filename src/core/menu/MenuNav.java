@@ -48,7 +48,8 @@ public class MenuNav {
 				if (Details.getInstance().isAdmin(user.getUsername())) {
 					node.onExecution(args, user.getUsername());
 				}
-			} else if (node.getAuth() == AuthGroup.NONE) {
+			// TODO: implement registered group when auth is in.
+			} else /*if (node.getAuth() == AuthGroup.NONE) For now while registered is not implemented*/ {
 				node.onExecution(args, user.getUsername());
 			}
 			//returnToRoot(user);
@@ -56,6 +57,7 @@ public class MenuNav {
 			user.setCurLoc(node);
 		}
 	}
+	
 	public static String helpNode(MenuItem node, UserLoc user) {
 		String tempHelp = new String();
 		if (node.getChildren().size() == 0) {
@@ -63,7 +65,8 @@ public class MenuNav {
 				if (Details.getInstance().isAdmin(user.getUsername())) {
 					tempHelp = node.onHelp();
 				}
-			} else if (node.getAuth() == AuthGroup.NONE) {
+				// TODO: implement registered group when auth is in.
+			} else /*if (node.getAuth() == AuthGroup.NONE) For now while registered is not implemented*/ {
 				tempHelp = node.onHelp();
 			}
 			//returnToRoot(user);

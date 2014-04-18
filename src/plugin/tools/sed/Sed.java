@@ -6,14 +6,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Stack;
 
-import core.Channel;
 import core.event.Message;
 import core.menu.AuthGroup;
 import core.menu.MenuItem;
 import core.plugin.Plugin;
 import core.utils.Colour;
 import core.utils.Details;
-import core.utils.IRC;
 
 /**
  * Sed plugin.
@@ -23,6 +21,16 @@ import core.utils.IRC;
  * s/<search>/<replacement>
  */
 public class Sed extends Plugin {
+	
+	private static final String CMD_INFO     = "info";
+	private static final String CMD_SED_DUMP = "seddumpcache";
+	private static final String CMD_SED_DROP = "seddropcache";
+	
+	private static final String HLP_INFO     = "[<username>: ]s/<search>/<replacement>/ - e.g XeTK: s/.*/hello/ is used to replace the previous statement with hello";
+	private static final String HLP_SED_DUMP = String.format("seddumpcache - dumps sed cache", CMD_SED_DUMP);
+	private static final String HLP_SED_DROP = String.format("seddropcache - drops sed cache", CMD_SED_DROP);
+	
+	private static final String RGX_SED      = "^(?:([\\w]+): )?s/((?:(?<=\\\\)/|[^/])+)/((?:(?<=\\\\)/|[^/])*)/?";
 
 	/**
 	 * The max number of Message objects stored per user.
@@ -50,21 +58,12 @@ public class Sed extends Plugin {
 	 * Details instance.
 	 */
 	private Details details_ = Details.getInstance();
-	/**
-	 * IRC instance.
-	 */
-	private IRC irc_ = IRC.getInstance();
 
 	/**
 	 * Stores Messages objects per-user.
 	 */
 	private Map<String, Stack<Message>> cache_ = new HashMap<String, Stack<Message>>();
 
-	private Channel channel_;
-	
-	public void onCreate(Channel inChannel) throws Exception {
-		this.channel_ = inChannel;
-	}
 	
 	public final void onMessage(final Message messageObj) throws Exception {
 		String message = messageObj.getMessage();
@@ -77,7 +76,7 @@ public class Sed extends Plugin {
 		// )? makes the group optional
 		// ([^/]+) captures the search string
 		// ([^/]*) captures the replacement
-		Pattern sedFinder = Pattern.compile("^(?:([\\w]+): )?s/((?:(?<=\\\\)/|[^/])+)/((?:(?<=\\\\)/|[^/])*)/?");
+		Pattern sedFinder = Pattern.compile(RGX_SED);
 		Matcher m = sedFinder.matcher(message);
 
 		// it's sed time, baby
@@ -135,7 +134,7 @@ public class Sed extends Plugin {
 					m.appendTail(sb);
 					text = sb.toString();
 					
-					irc_.sendPrivmsg(channel,
+					irc.sendPrivmsg(channel,
 						String.format(reply, tempMessage.getUser(), text));
 
 					break;
@@ -225,14 +224,14 @@ public class Sed extends Plugin {
 	 * @throws Exception Inherited badness from core
 	 */
 	private void dumpCache(final String target, final String channel) throws Exception {
-		irc_.sendPrivmsg(target, "sed cache for " + channel);
+		irc.sendPrivmsg(target, "sed cache for " + channel);
 		for (String user : cache_.keySet()) {
 			Stack<Message> userCache = getUserCache(user);
 
-			irc_.sendPrivmsg(target, " ");
-			irc_.sendPrivmsg(target, user + ": " + userCache.size() + "/" + CACHE_SIZE);
+			irc.sendPrivmsg(target, " ");
+			irc.sendPrivmsg(target, user + ": " + userCache.size() + "/" + CACHE_SIZE);
 			for (Message msg : userCache) {
-				irc_.sendPrivmsg(target, "\"" + msg.getMessage() + "\"");
+				irc.sendPrivmsg(target, "\"" + msg.getMessage() + "\"");
 			}
 		}
 	}
@@ -248,16 +247,10 @@ public class Sed extends Plugin {
 	 */
 	private void dropCache(final String target, final String channel) throws Exception {
 		cache_ = new HashMap<String, Stack<Message>>();
-		irc_.sendPrivmsg(target, "dropped sed cache for " + channel);
+		irc.sendPrivmsg(target, "dropped sed cache for " + channel);
 	}
 
-	public final String getHelpString() {
-		return "SED: \n" 
-				+ "\t[<username>: ]s/<search>/<replacement>/ - "
-				+ "e.g XeTK: s/.*/hello/ is used to "
-				+ "replace the previous statement with hello";
-	}
-
+  @SuppressWarnings("serial")
   public class SedException extends Exception {
 
     public SedException(String message) {
@@ -269,47 +262,55 @@ public class Sed extends Plugin {
   
 	@Override
 	public void getMenuItems(MenuItem rootItem) {
-		/*MenuItem pluginRoot = new MenuItem(rootItem.getNodeName(), rootItem.getParentMI(), rootItem.getNodeNumber()) {
-			@Override
-			public String onHelp() {
-				return "\t[<username>: ]s/<search>/<replacement>/ - "
-						+ "e.g XeTK: s/(regex here)/hello/ is used to "
-						+ "replace the previous statement with hello";
-			}
-		};*/
+
 		MenuItem pluginRoot = rootItem;
 		
-		MenuItem sedDumpCache = new MenuItem("seddumpcache", rootItem, 1, AuthGroup.ADMIN){
+		MenuItem sedInfo = new MenuItem(CMD_INFO, rootItem, 1, AuthGroup.NONE){
+			@Override
+			public void onExecution(String args, String username) { 
+				try {
+					irc.sendPrivmsg(channel_.getChannelName(), HLP_INFO);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			@Override
+			public String onHelp() {
+				return HLP_INFO;
+			}
+		};
+		
+		pluginRoot.addChild(sedInfo);
+		
+		MenuItem sedDumpCache = new MenuItem(CMD_SED_DUMP, rootItem, 2, AuthGroup.ADMIN){
 			@Override
 			public void onExecution(String args, String username) { 
 				try {
 					dumpCache(username, channel_.getChannelName());
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 			@Override
 			public String onHelp() {
-				return "seddumpcache - dumps sed cache";
+				return HLP_SED_DUMP;
 			}
 		};
 
 		pluginRoot.addChild(sedDumpCache);
 		
-		MenuItem sedDropCache = new MenuItem("seddropcache", rootItem, 2, AuthGroup.ADMIN){
+		MenuItem sedDropCache = new MenuItem(CMD_SED_DROP, rootItem, 3, AuthGroup.ADMIN){
 			@Override
 			public void onExecution(String args, String username) { 
 				try {
 					dropCache(username, channel_.getChannelName());
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 			@Override
 			public String onHelp() {
-				return "seddropcache - drops sed cache";
+				return HLP_SED_DROP;
 			}
 		};
 

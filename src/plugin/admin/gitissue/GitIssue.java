@@ -13,11 +13,9 @@ import javax.net.ssl.HttpsURLConnection;
 
 import com.google.gson.Gson;
 
-import core.event.Message;
+import core.menu.AuthGroup;
 import core.menu.MenuItem;
 import core.plugin.Plugin;
-import core.utils.Details;
-import core.utils.IRC;
 import core.utils.IRCException;
 
 /**
@@ -26,14 +24,15 @@ import core.utils.IRCException;
  * @author Tom Leaman (tom@tomleaman.co.uk)
  */
 public class GitIssue extends Plugin {
+	
+	private static final String CMD_BUG = "bug";
+	
+	private static final String HLP_BUG = String.format("%s <one_line_bug_report>", CMD_BUG);
 
 	private static final String AUTH_TOKEN_FILE = "auth_token";
 	private static final String GITHUB_URL      = "https://api.github.com";
 	private static final String REPO_OWNER      = "XeTK";
 	private static final String REPO_NAME       = "JavaBot";
-
-	private Details details = Details.getInstance();
-	private IRC irc = IRC.getInstance();
 
 	private String authToken;
 	private boolean isLoaded = false;
@@ -69,32 +68,19 @@ public class GitIssue extends Plugin {
 		return line;
 	}
 
-	public void onMessage(Message message) throws Exception {
-		if (!isLoaded)
-			return;
-
-		if (message.getMessage().startsWith(".bug ") && details.isAdmin(message.getUser()))
-			createIssue(message);
-	}
-
-	public String getHelpString() {
-		return "ISSUE:\n"
-				+ "\t.bug <one_line_bug_report>";
-	}
-
 	// TODO fix Exceptions
-	private void createIssue(Message message) throws Exception {
-		// Should remove ".bug " from the start of the message
-		String issueTitle = message.getMessage().substring(5);
-		if (issueTitle.length() <= 0) {
-			irc.sendPrivmsg(message.getChannel(), message.getUser() + ": " + getHelpString());
+	private void createIssue(String message, String user) throws Exception {
+		String channel = channel_.getChannelName();
+		
+		if (message.length() <= 0) {
+			irc.sendPrivmsg(channel, user + ": " + HLP_BUG);
 		}
 		String issueBody = ":octocat: This message was generated automatically by "
-				+ message.getUser()
+				+ user
 				+ " in "
-				+ message.getChannel()
+				+ channel
 				+ ". Once confirmed, please remove `unconfirmed` tag.";
-		String jsonContent = "{\"title\":\"" + issueTitle + "\""
+		String jsonContent = "{\"title\":\"" + message + "\""
 				+ ",\"body\":\"" + issueBody + "\""
 				+ ",\"labels\":[\"bug\", \"unconfirmed\"]}";
 
@@ -128,7 +114,9 @@ public class GitIssue extends Plugin {
 			// send issue url to user
 			Gson parser = new Gson();
 			IssueResponse responseData = (IssueResponse) parser.fromJson(response.toString(), IssueResponse.class);
-			irc.sendPrivmsg(message.getChannel(), message.getUser() + ": " + "Issue #" + responseData.getNumber() + " created: " + responseData.getHtmlUrl());
+			
+			irc.sendPrivmsg(channel, user + ": " + "Issue #" + responseData.getNumber() + " created: " + responseData.getHtmlUrl());
+			
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -142,6 +130,7 @@ public class GitIssue extends Plugin {
 		return "Issue";
 	}
 
+	@SuppressWarnings("serial")
 	private class IssueException extends Exception {
 
 		public IssueException(String msg) {
@@ -151,7 +140,29 @@ public class GitIssue extends Plugin {
 
 	@Override
 	public void getMenuItems(MenuItem rootItem) {
+		MenuItem pluginRoot = rootItem;
+		
+		MenuItem issueSetBug = new MenuItem(CMD_BUG, rootItem, 1, AuthGroup.REGISTERD){
+			@Override
+			public void onExecution(String args, String username) { 
+				if (!isLoaded)
+					return;
+				
+				try {
+					createIssue(args, username);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			@Override
+			public String onHelp() {
+				return HLP_BUG;
+			}
+		};
 
+		pluginRoot.addChild(issueSetBug);
+		
+		rootItem = pluginRoot;
 	}
 
 }

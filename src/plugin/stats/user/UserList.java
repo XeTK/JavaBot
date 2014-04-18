@@ -119,7 +119,7 @@ public class UserList {
 		if (tempUser != null) {
 			tempUser.addQuote(message);
 		} else {
-			// If the user dosnt exist in the sytem then we add them to it.
+			// If the user dosn't exist in the system then we add them to it.
 			User newUser = new User(user, "");
 			newUser.addQuote(message);
 			users_.add(newUser);

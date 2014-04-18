@@ -18,8 +18,6 @@ import com.google.gson.Gson;
 import core.event.Message;
 import core.menu.MenuItem;
 import core.plugin.Plugin;
-import core.utils.IRC;
-
 /**
  * Imgur plugin.
  *
@@ -28,11 +26,12 @@ import core.utils.IRC;
  * @author Tom (bugsduggan) Leaman (tom@tomleaman.co.uk)
  */
 public class Imgur extends Plugin {
+		
+	private static final String TXT_SPOILER = "I ain't spoiling nawthing! Dawgh!";
 
 	private static final String IMGUR_CREDS_FILE = "imgur_creds";
 	private static final String API_ENDPOINT = "https://api.imgur.com/3/gallery/image/";
 
-	private IRC irc = IRC.getInstance();
 	private String clientId = new String();
 
 	public Imgur() {
@@ -114,6 +113,10 @@ public class Imgur extends Plugin {
 				imageString = imageString + "'" + imgurResponse.getTitle() + "'";
 				imageString = imageString + " - " + imgurResponse.getViews() + " views";
 				imageString = imageString + " (" + imgurResponse.getLikes() + "/" + imgurResponse.getDislikes() + ")";
+				
+				if (message.startsWith("-s ") || message.endsWith(" -s"))
+					imageString = TXT_SPOILER;
+				
 				irc.sendPrivmsg(channel, imageString);
 
 			} catch (MalformedURLException e) {
@@ -138,15 +141,9 @@ public class Imgur extends Plugin {
 		return line;
 	}
 
-	public String getHelpString() {
-		return "IMGUR:\n"
-				+ "\t<URL> - This will parse Imgur links\n";
-	}
-
 	@Override
 	public void getMenuItems(MenuItem rootItem) {
-		// TODO Auto-generated method stub
-		
+		// Does not need a menu...
 	}
 
 }

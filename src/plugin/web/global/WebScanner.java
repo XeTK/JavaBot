@@ -13,6 +13,8 @@ import core.utils.IRC;
 import core.utils.Regex;
 
 public class WebScanner extends Plugin{
+	
+	private static final String TXT_SPOILER = "I ain't spoiling nawthing! Dawgh!";
 
 	public void onMessage(Message inMessage) throws Exception {
 		Matcher m = Regex.getMatcher("(http(?:s)?://(?:www.)?[\\w\\d]*.[\\w]*[./][\\.\\w\\d//?/=-]*)", inMessage.getMessage());
@@ -37,16 +39,15 @@ public class WebScanner extends Plugin{
 				if (!title.isEmpty()) {
 					IRC irc = IRC.getInstance();
 					String link = Colour.colour("[LINK]", Colour.YELLOW, Colour.BLUE);
-					irc.sendPrivmsg(inMessage.getChannel(), link + " '" + title + "'");	
+					if (inMessage.getMessage().startsWith("-s ") || inMessage.getMessage().endsWith(" -s"))
+						irc.sendActionMsg(inMessage.getChannel(), TXT_SPOILER);
+					else
+						irc.sendPrivmsg(inMessage.getChannel(), link + " '" + title + "'");	
 				}
 				
 				in.close();
 			}
 		}
-	}
-
-	public String getHelpString(){
-		return null;
 	}
 
 	@Override

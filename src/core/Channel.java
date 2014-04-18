@@ -22,7 +22,6 @@ import core.utils.Details;
 import core.utils.IRC;
 import core.utils.IRCException;
 import core.utils.Regex;
-import core.utils.RegexFormatter;
 import core.utils.TimeThread;
 
 /**
@@ -63,7 +62,8 @@ public class Channel {
 		for (Plugin plugin: plugins_) {
 			MenuItem pluginRoot = new MenuItem(plugin.name(), root, index);
 			plugin.getMenuItems(pluginRoot);
-			root.addChild(pluginRoot);
+			if (pluginRoot.getChildren().size() != 0)
+				root.addChild(pluginRoot);
 			index++;
 		}
 		uLH = new UserLocHandle(root);
@@ -123,10 +123,29 @@ public class Channel {
 						cL = uL.getCurLoc();
 					}
 				} else if (m.group(1).startsWith("" + details.getCMDPrefix()) || m.group(1).startsWith("?")) {
+					
+					
 					String menuCMD = m.group(2);
 					if (menuCMD.contains("" + details.getCmdSeperator())) {
-						String[] cmds = menuCMD.split("" + details.getCmdSeperator());
+						
+						// Strip args away so they can't effect the operations.
+						int ind = 0;
+						if (menuCMD.contains(" ")) {
+							ind = menuCMD.indexOf(' ');
+						} else {
+							ind = menuCMD.length();
+						}
+						
+						// Breaking the command down without the args.
+						String[] cmds = menuCMD.substring(0,ind).split("" + details.getCmdSeperator() + "");
 						char cmdPrefix = m.group(1).charAt(0);
+						
+						// Adding the args back on once we have finished splitting the tree.
+						cmds[cmds.length -1] += menuCMD.substring(ind);
+						
+						// Reset menu location to root before deploying command or we get a collison on names.
+						MenuNav.returnToRoot(uL);
+						
 						for (String cmd : cmds) {
 							ArrayList<MenuItem> children = uL.getCurLoc().getChildren();
 

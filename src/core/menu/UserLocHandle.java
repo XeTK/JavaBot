@@ -11,7 +11,7 @@ public class UserLocHandle {
 	public UserLocHandle(MenuItem rootMenuItem) {
 		this.rootMenuItem = rootMenuItem;
 	}
-	
+
 	public UserLoc getUser(String userName) {
 		UserLoc temp = null;
 		boolean found = false;

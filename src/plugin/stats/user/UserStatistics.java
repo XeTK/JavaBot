@@ -11,7 +11,6 @@ import core.menu.MenuItem;
 import core.plugin.Plugin;
 import plugin.stats.user.UserListLoader;
 import core.utils.Details;
-import core.utils.IRC;
 import core.utils.IRCException;
 
 public class UserStatistics extends Plugin {
@@ -20,12 +19,11 @@ public class UserStatistics extends Plugin {
 	private final String USER_JOINED = "%s has joined %s times";
 	private final String USER_QUIT   = "%s has quit %s times";
 	private final String USER_KICKED = "%s has been kicked %s times";
-
-	private final IRC irc_ = IRC.getInstance();
 	
 	private UserList userList;
 
 	public void onCreate(Channel inChannel) throws Exception {
+		super.onCreate(inChannel);
 		this.userList = ((UserListLoader) inChannel.getPlugin(UserListLoader.class)).getUserList();
 	}
 
@@ -41,12 +39,12 @@ public class UserStatistics extends Plugin {
 			user.incjoins(inJoin.getHost());
 			String msg = String.format(USER_JOINED, inJoin.getUser(),user.getJoins());
 			
-			irc_.sendPrivmsg(inJoin.getChannel(), msg);
+			irc.sendPrivmsg(inJoin.getChannel(), msg);
 		} else {
 			String botName = Details.getInstance().getNickName();
 			if (!botName.equalsIgnoreCase(inJoin.getUser())) {
 				String msg = String.format(NEW_USER, inJoin.getUser());
-				irc_.sendPrivmsg(inJoin.getChannel(), msg);
+				irc.sendPrivmsg(inJoin.getChannel(), msg);
 			}
 		}
 	}
@@ -58,12 +56,11 @@ public class UserStatistics extends Plugin {
 			userOBJ.incQuits();
 			String msg = String.format(USER_QUIT, in_quit.getUser(), userOBJ.getQuits());
 			
-			irc_.sendPrivmsg(in_quit.getChannel(), msg);		
+			irc.sendPrivmsg(in_quit.getChannel(), msg);		
 		}
 	}
 
 	public void onKick(Kick in_kick) throws Exception {
-		IRC irc = IRC.getInstance();
 
 		User userOBJ = userList.getUser(in_kick.getKicked());
 		if (userOBJ != null) {
@@ -74,13 +71,9 @@ public class UserStatistics extends Plugin {
 			irc.sendPrivmsg(in_kick.getChannel(), msg);
 		}
 	}
-	
-	public String getHelpString() {
-		return "USERS: \n"
-				+ "\tThis class does not have any commands.";
-	}
 
 	@Override
 	public void getMenuItems(MenuItem rootItem) {
+		//No Menu Needed.
 	}
 }
