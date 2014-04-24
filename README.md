@@ -75,13 +75,13 @@ Thanks to SoftlySplinter, ssherar and bugsduggan for their input into the design
 
 Command Structure
 
-`#\<plugin_name\>/\<function\> \<args\>`
+`#<plugin_name>/<function> <args>`
 
 e.g `#rep/rep XeTK`
 
 To acces help for commands you can issue commands like this
 
-`?\<plugin_name\>/\<function\>`
+`?<plugin_name>/<function>`
 
 e.g `?admin/loaded`
 
@@ -89,7 +89,7 @@ You can also navigate Javabot's commands using contexted menu's
 
 Which are structured like this
 
-`\<bot_nickname\>: \<Plugin_name or Plugin_Command or Navigation_Command\>`
+`<bot_nickname>: <Plugin_name | Plugin_Command | Navigation_Command>`
 
 e.g `Javabot: Admin` , `Javabot: rep XeTK` , `Javabot: root`
 
