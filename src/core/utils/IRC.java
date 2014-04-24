@@ -1,4 +1,4 @@
-﻿package core.utils;
+package core.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
