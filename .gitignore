@@ -14,3 +14,4 @@ libs/*
 *.txt
 servers/*
 imgur_creds
+.DS_Store

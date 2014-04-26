@@ -1,31 +1,30 @@
 package core.utils;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import core.plugin.Plugin;
 
 /**
- * Thread to run the timed events as we can't just leave it in the main loop as
- * we wont loop till we have received input from the Server/Clients.
- * 
+ * Thread to run the timed events.
+ *
  * @author Tom Rosier(XeTK)
  */
 public class TimeThread extends Thread {
-	// Keep a link to the plugins stored within Start.java
-	private ArrayList<Plugin> plugins;
+	private static int SLEEP_MILLIS = 1000;
+
+	private List<Plugin> plugins;
 
 	/**
-	 * Deploy are timed events on are separate thread. Keep looping till the
-	 * application terminates, we sleep for a second before we loop back round
-	 * again to run all the timed events again
+	 * Deploy timed events on a separate thread, keep looping until the
+	 * application terminates
 	 */
 	public void run() {
 		while (true) {
 			try {
-				for (int i = 0; i < plugins.size(); i++)
+				for (int i = 0; i < plugins.size(); i++) {
 					plugins.get(i).onTime();
-
-				super.sleep(1000);
+				}
+				super.sleep(SLEEP_MILLIS);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -34,11 +33,11 @@ public class TimeThread extends Thread {
 
 	/**
 	 * This takes in the plugins for a specific channel and adds them to its own
-	 * separate time thread, this is to help with having channel isolation.
-	 * 
-	 * @param plugins this is the list of plugins tied to a specific channel.
+	 * separate time thread
+	 *
+	 * @param plugins the list of plugins for a specific channel.
 	 */
-	public TimeThread(ArrayList<Plugin> plugins) {
+	public TimeThread(List<Plugin> plugins) {
 		this.plugins = plugins;
 	}
 }
