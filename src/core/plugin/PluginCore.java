@@ -3,6 +3,7 @@ package core.plugin;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * This separates the plugin loading away from the core of the program. 
@@ -97,15 +98,12 @@ public class PluginCore {
 	 * 
 	 * @return's a string containing the plugins that have been loaded.
 	 */
-	public static String loadedPlugins(ArrayList<Plugin> plugins) {
-		
+	public static String loadedPlugins(List<Plugin> plugins) {
 		String[] names = new String[plugins.size()];
-		
-		for (int i = 0; i < names.length; i++)
+		for (int i = 0; i < names.length; i++) {
 			names[i] = plugins.get(i).name();
-		
+		}
 		Arrays.sort(names);
-
 		return Arrays.toString(names);
 	}
 }
