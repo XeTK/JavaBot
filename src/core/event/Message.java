@@ -28,19 +28,23 @@ public class Message {
 		String channel = m.group(3);
 		String message = m.group(4);
 
-		this(user, channel, message);
+		setupMessage(user, channel, message);
 	}
 
 	public Message(String username, String channel, String message) {
+		setupMessage(username, channel, message);
+	}
+
+	public void setupMessage(String username, String channel, String message) {
 		this.date_    = new Date();
 
 		this.user_    = username;
 		this.channel_ = channel;
 		this.message_ = message;
-
+		
 		if (!channel_.startsWith("#") && !channel_.startsWith("&")) {
-			self.isPrivMsg_ = true;
-			self.channel_   = user_;
+			this.isPrivMsg_ = true;
+			this.channel_   = user_;
 		}
 	}
 
