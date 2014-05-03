@@ -1,6 +1,7 @@
 package plugin.stats.user;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import core.Channel;
 import core.event.Join;
@@ -9,9 +10,10 @@ import core.event.Message;
 import core.event.Quit;
 import core.menu.MenuItem;
 import core.plugin.Plugin;
-import plugin.stats.user.UserListLoader;
 import core.utils.Details;
 import core.utils.IRCException;
+
+import plugin.stats.user.UserListLoader;
 
 public class UserStatistics extends Plugin {
 
@@ -21,6 +23,16 @@ public class UserStatistics extends Plugin {
 	private final String USER_KICKED = "%s has been kicked %s times";
 	
 	private UserList userList;
+
+	private String[] dependencies_ = {"UserListLoader"};
+
+	public String[] getDependencies() {
+		return dependencies_;
+	}
+
+	public boolean hasDependencies() {
+		return (dependencies_.length > 0);
+	}
 
 	public void onCreate(Channel inChannel) throws Exception {
 		super.onCreate(inChannel);

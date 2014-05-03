@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
+import java.util.ArrayList;
 
 import plugin.stats.channel.data.Day;
 import plugin.stats.channel.data.Hour;
@@ -49,6 +50,16 @@ public class ChannelStatistics extends Plugin {
 	private Day     today_;
 	private Options options_;
 	private Channel channel_;
+
+	private String[] dependencies_ = {"UserListLoader"};
+
+	public String[] getDependencies() {
+		return dependencies_;
+	}
+
+	public boolean hasDependencies() {
+		return (dependencies_.length > 0);
+	}
 
 	public void onCreate(Channel inChannel) throws Exception {
 		this.channel_     = inChannel;

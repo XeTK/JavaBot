@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 
 import javax.crypto.Cipher;
@@ -25,6 +26,16 @@ import core.utils.IRC;
 import core.utils.Regex;
 
 public class Authenticate extends Plugin {
+
+	private String[] dependencies_ = {"UserListLoader"};
+
+	public String[] getDependencies() {
+		return dependencies_;
+	}
+
+	public boolean hasDependencies() {
+		return (dependencies_.length > 0);
+	}
 
 	@Override
 	public void getMenuItems(MenuItem rootItem) {

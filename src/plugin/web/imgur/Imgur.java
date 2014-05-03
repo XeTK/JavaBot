@@ -10,6 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -33,6 +34,16 @@ public class Imgur extends Plugin {
 	private static final String API_ENDPOINT = "https://api.imgur.com/3/gallery/image/";
 
 	private String clientId = new String();
+
+	private String[] dependencies_ = {};
+
+	public String[] getDependencies() {
+		return dependencies_;
+	}
+
+	public boolean hasDependencies() {
+		return (dependencies_.length > 0);
+	}
 
 	public Imgur() {
 		try {

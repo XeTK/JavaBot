@@ -1,5 +1,7 @@
 package plugin.admin.test;
 
+import java.util.ArrayList;
+
 import core.Channel;
 import core.event.Join;
 import core.event.Kick;
@@ -24,6 +26,16 @@ public class Counters extends Plugin {
 	private static int quits_    = 0;
 	private static int kicks_    = 0;
 	private static int raws_     = 0;
+
+	private String[] dependencies_ = {};
+
+	public String[] getDependencies() {
+		return dependencies_;
+	}
+
+	public boolean hasDependencies() {
+		return (dependencies_.length > 0);
+	}
 	
 	public void onCreate(Channel inChannel) throws Exception {
 		super.onCreate(inChannel);

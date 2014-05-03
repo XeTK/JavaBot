@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.regex.Matcher;
+import java.util.ArrayList;
 
 import core.event.Message;
 import core.menu.MenuItem;
@@ -15,6 +16,16 @@ import core.utils.Regex;
 public class WebScanner extends Plugin{
 	
 	private static final String TXT_SPOILER = "I ain't spoiling nawthing! Dawgh!";
+
+	private String[] dependencies_ = {};
+
+	public String[] getDependencies() {
+		return dependencies_;
+	}
+
+	public boolean hasDependencies() {
+		return (dependencies_.length > 0);
+	}
 
 	public void onMessage(Message inMessage) throws Exception {
 		Matcher m = Regex.getMatcher("(http(?:s)?://(?:www.)?[\\w\\d]*.[\\w]*[./][\\.\\w\\d//?/=-]*)", inMessage.getMessage());

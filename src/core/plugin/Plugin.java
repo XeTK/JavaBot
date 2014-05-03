@@ -19,8 +19,18 @@ public abstract class Plugin {
 	
 	protected IRC irc = IRC.getInstance();
 
+        private String[] dependencies_ = {};
+
 	public void onCreate(Channel inChannel) throws Exception {
 		this.channel_ = inChannel;
+	}
+
+	public String[] getDependencies() {
+		return dependencies_;
+	}
+
+	public boolean hasDependencies() {
+		return (dependencies_.length > 0);
 	}
 
 	public String name() {

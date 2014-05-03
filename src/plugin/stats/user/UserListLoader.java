@@ -13,6 +13,16 @@ public class UserListLoader extends Plugin{
 	private String dbFile_ = new String();
 	
 	private UserList userList_;
+
+	private String[] dependencies_ = {};
+
+	public String[] getDependencies() {
+		return dependencies_;
+	}
+
+	public boolean hasDependencies() {
+		return (dependencies_.length > 0);
+	}
 	
 	public void onCreate(Channel inChannel) throws Exception {
 		super.onCreate(inChannel);

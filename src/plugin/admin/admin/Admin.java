@@ -2,6 +2,8 @@ package plugin.admin.admin;
 
 import java.lang.management.ManagementFactory;
 
+import java.util.ArrayList;
+
 import core.event.Join;
 import core.menu.AuthGroup;
 import core.menu.MenuItem;
@@ -49,6 +51,16 @@ public class Admin extends Plugin {
 	private final String HLP_RELOAD     = String.format("%s - Reloads plugins from local directory without restarting the bot", CMD_RELOAD);
 	private final String HLP_LOADED     = String.format("%s - Returns list of loaded plugins", CMD_LOADED);
 	private final String HLP_NOT_LOADED = String.format("%s - Returns list of plugins not loaded", CMD_NOT_LOADED);
+
+	private String[] dependencies_ = {};
+
+	public String[] getDependencies() {
+		return dependencies_;
+	}
+
+	public boolean hasDependencies() {
+		return (dependencies_.length > 0);
+	}
 
 	public void onJoin(Join inJoin) throws Exception {
 		irc.sendServer("MODE " + inJoin.getChannel() + " +v " + inJoin.getUser());

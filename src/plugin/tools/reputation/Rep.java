@@ -2,6 +2,7 @@ package plugin.tools.reputation;
 
 import java.io.File;
 import java.util.regex.Matcher;
+import java.util.ArrayList;
 
 import core.Channel;
 import core.event.Message;
@@ -31,6 +32,16 @@ public class Rep extends Plugin {
 	private String cfgFile_ = new String();
 
 	private RepList repList_ = new RepList();
+
+	private String[] dependencies_ = {};
+
+	public String[] getDependencies() {
+		return dependencies_;
+	}
+
+	public boolean hasDependencies() {
+		return (dependencies_.length > 0);
+	}
 
 	public void onCreate(Channel inChannel) throws Exception {
 		super.onCreate(inChannel);

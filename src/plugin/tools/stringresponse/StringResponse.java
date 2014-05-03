@@ -28,6 +28,16 @@ public class StringResponse extends Plugin {
 	private ResponseList responseList_ = new ResponseList();
 	private Random random_ = new Random();
 
+	private String[] dependencies_ = {};
+
+	public String[] getDependencies() {
+		return dependencies_;
+	}
+
+	public boolean hasDependencies() {
+		return (dependencies_.length > 0);
+	}
+
 	/**
 	 * On create we want to load any previously saved Responses back into the
 	 * system for them to be used again.

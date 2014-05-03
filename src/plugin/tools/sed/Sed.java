@@ -1,5 +1,6 @@
 package plugin.tools.sed;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -64,6 +65,15 @@ public class Sed extends Plugin {
 	 */
 	private Map<String, Stack<Message>> cache_ = new HashMap<String, Stack<Message>>();
 
+	private String[] dependencies_ = {};
+
+	public String[] getDependencies() {
+		return dependencies_;
+	}
+
+	public boolean hasDependencies() {
+		return (dependencies_.length > 0);
+	}
 	
 	public final void onMessage(final Message messageObj) throws Exception {
 		String message = messageObj.getMessage();

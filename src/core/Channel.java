@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Matcher;
 
@@ -37,7 +38,7 @@ public class Channel {
 
 	private final String TXT_LOADED     = "\u001B[33mPlugins Loaded: %s";
 	private final String TXT_NOT_LOADED = "\u001B[33mPlugins Not Loaded: %s";
-	private final String TXT_MENU_CMD   = "(" + Details.getInstance().getNickName() + ":\\s|\\?|" + Details.getInstance().getCMDPrefix() +  ")(.*)";
+	private final String TXT_MENU_CMD   = "(" + Details.getInstance().getNickName() + ":\\s|\\?|\\" + Details.getInstance().getCMDPrefix() +  ")(.*)";
 
 	private final String REG_GET_SERVER = "(?:[\\w\\d]*\\.)?([\\w\\d]*)\\..*";
 	private final String REG_MENU_CMD   = "([a-zA-Z]*)(?:\\s(.*))?";
@@ -296,8 +297,17 @@ public class Channel {
 		buildMenu();
 
 		// Init plugins
+		HashSet<Plugin> dependents = new HashSet<Plugin>();
 		for (int i = 0; i < plugins_.size(); i++) {
-			plugins_.get(i).onCreate(this);
+                        if(!plugins_.get(i).hasDependencies()) {
+				plugins_.get(i).onCreate(this);
+			}
+			else {
+				dependents.add(plugins_.get(i));
+			}
+		}
+                for(Plugin p : dependents) {
+			p.onCreate(this);
 		}
 
 		// Init timer
@@ -318,6 +328,7 @@ public class Channel {
 		// Double check that the message is actually for this class.
 		if (inMessage.getChannel().equalsIgnoreCase(channelName_)) {
 			if (inMessage.getMessage().matches(TXT_MENU_CMD)) {
+                                System.out.println("MATCHES TXT_MENU_CMD: " + TXT_MENU_CMD);
 				handleMenu(inMessage);
 			} else {
 				for (int i = 0; i < plugins_.size(); i++) {

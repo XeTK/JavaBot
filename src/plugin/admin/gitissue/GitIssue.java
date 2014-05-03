@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -36,6 +37,16 @@ public class GitIssue extends Plugin {
 
 	private String authToken;
 	private boolean isLoaded = false;
+
+	private String[] dependencies_ = {};
+
+	public String[] getDependencies() {
+		return dependencies_;
+	}
+
+	public boolean hasDependencies() {
+		return (dependencies_.length > 0);
+	}
 
 	public GitIssue() {
 		try {

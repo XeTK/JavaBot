@@ -2,6 +2,7 @@ package plugin.tools.quote;
 
 import java.util.Random;
 import java.util.regex.Matcher;
+import java.util.ArrayList;
 
 import plugin.stats.user.UserList;
 import plugin.stats.user.UserListLoader;
@@ -34,6 +35,16 @@ public class Quote extends Plugin {
 	private final String MSG_REMOVE = "%s: quote removed";
 
 	private UserList userList_;
+
+	private String[] dependencies_ = {"UserListLoader"};
+
+	public String[] getDependencies() {
+		return dependencies_;
+	}
+
+	public boolean hasDependencies() {
+		return (dependencies_.length > 0);
+	}
 
 	public void onCreate(Channel inChannel) throws Exception {
 		super.onCreate(inChannel);

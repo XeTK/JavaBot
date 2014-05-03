@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Matcher;
+import java.util.ArrayList;
 
 import plugin.stats.user.User;
 import plugin.stats.user.UserList;
@@ -43,6 +44,8 @@ public class Reminder extends Plugin {
 	
 	private UserList userList_;
 
+	private String[] dependencies_ = {"UserListLoader"};
+
 	public void onCreate(Channel inChannel) throws Exception {
 		super.onCreate(inChannel);
 		
@@ -55,6 +58,14 @@ public class Reminder extends Plugin {
 		else
 			JSON.save(cfgFile_, remindersList_);
 	}
+
+	public String[] getDependencies() {
+		return dependencies_;
+        }
+
+        public boolean hasDependencies() {
+		return (dependencies_.length > 0);
+        }
 
 	public void onTime() throws Exception {
 		Reminders[] reminders = remindersList_.getReminders(new Date());
@@ -69,7 +80,6 @@ public class Reminder extends Plugin {
 			
 			String user    = inMessage.getUser();
 			String channel = inMessage.getChannel();
-
 			User tempUser = userList_.getUser(user);
 			
 			if (tempUser != null) {
