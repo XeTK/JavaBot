@@ -31,7 +31,8 @@ public class Sed extends Plugin {
 	private static final String HLP_SED_DUMP = String.format("seddumpcache - dumps sed cache", CMD_SED_DUMP);
 	private static final String HLP_SED_DROP = String.format("seddropcache - drops sed cache", CMD_SED_DROP);
 	
-	private static final String RGX_SED      = "^(?:([\\w]+): )?s/((?:(?<=\\\\)/|[^/])+)/((?:(?<=\\\\)/|[^/])*)/?";
+//	private static final String RGX_SED      = "^(?:([\\w]+): )?s/((?:(?<=\\\\)/|[^/])+)/((?:(?<=\\\\)/|[^/])*)/?";
+	private static final String RGX_SED      = "^(?:([\\w\\[\\]\\{\\}`\\|\\^\\\\-]+): )?s/((?:(?<=\\\\)/|[^/])+)/((?:(?<=\\\\)/|[^/])*)/?";
 
 	/**
 	 * The max number of Message objects stored per user.
