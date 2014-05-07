@@ -32,7 +32,7 @@ public class Sed extends Plugin {
 	private static final String HLP_SED_DROP = String.format("seddropcache - drops sed cache", CMD_SED_DROP);
 	
 //	private static final String RGX_SED      = "^(?:([\\w]+): )?s/((?:(?<=\\\\)/|[^/])+)/((?:(?<=\\\\)/|[^/])*)/?";
-	private static final String RGX_SED      = "^(?:([\\w\\[\\]\\{\\}`\\|\\^\\\\-]+): )?s/((?:(?<=\\\\)/|[^/])+)/((?:(?<=\\\\)/|[^/])*)/?";
+	private static final String RGX_SED      = "^(?:([\\w\\[\\]\\{\\}`\\|\\^\\\\-]+): )?(?:\\[(\\d+)\\])?s/((?:(?<=\\\\)/|[^/])+)/((?:(?<=\\\\)/|[^/])*)/?";
 
 	/**
 	 * The max number of Message objects stored per user.
@@ -50,11 +50,15 @@ public class Sed extends Plugin {
 	/**
 	 * The second group of the sed regex.
 	 */
-	private static final int SED_SEARCH_GROUP = 2;
+	private static final int SED_MSG_TARGET_GROUP = 2;
 	/**
 	 * The third group of the sed regex.
 	 */
-	private static final int SED_REPLACEMENT_GROUP = 3;
+	private static final int SED_SEARCH_GROUP = 3;
+	/**
+	 * The fourth group of the sed regex.
+	 */
+	private static final int SED_REPLACEMENT_GROUP = 4;
 
 	/**
 	 * Details instance.
@@ -113,7 +117,20 @@ public class Sed extends Plugin {
 				userCache = getUserCache(targetUser);
 			}
 
+                        boolean isStackSize = false;
+                        int stacksize = -1;
+			if(m.group(SED_MSG_TARGET_GROUP) != null) {
+				stacksize = Integer.parseInt(m.group(SED_MSG_TARGET_GROUP));
+                                isStackSize = true;
+			}
+
 			while (!userCache.empty()) {
+                                stacksize--;
+                                if(isStackSize && stacksize > 0) {
+				// We don't want to continue if a match is not found at stacksize
+                                        Message discard = userCache.pop();
+					continue;
+				}
 				Message tempMessage = userCache.pop();
 				String text = tempMessage.getMessage();
 
