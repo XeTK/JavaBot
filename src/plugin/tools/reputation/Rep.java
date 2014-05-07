@@ -17,7 +17,7 @@ public class Rep extends Plugin {
 	private final String CMD_REP  = "rep";
 	private final String CMD_INFO = "info";
 	
-	private final String TXT_REP    = "%s Has a reputation of %s";
+	private final String TXT_REP    = "%s has a reputation of %s.";
 	private final String TXT_EX_REP = "You can't do that, it's too much rep...";
 	private final String TXT_INFO   = "Please view the help on how to use this plugin";
 	
