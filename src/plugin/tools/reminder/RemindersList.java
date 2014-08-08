@@ -16,10 +16,9 @@ public class RemindersList {
 	/**
 	 * Simple adds a new reminder to the list of reminders.
 	 * 
-	 * @param message
-	 *            is the message that we want to hold with are reminder.
-	 * @param timeOfEvent
-	 *            this is the time that the event is scheduled for.
+	 * @param message is the message that we want to hold with are reminder.
+	 * 
+	 * @param timeOfEvent this is the time that the event is scheduled for.
 	 */
 	public void addReminder(String message, Date timeOfEvent) {
 		reminders_.add(new Reminders(message, timeOfEvent));
@@ -29,8 +28,8 @@ public class RemindersList {
 	 * This gets all the events at the current time, it also removes the events
 	 * from the list so that they do not repeat.
 	 * 
-	 * @param timeOfEvent
-	 *            this is the time we want to get the reminders for
+	 * @param timeOfEvent this is the time we want to get the reminders for
+	 * 
 	 * @return's a list of reminders that then can be printed out to the server
 	 */
 	public Reminders[] getReminders(Date timeOfEvent) {
@@ -39,6 +38,7 @@ public class RemindersList {
 
 		// Loop through all the elements within the list
 		for (int i = 0; i < reminders_.size();) {
+			
 			/*
 			 * If the time of the event has passed or is current then we add it
 			 * to the list to be returned, we also delete it from are reminders

@@ -3,13 +3,11 @@ package core.event;
 import java.util.regex.Matcher;
 
 /**
- * This is a quit object, it contains all the relevant information for when a
- * user is kicked.
- * 
+ * A Quit Event
+ *
  * @author Tom Rosier(XeTK)
  */
 public class Quit {
-	// Variables we need for this operation
 	private String user_     = new String();
 	private String host_     = new String();
 	private String channel_  = new String();
@@ -17,45 +15,40 @@ public class Quit {
 	private String message_  = new String();
 
 	/**
-	 * Default constructor takes in are Regex matcher and turn it into the
-	 * relevant strings
+	 * Constructor
 	 * 
-	 * @param m
-	 *            this is the Regex passed into the constructor
+	 * @param m the Matcher object
 	 */
 	public Quit(Matcher m) {
-		user_        = m.group(1);
-		host_        = m.group(2);
-		exitType_    = m.group(3);
-		
-		if (exitType_.equals("PART"))
-			channel_ = m.group(4);
-		
-		message_     = m.group(5);
-		
+		this.user_        = m.group(1);
+		this.host_        = m.group(2);
+		this.exitType_    = m.group(3);
+
+		if (exitType_.equals("PART")) {
+			this.channel_ = m.group(4);
+		}
+
+		this.message_     = m.group(5);
 	}
 
-	// Getters
-
 	public String getUser() {
-		return user_;
+		return this.user_;
 	}
 
 	public String getHost() {
-		return host_;
+		return this.host_;
 	}
 
 	public String getChannel() {
-		return channel_;
+		return this.channel_;
 	}
 
 	public String getExitType() {
-		return exitType_;
+		return this.exitType_;
 	}
 
 	public String getMessage() {
-		return message_;
+		return this.message_;
 	}
-	
 
 }

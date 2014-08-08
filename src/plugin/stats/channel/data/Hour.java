@@ -45,8 +45,7 @@ public class Hour {
 	/**
 	 * This increment the number of messages a user has sent in the last hour.
 	 * 
-	 * @param user
-	 *            this is the user that needs to there total incrementing.
+	 * @param user this is the user that needs to there total incrementing.
 	 */
 	public void incMsgSent(String user) {
 		// Keep a flag to see if the user has been found.
@@ -63,8 +62,7 @@ public class Hour {
 				break;
 			}
 		}
-		// If the user has not been found then we create a new instance of a
-		// user
+		// If the user has not been found then we create a new instance of a user
 		if (!userExists)
 			users_.add(new User(user));
 	}

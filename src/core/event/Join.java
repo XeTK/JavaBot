@@ -3,40 +3,37 @@ package core.event;
 import java.util.regex.Matcher;
 
 /**
- * This is a data class for the users that join a channel, this is here to be
- * used for encapsulation purposes.
- * 
+ * This is a data class for the users that join a channel
+ *
  * @author Tom Rosier(XeTK)
  */
 public class Join {
-	// Global variables for a Join action
-	private String user_ = new String();
-	private String host_ = new String();
+	private String user_    = new String();
+	private String host_    = new String();
 	private String channel_ = new String();
 
 	/**
 	 * This is the default Constructor converts Regex into usable strings
-	 * 
-	 * @param m
-	 *            this is the Regex passed in
+	 *
+	 * @param m the Matcher object
 	 */
 	public Join(Matcher m) {
-		user_ = m.group(1);
-		host_ = m.group(2);
-		channel_ = m.group(3);
+		this.user_    = m.group(1);
+		this.host_    = m.group(2);
+		this.channel_ = m.group(3);
 	}
 
 	// Getters
 	public String getUser() {
-		return user_;
+		return this.user_;
 	}
 
 	public String getHost() {
-		return host_;
+		return this.host_;
 	}
 
 	public String getChannel() {
-		return channel_;
+		return this.channel_;
 	}
 
 }

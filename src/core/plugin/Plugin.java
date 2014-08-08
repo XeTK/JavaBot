@@ -5,6 +5,8 @@ import core.event.Join;
 import core.event.Kick;
 import core.event.Message;
 import core.event.Quit;
+import core.menu.MenuItem;
+import core.utils.IRC;
 
 /**
  * This is the abstract class that all the plugins extend from.
@@ -13,12 +15,27 @@ import core.event.Quit;
  */
 @IsPlugin
 public abstract class Plugin {
+	protected Channel channel_;
+	
+	protected IRC irc = IRC.getInstance();
+
+        private String[] dependencies_ = {};
+
+	public void onCreate(Channel inChannel) throws Exception {
+		this.channel_ = inChannel;
+	}
+
+	public String[] getDependencies() {
+		return dependencies_;
+	}
+
+	public boolean hasDependencies() {
+		return (dependencies_.length > 0);
+	}
 
 	public String name() {
 		return this.getClass().getSimpleName();
 	}
-
-	public void onCreate(Channel inChannel) throws Exception {}
 
 	public void onTime() throws Exception {}
 
@@ -34,10 +51,7 @@ public abstract class Plugin {
 	public void onKick(Kick inKick) throws Exception {}
 
 	public void rawInput(String inStr) throws Exception {}
-
-	/**
-	 * The string displayed by .help message
-	 */
-	public abstract String getHelpString();
+	
+	public abstract void getMenuItems(MenuItem rootItem);
 
 }

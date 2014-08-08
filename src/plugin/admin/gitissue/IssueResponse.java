@@ -12,15 +12,15 @@ public class IssueResponse {
 	private String comments_url;
 	private String events_url;
 	private String html_url;
-	private int id;
-	private int number;
+	private int    id;
+	private int    number;
 	private String title;
 	private Object user;
 	private List<Object> labels;
 	private String state;
 	private Object assignee;
 	private Object milestone;
-	private int comments;
+	private int    comments;
 	private String created_at;
 	private String updated_at;
 	private String closed_at;

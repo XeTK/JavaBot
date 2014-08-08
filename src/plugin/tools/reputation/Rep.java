@@ -2,24 +2,52 @@ package plugin.tools.reputation;
 
 import java.io.File;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
 
 import core.Channel;
 import core.event.Message;
+import core.menu.AuthGroup;
+import core.menu.MenuItem;
 import core.plugin.Plugin;
-import core.utils.IRC;
 import core.utils.JSON;
-import core.utils.RegexFormatter;
+import core.utils.Regex;
 
 public class Rep extends Plugin {
+	
+	private final String CMD_REP  = "rep";
+	private final String CMD_INFO = "info";
+	
+	private final String TXT_REP    = "%s has a reputation of %s.";
+	private final String TXT_EX_REP = "You can't do that, it's too much rep...";
+	private final String TXT_INFO   = "Please view the help on how to use this plugin";
+	
+	private final String HLP_REP  = String.format("%s <Item> - view the reputation of a item\n", CMD_REP);
+	private final String HLP_INFO = "<Item>--/++ - increment or decrement the rep of a item /\n" + 
+			  						"<Item> +/- <Ammount> - increment or decrement the rep of a set item by a set amount";
+	
+	private final String RGX_GET_REP = "^(\\w+)\\s?([+-])(?:\\2|=\\s?(\\d+))";
+	
 	private final String CONFIG_FILE_LOCATION = "Rep.json";
 	
 	private String cfgFile_ = new String();
 
 	private RepList repList_ = new RepList();
 
+	private String[] dependencies_ = {};
+
+	public String[] getDependencies() {
+		return dependencies_;
+	}
+
+	public boolean hasDependencies() {
+		return (dependencies_.length > 0);
+	}
+
 	public void onCreate(Channel inChannel) throws Exception {
-		cfgFile_ = inChannel.getPath() + CONFIG_FILE_LOCATION;
+		super.onCreate(inChannel);
+		
+		cfgFile_ = channel_.getPath() + CONFIG_FILE_LOCATION;
+		
 		if (new File(cfgFile_).exists())
 			repList_ = (RepList) JSON.load(cfgFile_, RepList.class);
 		else
@@ -32,18 +60,11 @@ public class Rep extends Plugin {
 			String channel = inMessage.getChannel();
 			String message = inMessage.getMessage();
 
-			// Message .Trim
 
 			if (message.charAt(message.length() - 1) == ' ')
 				message = message.substring(0, message.length() - 1);
-
-			IRC irc = IRC.getInstance();
 			
-			Matcher r = Pattern.compile(
-					"^([\\w\\d]*)(?:[\\s])?([+|-])(?:[+|-|=])?(?:[\\s]([\\d]*))?\\r",
-					Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(
-					message);
-			
+			Matcher r = Regex.getMatcher(RGX_GET_REP, message);
 			
 			if (r.find()) {
 
@@ -68,30 +89,68 @@ public class Rep extends Plugin {
 							iAmmount = Integer.valueOf(type + ammount);
 					}
 					if (iAmmount > 100 || iAmmount < -100) {
-						irc.sendPrivmsg(channel,
-								"You cant do that its to much rep...");
+						irc.sendPrivmsg(channel,TXT_EX_REP);
 					} else {
 						Reputation tempRep = repList_.getRep(item);
 						tempRep.modRep(iAmmount);
-						irc.sendPrivmsg(channel, item + ": Rep = "
-								+ tempRep.getRep() + "!");
+						
+						String msg = String.format(TXT_REP, item, tempRep.getRep());
+						
+						irc.sendPrivmsg(channel, msg);
 					}
 				}
-			} else if (message.matches(RegexFormatter.format("rep",RegexFormatter.REG_NICK))) {
-				String[] t = message.split(" ");
-				if (t.length > 0 || t[1] != null)
-					irc.sendPrivmsg(channel, t[1] + ": Rep = "
-							+ repList_.getRep(t[1]).getRep() + "!");
 			}
 			JSON.save(cfgFile_, repList_);
 		}
 	}
 
-	public String getHelpString() {
-		return "REP: \n"
-				+ "\t.rep <Item> - view the reputation of a item\n"
-				+ "\t<Item>--/++ - increment or decrement the rep of a item /\n"
-				+ "\t<Item> +/- <Ammount> - increment or decrement the rep of a set item by a set amount\n";
+	@Override
+	public void getMenuItems(MenuItem rootItem) {
+		MenuItem pluginRoot = rootItem;
+		
+		MenuItem repGetRep = new MenuItem(CMD_REP, rootItem, 1, AuthGroup.NONE){
+			@Override
+			public void onExecution(String args, String username) { 
+				if (args != null) {
+					String item = args.trim();
+					
+					int rep = repList_.getRep(item).getRep();
+					
+					String msg = String.format(TXT_REP, item, rep);
+					
+					try {
+						irc.sendPrivmsg(channel_.getChannelName(), msg);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			@Override
+			public String onHelp() {
+				return HLP_REP;
+			}
+		};
+
+		pluginRoot.addChild(repGetRep);
+		
+		MenuItem repGetInfo = new MenuItem(CMD_INFO, rootItem, 2, AuthGroup.NONE){
+			@Override
+			public void onExecution(String args, String username) { 
+				try {
+					irc.sendPrivmsg(channel_.getChannelName(), TXT_INFO);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			@Override
+			public String onHelp() {
+				return HLP_INFO;
+			}
+		};
+
+		pluginRoot.addChild(repGetInfo);
+		
+		rootItem = pluginRoot;
 	}
 
 }

@@ -6,7 +6,7 @@ import javax.mail.*;
 import javax.mail.internet.*;
 
 /**
- * This is the static email class, it sends emails over secure SMTP, which makes
+ * This is the static email class, it sends email's over secure SMTP, which makes
  * it compatible with GmailL & Hotmail but should also work with others.
  * 
  * @author Tom Rosier(XeTK)
@@ -15,32 +15,26 @@ public class EMail {
 	/**
 	 * This sends an email using the details given in the Details.json
 	 * 
-	 * @param emailAddress
-	 *            this is the email of the person receiving the email.
-	 * @param inMessage
-	 *            this is the body of the email, and the context that the user
-	 *            will read.
-	 * @param topic
-	 *            this is the title of the email and the subject line.
-	 * @throws Exception
-	 *             if there is an error sending the email issue and an
-	 *             exceptipn.
+	 * @param emailAddress this is the email of the person receiving the email.
+	 * 
+	 * @param inMessage this is the body of the email, and the context that the user will read.
+	 * 
+	 * @param topic this is the title of the email and the subject line.
+	 * 
+	 * @throws Exception if there is an error sending the email issue and an exception.
 	 */
-	public static void sendEmail(String emailAddress, String inMessage,
-			String topic) throws Exception {
-		// Get an instance of details so we can set up are authentication to the
-		// mail server.
+	public static void sendEmail(String emailAddress, String inMessage, String topic) throws Exception {
+		// Get an instance of details so we can set up are authentication to the mail server.
 		Details details = Details.getInstance();
 
 		// Get system properties ready to send the email.
 		Properties props = System.getProperties();
 
-		// Assign the properties to the properties instance, ready to be passed
-		// to the mail lib.
-		props.put("mail.smtp.auth", "true");
+		// Assign the properties to the properties instance, ready to be passed to the mail lib.
+		props.put("mail.smtp.auth",            "true");
 		props.put("mail.smtp.starttls.enable", "true");
-		props.put("mail.smtp.port", "587");
-		props.put("mail.smtp.host", details.getSmtpHost());
+		props.put("mail.smtp.port",            "587");
+		props.put("mail.smtp.host",            details.getSmtpHost());
 
 		// Create a session and open the socket to the mail server, we also
 		// authenticate the user here.

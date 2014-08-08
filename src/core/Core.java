@@ -2,8 +2,8 @@ package core;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import core.event.Join;
 import core.event.Kick;
@@ -12,52 +12,79 @@ import core.event.Quit;
 import core.utils.Details;
 import core.utils.IRC;
 import core.utils.IRCException;
+import core.utils.Regex;
 
 /**
  * This is the core execution point of the program, this handles all messages &
  * passing them to the plugins, it also handles the connection process of
- * getting, an socket opened and interacting with the IRC server and sending the
+ * getting an open socket, interacting with the IRC server and sending the
  * appropriate data for the bot to function.
- * 
+ *
  * @author Tom Rosier(XeTK)
  */
 public class Core {
-	// Keep a list of all the channels we are currently connected to.
-	private ArrayList<Channel> channels_ = new ArrayList<Channel>();
+
+	/**
+	 * The number of acceptable rejoins before we give up
+	 */
+	private final int MAX_REJOINS = 3;
+
+	/**
+	 * Matches valid IRC actions (PART, JOIN etc)
+	 */
+	private final String REG_ALL_CMD = ":(.*)!(?:~)?([\\w\\d\\.@-]*)\\s(PART|QUIT|JOIN|PRIVMSG|KICK)\\s(?::)?((?:#)?[\\d\\w]*)(?:.*)?";
+	/**
+	 * Matches INVITE actions
+	 */
+	private final String REG_INVITE  = ":([\\w\\d]*)!(?:~)?([\\w\\d@\\-.]*) INVITE ([\\w\\d]*) :(#[\\w\\d]*)";
+	/**
+	 * Matches PRIVMSG
+	 */
+	private final String REG_MESSAGE = ":(.*)!.*@(.*) PRIVMSG (.*) :(.*)";
+	/**
+	 * Matches JOIN
+	 */
+	private final String REG_JOIN    = ":(.*)!.*@(.*) JOIN :(#?.*)";
+	/**
+	 * Matches QUIT/PART
+	 */
+	private final String REG_PART    = ":(.*)!(.*@.*)\\s(QUIT|PART)(?:\\s(#[\\w\\d]*))?\\s:(.*)";
+	/**
+	 * Matches KICK
+	 */
+	private final String REG_KICK    = ":(.*)!(.*@.*) KICK (#.*) (.*) :(.*)";
+
+	private List<Channel> channels_ = new ArrayList<Channel>();
 
 	public void killBot(){
 		IRC irc = IRC.getInstance();
+
 		try {
-			irc.sendServer("QUIT Something wants this process dead...");
+
+			irc.sendServer("QUIT");
+
 			for (Channel channel: channels_) {
-				System.out.println("Stopping thread for channel : " + channel.getChannelName());
 				channel.getTimeThread().interrupt();
 			}
+
 			irc.closeConnection();
-			
+
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IRCException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.exit(0);
 	}
-	
+
 	/**
 	 * This is the start point for the application after it has been launched,
 	 * this is where we end up after we have gone past the static context.
-	 * 
-	 * @throws Exception
-	 *             if there is an error we throw it up to the JVM.
+	 *
+	 * @throws Exception if there is an error we throw it up to the JVM.
 	 */
 	public Core() throws Exception {
-        
-		// When the application first loads it needs to connect and open the
-		// connection to the server
 		connect();
-		// We then load into the main loop that keeps the program running.
 		mainLoop();
 	}
 
@@ -65,44 +92,32 @@ public class Core {
 	 * This is the method called to connect the IRC bot to the Server, it also
 	 * executes the commands that are needed to make the bot interact correctly
 	 * with the IRC server, it sets the values needed for the bot to connect.
-	 * 
-	 * @throws Exception
-	 *             throws an exception up to the main if there is an issue.
+	 *
+	 * @throws Exception throws an exception up to the main if there is an issue.
 	 */
 	private void connect() throws Exception {
-		// Get an instance of the IRC class to send the messages on.
 		IRC irc = IRC.getInstance();
-		// Also get an instance of the details needed to connect to the server
 		Details details = Details.getInstance();
 
-		// Open a connection to the server via the IRC class.
 		irc.connectServer(details.getServer(), details.getPort());
 
-		// Get the nickname of the bot before we use it to connect, it gets used
-		// alot...
 		String nick = details.getNickName();
 
-		// Send the connection information to the IRC server to get us
-		// registered.
+		// Send the connection information to the IRC server to get us registered.
 		irc.sendServer("NICK " + nick);
 		irc.sendServer("USER " + nick + " 8 *" + ": " + nick + " " + nick);
 
 		// Send all our startup commands from the details file.
-		for (int i = 0; i < details.getStartup().length; i++)
+		for (int i = 0; i < details.getStartup().length; i++) {
 			irc.sendServer(details.getStartup()[i]);
+		}
 
-		// Clear the current channels that we are connected to so we don't get
-		// duplicate channels.
 		channels_ = new ArrayList<Channel>();
 
 		// Connect to all the channels that are stored within the details file
 		for (int i = 0; i < details.getChannels().length; i++) {
-			// Get the channels identifier.
 			String chanName = details.getChannels()[i];
-			// Send join command to the server.
 			irc.sendServer("JOIN " + chanName);
-			// Add the channel to are list of connected channels to make sure
-			// its tracked.
 			channels_.add(new Channel(chanName));
 		}
 	}
@@ -110,145 +125,106 @@ public class Core {
 	/**
 	 * This is the place where all the magic happens, and the messages are
 	 * received and processed and passed onto the plugins to be handled.
-	 * 
-	 * @throws Exception
-	 *             problems are thrown up to the main to be handled by the JVM.
+	 *
+	 * @throws Exception problems are thrown up to the main to be handled by the JVM.
 	 */
 	private void mainLoop() throws Exception {
-		// Get an instance of the IRC class so we can later carry out operations
-		// on it.
 		IRC irc = IRC.getInstance();
 		Details details = Details.getInstance();
 
-		// Keep a list of private messages.
-		ArrayList<PrivMsg> privMsgs = new ArrayList<PrivMsg>();
+		List<PrivMsg> privMsgs = new ArrayList<PrivMsg>();
 
 		// Keep a rejoin count so we determine if its worth retrying to connect.
 		int rejoins = 0;
 
 		// Enter the while loop never to return
 		while (true) {
-			// Try and carry out the actions given. Else we throw an IRC
-			// exception that is sent to one of the admin's.
 			try {
-				// Get the output from the server
+				// grab whatever's waiting for us
 				String output = irc.getFromServer();
 
-				// If it is null it usually means we have been disconnected from
-				// the server.
+				// If it is null it usually means we have been disconnected from the server.
 				if (output == null) {
-					// If we have greater the number of rejoin attempts that we
-					// are aloud then we exit the application.
-					if (rejoins > 3)
+					/*
+					 *  If we have greater the number of rejoin attempts that we
+					 *  are aloud then we exit the application.
+					 */
+					if (rejoins > MAX_REJOINS)
 						System.exit(0);
-					// Else we close the connection we already have with the
-					// server.
+
+					// do the reconnection dance
 					irc.closeConnection();
-					// And try to reconnect to the server.
 					connect();
-					// Incrementing the number of times we have joined so we can
-					// decide if its worth rejoining.
 					rejoins++;
-					// The output string is null so we don't want to continue
-					// parsing it so we loop back to get the new output from the
-					// server.
+
+					/*
+					 * The output string is null so we don't want to continue
+					 * parsing it so we loop back to get the new output from the server.
+					 */
 					continue;
 				}
 
-				// Create are Regex matcher, it gets used alot so seems to make
-				// more sense to keep it separate.
 				Matcher m;
 
-				// Check if the output from the server matches a valid IRC
-				// channel action. Either a PART|JOIN|PRIVMSG|KICk
-				m = Pattern
-						.compile(
-								":(.*)!(?:~)?([\\w\\d\\.@-]*)\\s(PART|JOIN|PRIVMSG|KICK)\\s(?::)?((?:#)?[\\d\\w]*)(?:.*)?",
-								Pattern.CASE_INSENSITIVE | Pattern.DOTALL)
-						.matcher(output);
+				m = Regex.getMatcher(REG_ALL_CMD, output);
 
-				// If the message is a IRC channel message then we can check if
-				// it has been registered with the channels.
 				if (m.find()) {
-					// Get the channel information from the string, so that we
-					// can compare it to the channels we have.
-					String user = m.group(1);
+					String user    = m.group(1);
 					String channel = m.group(4);
-					// Double check that it is a channel we are looking at,
-					// otherwise we have a private message.
+
 					if (channel.charAt(0) == '#') {
-						// Need a flag so we know if it has been found.
+						// channel message
 						boolean found = false;
-						// Loop through the already registered channels, to see
-						// if we already have it.
+
 						for (int i = 0; i < channels_.size(); i++) {
-							// If the channel we are looking for matches the
-							// channel the message came from.
-							if (channels_.get(i).getChannelName()
-									.equalsIgnoreCase(channel)) {
-								// Trip are boolean value so we know we found
-								// it.
+							if (channels_.get(i).getChannelName().equalsIgnoreCase(channel)) {
 								found = true;
-								// Break from the loop we found what we are
-								// looking for get the hell out of here.
 								break;
 							}
 						}
-						// And if we didn't find the channel we wanted then we
-						// create it so we don't have any nasty exceptions.
-						if (!found)
+
+						if (!found) {
 							channels_.add(new Channel(channel));
+						}
 					} else {
-						// Same as with the channels just for private messages.
+						// private message (query)
 						boolean found = false;
 
 						for (int i = 0; i < privMsgs.size(); i++) {
-							if (privMsgs.get(i).getUserName()
-									.equalsIgnoreCase(user)) {
+							if (privMsgs.get(i).getUserName().equalsIgnoreCase(user)) {
 								found = true;
 								break;
 							}
 						}
-						if (!found)
-							privMsgs.add(new PrivMsg(user));
-					}
 
+						if (!found) {
+							privMsgs.add(new PrivMsg(user));
+						}
+					}
 				}
 
-				// This supplys every plugin to have access to have the raw data
-				// from the server.
+				// Give Channel objects an opportunity to respond to the server
 				for (int i = 0; i < channels_.size(); i++)
 					channels_.get(i).onRaw(output);
 
 				// Process Invites
-				m = Pattern
-						.compile(
-								":([\\w\\d]*)!(?:~)?([\\w\\d@\\-.]*) INVITE ([\\w\\d]*) :(#[\\w\\d]*)",
-								Pattern.CASE_INSENSITIVE | Pattern.DOTALL)
-						.matcher(output);
-
+				m = Regex.getMatcher(REG_INVITE, output);
 				if (m.find()) {
-					// Get the channels identifier.
 					String chanName = m.group(4);
-					
-					boolean chanNotIn = false;
-					
+					boolean memberOfChannel = false;
+
 					for (Channel channel: channels_) {
 						if (channel.getChannelName().equals(chanName)) {
-							chanNotIn = true;
+							memberOfChannel = true;
 							break;
 						}
 					}
-					
-						
-					if (!chanNotIn) {
-						// Send join command to the server.
+
+					if (!memberOfChannel) {
 						irc.sendServer("JOIN " + chanName);
-						// Add the channel to are list of connected channels to make sure
-						// its tracked.
 						channels_.add(new Channel(chanName));
 					}
-					
+
 					continue;
 				}
 
@@ -265,10 +241,7 @@ public class Core {
 				 */
 
 				// On Message
-				m = Pattern.compile(":(.*)!.*@(.*) PRIVMSG (.*) :(.*)",
-						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(
-						output);
-
+				m = Regex.getMatcher(REG_MESSAGE, output);
 				if (m.find()) {
 					Message message = new Message(m);
 					if (message.isPrivMsg()) {
@@ -282,13 +255,10 @@ public class Core {
 				}
 
 				// On Join
-				m = Pattern.compile(":(.*)!.*@(.*) JOIN :(#?.*)",
-						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(
-						output);
-
+				m = Regex.getMatcher(REG_JOIN, output);
 				if (m.find()) {
 					Join join = new Join(m);
-					// Check if the bot or not if it isn't then we continue
+					// make sure we're not talking to ourselves
 					if (!join.getUser().equalsIgnoreCase(details.getNickName()))
 						for (int i = 0; i < channels_.size(); i++)
 							channels_.get(i).onJoin(join);
@@ -296,10 +266,7 @@ public class Core {
 				}
 
 				// On Quit
-				m = Pattern.compile(":(.*)!(.*@.*)\\s(QUIT|PART)(?:\\s(#[\\w\\d]*))?\\s:(.*)",
-						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(
-						output);
-
+				m = Regex.getMatcher(REG_PART, output);
 				if (m.find()) {
 					Quit quit = new Quit(m);
 					for (int i = 0; i < channels_.size(); i++)
@@ -308,10 +275,7 @@ public class Core {
 				}
 
 				// On Kick
-				m = Pattern.compile(":(.*)!(.*@.*) KICK (#.*) (.*) :(.*)",
-						Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(
-						output);
-
+				m = Regex.getMatcher(REG_KICK, output);
 				if (m.find()) {
 					Kick kick = new Kick(m);
 					for (int i = 0; i < channels_.size(); i++)
@@ -319,13 +283,15 @@ public class Core {
 					continue;
 				}
 
-				// Respond to the IRC servers pings so the bot does not time
-				// out.
-				if (output.split(" ")[0].equals("PING"))
+				// Ping Pong
+				if (output.split(" ")[0].equals("PING")) {
 					irc.sendServer("PONG " + output.split(" ")[1]);
+				}
 
-				// If we have one successful run this means that we connected
-				// successfully and can reset the rejoin attempts.
+				/*
+				 *  If we have one successful run this means that we connected
+				 *  successfully and can reset the rejoin attempts.
+				 */
 				rejoins = 0;
 			} catch (Exception ex) {
 				throw new IRCException(ex);

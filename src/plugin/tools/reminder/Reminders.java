@@ -10,18 +10,16 @@ import java.util.Date;
 public class Reminders {
 	// Globals holding the data for the reminder
 	private Date timeOfEvent_ = new Date();
-	private String reminder_ = new String();
+	private String reminder_  = new String();
 
 	/**
 	 * Take in the information for a reminder and set on creation
 	 * 
-	 * @param reminder
-	 *            is the message that is given when reminder is triggered
-	 * @param timeOfEvent
-	 *            this is the time of the reminder should be given
+	 * @param reminder is the message that is given when reminder is triggered
+	 * @param timeOfEvent this is the time of the reminder should be given
 	 */
 	public Reminders(String reminder, Date timeOfEvent) {
-		this.reminder_ = reminder;
+		this.reminder_    = reminder;
 		this.timeOfEvent_ = timeOfEvent;
 	}
 

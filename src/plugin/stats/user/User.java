@@ -11,14 +11,14 @@ import java.util.Date;
 public class User {
 
 	// Other data members about the user.
-	private String user_ = new String();
-	private String host_ = new String();
+	private String user_  = new String();
+	private String host_  = new String();
 	private String email_ = new String();
 
 	private long msgSent_ = 0;
-	private long joins_  = 0;
-	private long quits_ = 0;
-	private long kicks_ = 0;
+	private long joins_   = 0;
+	private long quits_   = 0;
+	private long kicks_   = 0;
 
 	private Date lastOnline_ = new Date();
 
@@ -27,16 +27,14 @@ public class User {
 	private byte[] encyptedPasswordHash_ = new byte[16];
 
 	// List of reminders and quotes tied to a average user.
-	private ArrayList<String> quotes_ = new ArrayList<String>();
+	private ArrayList<String> quotes_    = new ArrayList<String>();
 	private ArrayList<String> reminders_ = new ArrayList<String>();
 
 	/**
 	 * Set the username and host on creation of the class.
 	 * 
-	 * @param user
-	 *            this is the username of the user.
-	 * @param host
-	 *            this is the address of the user.
+	 * @param user this is the username of the user.
+	 * @param host this is the address of the user.
 	 */
 	public User(String user, String host) {
 		this.user_ = user;
@@ -47,8 +45,7 @@ public class User {
 	 * This is the method to increment the number of messages sent by a user. It
 	 * also updates the time the user was last seen around the IRC session.
 	 * 
-	 * @param host
-	 *            this is the address the user is working from.
+	 * @param host this is the address the user is working from.
 	 */
 	public void incMsgSent(String host) {
 		msgSent_++;
@@ -73,9 +70,8 @@ public class User {
 	/**
 	 * Simple method to increment the number of joins a user has done.
 	 * 
-	 * @param host
-	 *            this is the address of the user is using, it needs to be
-	 *            passed to the dirty check
+	 * @param host this is the address of the user is using, it needs to be
+	 *             passed to the dirty check
 	 */
 	public void incjoins(String host) {
 		joins_++;
@@ -83,11 +79,9 @@ public class User {
 	}
 
 	/**
-	 * Check if the user has any drastic problems, E.G. host change or over due
-	 * reminders.
+	 * Check if the user has any drastic problems, E.G. host change or over due reminders.
 	 * 
-	 * @param host
-	 *            is the user's host address so we can check if it has changed.
+	 * @param host is the user's host address so we can check if it has changed.
 	 */
 	private void checkDirtyness(String host) {
 		if (reminders_.size() > 0)

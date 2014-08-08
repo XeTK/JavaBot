@@ -15,15 +15,54 @@ import java.io.PrintWriter;
  * @author Tom Rosier (XeTK)
  */
 public class IRC {
+
+	private class IRCThread extends Thread {
+		private static final String TXT_RECONNECT = "Connection lost trying to reconect!";
+		private IRC	irc	= IRC.getInstance();
+
+		public void run() {
+			while (true) {
+				try {
+					if (irc.clientSocket_ != null) {
+						if (irc.clientSocket_.isClosed()) {
+							irc.closeConnection();
+							irc.connectServer(irc.server, irc.port);
+							System.out.println(TXT_RECONNECT);
+						}
+					}
+					super.sleep(10000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	private IRCThread		ircThread				= null;
+
+	private final String	TXT_INBOUND				= "\u001B[31m-> %s";
+	private final String	TXT_OUTBOUND			= "\u001B[34m<- %s";
+
+	private final String	TXT_EXC_NULL_INSTANCE	= "IRC class has not yet been declared";
+	private final String	TXT_EXC_NULL_SOCKET		= "Remote Socket has not been opened";
+	private final String	TXT_EXC_NULL_OUTPUT		= "Stream to server has not been opened";
+	private final String	TXT_EXC_NULL_INPUT		= "Stream in from server has not been opened";
+
 	// This is the maximum size that a message can be that is sent.
-	private final int MSG_MAX_SIZE_ = 410;
+	private final int		MSG_MAX_SIZE_			= 410;
 
 	// We are using the singleton pattern
-	private static IRC instance_;
+	private static IRC		instance_;
 
-	private PrintWriter outToServer_;
-	private BufferedReader inFromServer_;
-	private Socket clientSocket_;
+	private PrintWriter		outToServer_;
+	private BufferedReader	inFromServer_;
+	private Socket			clientSocket_;
+
+	private String			server					= new String();
+
+	private int				port					= 0;
 
 	/**
 	 * To comply with the singleton pattern we return the instance of the
@@ -43,17 +82,20 @@ public class IRC {
 	 * then we can write to it.
 	 * 
 	 * @param server
+	 *            this is the url of the server we want to connect to.
 	 * @param port
-	 * @throws UnknownHostException
-	 * @throws IOException
+	 *            this is the port of the socket we want to open.
 	 */
-	public void connectServer(String server, int port)
-			throws UnknownHostException, IOException {
+	public void connectServer(String server, int port) throws UnknownHostException, IOException {
+		this.server = server;
+		this.port   = port;
+
+		ircThread = new IRCThread();
+		ircThread.start();
+
 		clientSocket_ = new Socket(server, port);
-		outToServer_ = new PrintWriter(new OutputStreamWriter(
-				clientSocket_.getOutputStream()));
-		inFromServer_ = new BufferedReader(new InputStreamReader(
-				clientSocket_.getInputStream()));
+		outToServer_  = new PrintWriter(new OutputStreamWriter(clientSocket_.getOutputStream()));
+		inFromServer_ = new BufferedReader(new InputStreamReader(clientSocket_.getInputStream()));
 	}
 
 	/**
@@ -63,17 +105,18 @@ public class IRC {
 	 *             if there is an error with the connection.
 	 */
 	private void checkConnection() throws IRCException {
+
 		if (instance_ == null)
-			throw new IRCException("IRC class has not yet been declared");
+			throw new IRCException(TXT_EXC_NULL_INSTANCE);
 
 		if (clientSocket_ == null)
-			throw new IRCException("Remote Socket has not been opened");
+			throw new IRCException(TXT_EXC_NULL_SOCKET);
 
 		if (outToServer_ == null)
-			throw new IRCException("Stream to server has not been opened");
+			throw new IRCException(TXT_EXC_NULL_OUTPUT);
 
 		if (inFromServer_ == null)
-			throw new IRCException("Stream in from server has not been opened");
+			throw new IRCException(TXT_EXC_NULL_INPUT);
 	}
 
 	/**
@@ -89,30 +132,34 @@ public class IRC {
 	 */
 	public void sendServer(String instr) throws IRCException, IOException {
 		checkConnection();
-		outToServer_.write(instr + "\r\n");
+
+		String tmp = instr + "\r\n";
+
+		outToServer_.write(tmp);
 		outToServer_.flush();
-		System.out.println("\u001B[34m<- " + instr);
+		System.out.println(String.format(TXT_OUTBOUND, instr));
 	}
 
 	/**
 	 * Makes the privmsg stick to the IRC Standard, along with shortening long
-	 * server messages
+	 * 0server messages
 	 * 
 	 * @param channel
 	 *            this is the place the message will be sent to.
 	 * @param message
 	 *            this is the message.
-	 * @throws IOException
-	 * @throws IRCException
 	 */
-	public void sendPrivmsg(String channel, String message)
-			throws IRCException, IOException {
-		String[] lines = message.split("\n");
-		for (int i = 0; i < lines.length; i++) {
-			String[] subLines = breakLongLines(lines[i]);
-			for (int j = 0; j < subLines.length; j++) {
-				String msg = subLines[j].replace("\t", "     ");
-				sendServer("PRIVMSG " + channel + " :" + msg);
+	public void sendPrivmsg(String channel, String message) throws IRCException, IOException {
+		if (message != null) {
+			String[] lines = message.split("\n");
+
+			for (int i = 0; i < lines.length; i++) {
+				String[] subLines = breakLongLines(lines[i]);
+
+				for (int j = 0; j < subLines.length; j++) {
+					String msg = subLines[j].replace("\t", "     ");
+					sendServer("PRIVMSG " + channel + " :" + msg);
+				}
 			}
 		}
 	}
@@ -124,11 +171,8 @@ public class IRC {
 	 *            this is the destination of the message.
 	 * @param message
 	 *            this is the text of the message.
-	 * @throws IRCException
-	 * @throws IOException
 	 */
-	public void sendActionMsg(String channel, String message)
-			throws IRCException, IOException {
+	public void sendActionMsg(String channel, String message) throws IRCException, IOException {
 		sendPrivmsg(channel, '\001' + "ACTION " + message + '\001');
 	}
 
@@ -145,7 +189,7 @@ public class IRC {
 	public String getFromServer() throws IRCException, IOException {
 		checkConnection();
 		String out = inFromServer_.readLine();
-		System.out.println("\u001B[31m-> " + out);
+		System.out.println(String.format(TXT_INBOUND, out));
 		return out;
 	}
 
@@ -167,23 +211,35 @@ public class IRC {
 	 * @return this is the broken down string.
 	 */
 	private String[] breakLongLines(String inStr) {
+
 		ArrayList<String> splitStr = new ArrayList<String>();
+
 		String buffer = inStr;
+
 		while (true) {
+
 			if (buffer.length() >= MSG_MAX_SIZE_) {
+
 				int lastSpace = 0;
+
 				for (int i = MSG_MAX_SIZE_; i > 0; i--) {
+
 					if (buffer.charAt(i) == ' ') {
+
 						lastSpace = i;
+
 						break;
 					}
 				}
+
 				if (buffer.length() >= lastSpace)
 					splitStr.add(buffer.substring(0, lastSpace));
-				if (buffer.length() >= lastSpace +1)
+
+				if (buffer.length() >= lastSpace + 1)
 					buffer = buffer.substring(lastSpace + 1);
 				else
 					break;
+
 			} else {
 				splitStr.add(buffer);
 				break;
@@ -191,4 +247,5 @@ public class IRC {
 		}
 		return splitStr.toArray(new String[0]);
 	}
+
 }
