@@ -64,6 +64,8 @@ public class Lyrics extends Plugin {
 				in.close();
 				
 				if (!title.isEmpty()){
+					WebUtils w = new WebUtils();
+					title = w.unescapeHTML(title);
 					title = title.replace(" - YouTube", "");
 					title = title.toLowerCase();
 					System.out.println(title);
@@ -98,6 +100,7 @@ public class Lyrics extends Plugin {
 								lyrics.add(cur.replace("<br />", ""));
 							
 						}
+						lyrics = w.unescapeHTML(lyrics);
 						lastSong = lyrics;
 						lastIndex = 0;
 					}

@@ -11,6 +11,8 @@ import core.plugin.Plugin;
 import core.utils.Colour;
 import core.utils.IRC;
 
+import plugin.web.WebUtils;
+
 public class Youtube extends Plugin {
 
 	// This needs rewritting again from scratch
@@ -72,6 +74,8 @@ public class Youtube extends Plugin {
 
 			String yt = Colour.colour("You", Colour.BLACK, Colour.WHITE);
 			yt += Colour.colour("Tube", Colour.WHITE, Colour.RED);
+			WebUtils w = new WebUtils();
+			title = w.unescapeHTML(title);
 			title = title.replace("YouTube", yt);
 			irc.sendPrivmsg(in_message.getChannel(), "'" + title + "', " + viewcount
 					+ " Views, " + likes + "|" + dislikes + " Likes|Dislikes");

@@ -11,6 +11,8 @@ import core.plugin.Plugin;
 import core.utils.Colour;
 import core.utils.IRC;
 
+import plugin.web.WebUtils;
+
 public class WebScanner extends Plugin{
 
 	public void onMessage(Message inMessage) throws Exception {
@@ -51,6 +53,8 @@ public class WebScanner extends Plugin{
 				if (!title.isEmpty()) {
 					IRC irc = IRC.getInstance();
 					String link = Colour.colour("[LINK]", Colour.YELLOW, Colour.BLUE);
+					WebUtils w = new WebUtils();
+					title = w.unescapeHTML(title);
 					irc.sendPrivmsg(inMessage.getChannel(), link + " '" + title + "'");	
 				}
 				

@@ -11,6 +11,8 @@ import core.plugin.Plugin;
 import core.utils.Colour;
 import core.utils.IRC;
 
+import plugin.web.WebUtils;
+
 public class Imgur extends Plugin {
 
 	public void onMessage(Message in_message) throws Exception {
@@ -97,6 +99,8 @@ public class Imgur extends Plugin {
 			IRC irc = IRC.getInstance();
 			String coloured = Colour.colour(" I", Colour.GREEN,Colour.BLACK);
 			coloured += Colour.colour("mgur ", Colour.WHITE, Colour.BLACK);
+			WebUtils w = new WebUtils();
+			title = w.unescapeHTML(title);
 			title = title.replace("Imgur",coloured);
 			irc.sendPrivmsg(in_message.getChannel(), "'" + title + "', Views : "
 					+ viewcount + ", Bandwidth used : " + bandwidth
