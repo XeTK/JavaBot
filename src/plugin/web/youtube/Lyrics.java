@@ -13,6 +13,7 @@ import core.event.Message;
 import core.plugin.Plugin;
 import core.utils.IRC;
 
+import plugin.web.WebUtils;
 
 public class Lyrics extends Plugin {
 // ([\d\w\s&]*)(?:\s)?[:-](?:\s)?([\w\s\d&]*)
