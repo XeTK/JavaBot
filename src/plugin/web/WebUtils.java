@@ -1,4 +1,4 @@
-/* package plugin.web; */
+package plugin.web;
 
 import java.io.StringWriter;
 import java.util.HashMap;
