@@ -13,6 +13,8 @@ import core.utils.Colour;
 import core.utils.IRC;
 import core.utils.Regex;
 
+import plugin.web.WebUtils;
+
 public class Youtube extends Plugin {
 
 	private static final String TXT_SPOILER = "I ain't spoiling nawthing! Dawgh!";
@@ -70,6 +72,8 @@ public class Youtube extends Plugin {
 
 			String yt = Colour.colour("You", Colour.BLACK, Colour.WHITE);
 			yt += Colour.colour("Tube", Colour.WHITE, Colour.RED);
+			WebUtils w = new WebUtils();
+			title = w.unescapeHTML(title);
 			title = title.replace("YouTube", yt);
 			if (in_message.getMessage().startsWith("-s ") || in_message.getMessage().endsWith(" -s"))
 				irc.sendActionMsg(in_message.getChannel(), TXT_SPOILER);

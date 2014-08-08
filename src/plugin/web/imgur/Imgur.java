@@ -19,6 +19,13 @@ import com.google.gson.Gson;
 import core.event.Message;
 import core.menu.MenuItem;
 import core.plugin.Plugin;
+<<<<<<< HEAD
+import core.utils.Colour;
+import core.utils.IRC;
+
+import plugin.web.WebUtils;
+
+=======
 /**
  * Imgur plugin.
  *
@@ -26,6 +33,7 @@ import core.plugin.Plugin;
  *
  * @author Tom (bugsduggan) Leaman (tom@tomleaman.co.uk)
  */
+>>>>>>> 92bc48a4afcae3226baea9f966d1d8ef73d2c9ee
 public class Imgur extends Plugin {
 		
 	private static final String TXT_SPOILER = "I ain't spoiling nawthing! Dawgh!";
@@ -135,6 +143,19 @@ public class Imgur extends Plugin {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+<<<<<<< HEAD
+			title = title.trim();
+			IRC irc = IRC.getInstance();
+			String coloured = Colour.colour(" I", Colour.GREEN,Colour.BLACK);
+			coloured += Colour.colour("mgur ", Colour.WHITE, Colour.BLACK);
+			WebUtils w = new WebUtils();
+			title = w.unescapeHTML(title);
+			title = title.replace("Imgur",coloured);
+			irc.sendPrivmsg(in_message.getChannel(), "'" + title + "', Views : "
+					+ viewcount + ", Bandwidth used : " + bandwidth
+					+ ", Likes/Dislikes : " + likes + "/" + dislikes);
+=======
+>>>>>>> 92bc48a4afcae3226baea9f966d1d8ef73d2c9ee
 		}
 	}
 

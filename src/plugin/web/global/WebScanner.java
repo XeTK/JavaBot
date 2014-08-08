@@ -13,6 +13,8 @@ import core.utils.Colour;
 import core.utils.IRC;
 import core.utils.Regex;
 
+import plugin.web.WebUtils;
+
 public class WebScanner extends Plugin{
 	
 	private static final String TXT_SPOILER = "I ain't spoiling nawthing! Dawgh!";
@@ -50,10 +52,16 @@ public class WebScanner extends Plugin{
 				if (!title.isEmpty()) {
 					IRC irc = IRC.getInstance();
 					String link = Colour.colour("[LINK]", Colour.YELLOW, Colour.BLUE);
+<<<<<<< HEAD
+					WebUtils w = new WebUtils();
+					title = w.unescapeHTML(title);
+					irc.sendPrivmsg(inMessage.getChannel(), link + " '" + title + "'");	
+=======
 					if (inMessage.getMessage().startsWith("-s ") || inMessage.getMessage().endsWith(" -s"))
 						irc.sendActionMsg(inMessage.getChannel(), TXT_SPOILER);
 					else
 						irc.sendPrivmsg(inMessage.getChannel(), link + " '" + title + "'");	
+>>>>>>> 92bc48a4afcae3226baea9f966d1d8ef73d2c9ee
 				}
 				
 				in.close();
